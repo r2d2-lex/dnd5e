@@ -1,0 +1,7 @@
+Уважаемый пользователь {{ user.username }}
+
+Подтвердите регистрацию, пройдите по ссылке
+
+{{ host }}{% url 'main:register_activate' sign=sign %}
+
+Спасибо.

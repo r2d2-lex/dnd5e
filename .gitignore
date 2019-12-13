@@ -1,0 +1,11 @@
+.idea/
+.env
+.venv
+env/
+venv/
+ENV/
+__pycache__
+ksardas/db.sqlite3
+ksardas/ksardas/__pycache__/
+ksardas/main/migrations/__pycache__/
+ksardas/main/__pycache__/
