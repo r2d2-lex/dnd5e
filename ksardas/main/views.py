@@ -54,6 +54,9 @@ class ChangeUserInfoView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
             queryset = self.get_queryset()
         return get_object_or_404(queryset,pk=self.user_id)
 
+    def get_login_url(self):
+        return super().get_login_url()
+
 
 class BBLoginView(LoginView):
     template_name = 'main/login.html'
@@ -61,6 +64,7 @@ class BBLoginView(LoginView):
 
 class BBLogoutView(LoginRequiredMixin, LogoutView):
     template_name = 'main/logout.html'
+
 
 def user_activate(request, sign):
     try:
@@ -76,6 +80,7 @@ def user_activate(request, sign):
         user.is_active = True
         user.save()
     return render(request, template)
+
 
 @login_required
 def profile(request):
