@@ -8,6 +8,7 @@ from .models import user_registrated
 
 class ChangeUserInfoForm(forms.ModelForm):
     email = forms.EmailField(required=True, label='Адерс эл. почты')
+
     class Meta:
         model = AdvUser
         fields = ('username', 'email', 'first_name', 'last_name', 'send_message')

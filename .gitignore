@@ -5,7 +5,9 @@ env/
 venv/
 ENV/
 __pycache__
-ksardas/db.sqlite3
-ksardas/ksardas/__pycache__/
-ksardas/main/migrations/__pycache__/
+ksardas/xdb.sqlite3
 ksardas/main/__pycache__/
+ksardas/ksardas/__pycache__/
+ksardas/main/migrations/*
+ksardas/main/migrations/__pycache__/
+

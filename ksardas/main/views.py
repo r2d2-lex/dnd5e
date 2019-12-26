@@ -16,8 +16,10 @@ from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
 from django.core.signing import BadSignature
+from django.template import loader
 
-from .models import AdvUser
+
+from .models import AdvUser, CharBase
 from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
 from .utilites import signer
@@ -106,7 +108,12 @@ def user_activate(request, sign):
 
 @login_required
 def profile(request):
-    return render(request,'main/profile.html')
+    chars = CharBase.objects.all()
+    return render(request, 'main/profile.html', {'chars': chars})
+    #template = loader.get_template('main/profile.html')
+    #chars = CharBase.objects.all()
+    #context = {'chars': chars}
+    #return HttpResponse(template.render(context, request=request))
 
 
 def other_page(request, page):
@@ -118,5 +125,5 @@ def other_page(request, page):
 
 
 def index(request):
-    return render(request,'main/index.html')
+    return render(request, 'main/index.html')
 

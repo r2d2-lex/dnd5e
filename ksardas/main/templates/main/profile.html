@@ -12,5 +12,22 @@
 {% else %}
 <p>Здравствуйте!</p>
 {% endif %}
-Ваще прдявления...
+Ваши персонажи...
+{% for ch in chars %}
+<div>
+    Name: {{ ch.name }} <br>
+    Race: {{ ch.race }} <br>
+    Playername:  {{ ch.playername }} <br>
+    Level: {{ ch.level }} <br>
+    Expirence: {{ ch.expirence }} <br>
+    Strength: {{ ch.strength }} <br>
+    Dexterity : {{ ch.dexterity }} <br>
+    Constitution: {{ ch.constitution }} <br>
+    Intellegence: {{ ch.intellegence }} <br>
+    Wisdom: {{ ch.wisdom }} <br>
+    Chrarisma: {{ ch.chrarisma }} <br>
+    Modified:  {{ ch.modified }} <br>
+    <br><br>
+</div>
+{% endfor %}
 {% endblock %}
