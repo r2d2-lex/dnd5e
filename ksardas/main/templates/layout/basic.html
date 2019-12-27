@@ -19,12 +19,13 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'main:register' %}">
                 Регистрация</a></li>
                 {% if user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'main:create_character' %}">Создать персонажа</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown"
                     href="#" role="button" aria-haspopup="true"
                     aria-expanded="false">Профиль</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{% url 'main:profile' %}">Мои объявления</a>
+                        <a class="dropdown-item" href="{% url 'main:profile' %}">Мои персонажи</a>
                         <a class="dropdown-item" href="{% url 'main:profile_change' %}">
                         Изменить личные данные</a>
                         <a class="dropdown-item" href="{% url 'main:password_change' %}">

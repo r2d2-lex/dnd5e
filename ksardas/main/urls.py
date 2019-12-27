@@ -7,6 +7,8 @@ from .views import BBPasswordChangeView
 from .views import RegisterUserView, RegisterDoneView
 from .views import DeleteUserView
 from .views import user_activate
+from .views import profile_character
+from .views import CharCreateView
 from django.contrib.auth.views import LoginView
 app_name = 'main'
 urlpatterns = [
@@ -16,6 +18,8 @@ urlpatterns = [
     path('accounts/profile/', profile, name='profile'),
     path('accounts/profile/change/', ChangeUserInfoView.as_view(), name='profile_change'),
     path('accounts/profile/delete/', DeleteUserView.as_view(), name='profile_delete'),
+    path('accounts/profile/char/create/', CharCreateView.as_view(), name='create_character'),
+    path('accounts/profile/char/<str:name>/', profile_character, name='profile_character'),
     path('accounts/password/change/', BBPasswordChangeView.as_view(), name='password_change'),
     path('accounts/login/', BBLoginView.as_view(), name='login'),
     path('accounts/logout/', BBLogoutView.as_view(), name='logout'),

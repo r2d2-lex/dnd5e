@@ -1,0 +1,26 @@
+{% extends "layout/basic.html" %}
+
+{% load bootstrap4 %}
+
+{% block title %}Персонаж {{ char.name }}  {% endblock %}
+
+{% block content %}
+<h2>Персонаж {{ char.name }}</h2>
+
+<div>
+    Name: {{ char.name }} <br>
+    Race: {{ char.race }} <br>
+    Playername:  {{ char.playername }} <br>
+    Level: {{ char.level }} <br>
+    Expirence: {{ char.expirence }} <br>
+    Strength: {{ char.strength }} <br>
+    Dexterity : {{ char.dexterity }} <br>
+    Constitution: {{ char.constitution }} <br>
+    Intellegence: {{ char.intellegence }} <br>
+    Wisdom: {{ char.wisdom }} <br>
+    Chrarisma: {{ char.chrarisma }} <br>
+    Modified:  {{ char.modified }} <br>
+    <br><br>
+</div>
+
+{% endblock %}

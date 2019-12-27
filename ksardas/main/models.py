@@ -27,8 +27,8 @@ class AdvUser(AbstractUser):
 
 
 class CharBase(models.Model):
-    owner = models.ForeignKey('AdvUser', null=True, on_delete=models.PROTECT, verbose_name='Владелец персонажа')
-    name = models.CharField(null=False, max_length=20, verbose_name='Имя персонажа')
+    owner = models.ForeignKey('AdvUser', null=False, on_delete=models.PROTECT, verbose_name='Владелец персонажа')
+    name = models.CharField(db_index=True, null=False, max_length=20, verbose_name='Имя персонажа')
     race = models.CharField(null=False, max_length=20, verbose_name='Расса персонажа')
     playername = models.CharField(null=True, max_length=20, verbose_name='Реальное имя персонажа')
     level = models.IntegerField(null=False, default=1, verbose_name='Уровень персонажа')

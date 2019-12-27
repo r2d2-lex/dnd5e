@@ -1,27 +1,25 @@
-from django.shortcuts import render
 from django.http import HttpResponse, Http404
-
+from django.core.signing import BadSignature
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-from django.template.loader import get_template
-from django.template import TemplateDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib import messages
-
-from django.views.generic.edit import UpdateView, CreateView, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
+
 from django.urls import reverse_lazy
+from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from django.views.generic.base import TemplateView
-from django.core.signing import BadSignature
+from django.template.loader import get_template
+from django.template import TemplateDoesNotExist
 from django.template import loader
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import UpdateView, CreateView, DeleteView
 
-
-from .models import AdvUser, CharBase
+from .forms import CreateCharForm
 from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
+from .models import AdvUser, CharBase
 from .utilites import signer
 
 
@@ -108,12 +106,42 @@ def user_activate(request, sign):
 
 @login_required
 def profile(request):
-    chars = CharBase.objects.all()
+    print("Current account: ",request.user)
+    chars = CharBase.objects.filter(owner=request.user)
     return render(request, 'main/profile.html', {'chars': chars})
+
+    #
     #template = loader.get_template('main/profile.html')
     #chars = CharBase.objects.all()
     #context = {'chars': chars}
     #return HttpResponse(template.render(context, request=request))
+    #
+
+
+@login_required
+def profile_character(request, name):
+    print("Current char: ",name)
+    ch = CharBase.objects.get(name=name)
+    return render(request, 'main/character.html', {'char': ch})
+
+
+# @login_required
+class CharCreateView(CreateView):
+    template_name = 'main/create_character.html'
+    form_class = CreateCharForm
+    success_url = reverse_lazy('main:profile')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['chars'] = CharBase.objects.all()
+        return context
+
+
+'''
+def create_character(request):
+    print("Create Character: ")
+    return render(request, 'main/create_character.html')
+'''
 
 
 def other_page(request, page):

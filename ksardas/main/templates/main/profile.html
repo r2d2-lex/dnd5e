@@ -15,7 +15,7 @@
 Ваши персонажи...
 {% for ch in chars %}
 <div>
-    Name: {{ ch.name }} <br>
+    Name: <a href="{% url 'main:profile_character' ch.name %}">{{ ch.name }}</a><br>
     Race: {{ ch.race }} <br>
     Playername:  {{ ch.playername }} <br>
     Level: {{ ch.level }} <br>
