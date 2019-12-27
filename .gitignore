@@ -8,6 +8,6 @@ __pycache__
 ksardas/xdb.sqlite3
 ksardas/main/__pycache__/
 ksardas/ksardas/__pycache__/
-ksardas/main/migrations/*
+ksardas/main/migrations/
 ksardas/main/migrations/__pycache__/
 

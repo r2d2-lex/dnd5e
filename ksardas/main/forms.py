@@ -23,6 +23,7 @@ class CreateCharForm(ModelForm):
                  'wisdom',
                  'chrarisma',)
 
+
 class ChangeUserInfoForm(forms.ModelForm):
     email = forms.EmailField(required=True, label='Адерс эл. почты')
 

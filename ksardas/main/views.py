@@ -74,7 +74,7 @@ class ChangeUserInfoView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         if not queryset:
             queryset = self.get_queryset()
-        return get_object_or_404(queryset,pk=self.user_id)
+        return get_object_or_404(queryset, pk=self.user_id)
 
     def get_login_url(self):
         return super().get_login_url()
@@ -92,7 +92,7 @@ def user_activate(request, sign):
     try:
         username = signer.unsign(sign)
     except BadSignature:
-        return render(request,'main/bad_signature.html')
+        return render(request, 'main/bad_signature.html')
     user = get_object_or_404(AdvUser, username=username)
     if user.is_activated:
         template = 'main/user_is_activated.html'
@@ -106,21 +106,21 @@ def user_activate(request, sign):
 
 @login_required
 def profile(request):
-    print("Current account: ",request.user)
+    print("Current account: ", request.user)
     chars = CharBase.objects.filter(owner=request.user)
     return render(request, 'main/profile.html', {'chars': chars})
 
     #
-    #template = loader.get_template('main/profile.html')
-    #chars = CharBase.objects.all()
-    #context = {'chars': chars}
-    #return HttpResponse(template.render(context, request=request))
+    # template = loader.get_template('main/profile.html')
+    # chars = CharBase.objects.all()
+    # context = {'chars': chars}
+    # return HttpResponse(template.render(context, request=request))
     #
 
 
 @login_required
 def profile_character(request, name):
-    print("Current char: ",name)
+    print("Current char: ", name)
     ch = CharBase.objects.get(name=name)
     return render(request, 'main/character.html', {'char': ch})
 
@@ -136,6 +136,15 @@ class CharCreateView(CreateView):
         context['chars'] = CharBase.objects.all()
         return context
 
+    model = CharBase
+
+    def form_valid(self, form):
+        object = form.save(commit=False)
+        object.owner = self.request.user
+        object.save()
+        #return super(CharBase, self).form_valid(form)
+        return super().form_valid(form)
+
 
 '''
 def create_character(request):
@@ -146,7 +155,7 @@ def create_character(request):
 
 def other_page(request, page):
     try:
-        template = get_template('main/'+page+'.html')
+        template = get_template('main/' + page + '.html')
     except TemplateDoesNotExist:
         raise Http404
     return HttpResponse(template.render(request=request))
@@ -154,4 +163,3 @@ def other_page(request, page):
 
 def index(request):
     return render(request, 'main/index.html')
-
