@@ -8,3 +8,9 @@ Name: Masha1
 Email: test@yandex.ru
 Mashapass33
 Masha User
+
+
+Name: Stan
+Email: stan@yandex.ru
+Stanpass44
+Eminem Stan

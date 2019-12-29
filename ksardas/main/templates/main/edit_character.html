@@ -1,0 +1,54 @@
+{% extends "layout/basic.html" %}
+
+{% load bootstrap4 %}
+
+{% block title %}Редактор персонажа{% endblock %}
+
+{% block content %}
+<h2>Редактор персонажа</h2>
+
+<div>
+    <form method="post">
+        {% csrf_token %}
+            <label for="name">Your name: </label>
+            <input id="name" type="text" name="name" value="{{ form.name }}"><br>
+
+            <label for="playername">Your realname: </label>
+            <input id="playername" type="text" name="playername" value="{{ form.playername }}"><br>
+
+            <label for="race">Your race: </label>
+            <input id="race" type="text" name="race" value="{{ form.race }}"><br>
+
+            <label for="level">Your Level: </label>
+            <input id="level" type="number" name="level" step="1" min="0" value="{{ form.level }}"><br>
+
+            <label for="expirence">Your expirence: </label>
+            <input id="expirence" type="number" name="expirence" step="1" min="0" value="{{ form.expirence }}"><br>
+
+            <label for="strength">Your strength: </label>
+            <input id="strength" type="number" name="strength" step="1" min="0" value="{{ form.strength }}"><br>
+
+            <label for="dexterity">Your dexterity: </label>
+            <input id="dexterity" type="number" name="dexterity" step="1" min="0" value="{{ form.dexterity }}"><br>
+
+            <label for="constitution">Your constitution: </label>
+            <input id="constitution" type="number" name="constitution" step="1" min="0" value="{{ form.constitution }}"><br>
+
+            <label for="intellegence">Your intellegence: </label>
+            <input id="intellegence" type="number" name="intellegence" step="1" min="0" value="{{ form.intellegence }}"><br>
+
+            <label for="wisdom">Your wisdom: </label>
+            <input id="wisdom" type="number" name="wisdom" step="1" min="0" value="{{ form.wisdom }}"><br>
+
+            <label for="chrarisma">Your chrarisma: </label>
+            <input id="chrarisma" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}"><br>
+
+            <label for="modified">Your modified: </label>
+            <input id="modified" type="datetime-local" name="modified" value="2019-12-27 23:15:17"><br>
+
+
+            <input type="submit" value="Изменить">
+    </form>
+</div>
+
+{% endblock %}

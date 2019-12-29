@@ -1,4 +1,3 @@
-from django.http import HttpResponse, Http404
 from django.core.signing import BadSignature
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -6,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponse, Http404
 
 from django.urls import reverse_lazy
 from django.shortcuts import render
@@ -16,12 +16,15 @@ from django.template import loader
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
 
+from .forms import CharForm
 from .forms import CreateCharForm
 from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
 from .models import AdvUser, CharBase
 from .utilites import signer
+import datetime
 
+# Операции с учётной записью пользователя
 
 class DeleteUserView(LoginRequiredMixin, DeleteView):
     model = AdvUser
@@ -118,23 +121,18 @@ def profile(request):
     #
 
 
-@login_required
-def profile_character(request, name):
-    print("Current char: ", name)
-    ch = CharBase.objects.get(name=name)
-    return render(request, 'main/character.html', {'char': ch})
-
-
-# @login_required
-class CharCreateView(CreateView):
+# Операции с персонажем
+# Создание персонажа
+class CharCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     template_name = 'main/create_character.html'
     form_class = CreateCharForm
     success_url = reverse_lazy('main:profile')
+    success_message = 'Персонаж создан'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['chars'] = CharBase.objects.all()
-        return context
+    #def get_context_data(self, **kwargs):
+    #    context = super().get_context_data(**kwargs)
+    #    context['chars'] = CharBase.objects.all()
+    #    return context
 
     model = CharBase
 
@@ -142,15 +140,50 @@ class CharCreateView(CreateView):
         object = form.save(commit=False)
         object.owner = self.request.user
         object.save()
-        #return super(CharBase, self).form_valid(form)
         return super().form_valid(form)
 
 
-'''
-def create_character(request):
-    print("Create Character: ")
-    return render(request, 'main/create_character.html')
-'''
+# Просмотр персонажа
+@login_required
+def profile_character(request, name):
+    print("Current char: ", name)
+    ch = CharBase.objects.get(name=name)
+    return render(request, 'main/character.html', {'char': ch})
+
+
+@login_required
+def edit_character(request, name):
+    if request.method == 'POST':
+        charform = CharForm(request.POST)
+        if charform.is_valid():
+
+            name = charform.cleaned_data['name']
+            playername = charform.cleaned_data['playername']
+            race = charform.cleaned_data['race']
+            level = charform.cleaned_data['level']
+            expirence = charform.cleaned_data['expirence']
+            strength = charform.cleaned_data['strength']
+            dexterity = charform.cleaned_data['dexterity']
+            constitution = charform.cleaned_data['constitution']
+            intellegence = charform.cleaned_data['intellegence']
+            wisdom = charform.cleaned_data['wisdom']
+            chrarisma = charform.cleaned_data['chrarisma']
+            modified = charform.cleaned_data['modified']
+            #Save base and self call edit_character
+
+            context = {'form': charform}
+
+            print('Post Name:', name,' Playername', playername, 'Race:', race)
+
+            print("Type: ", type(charform))
+            return render(request, 'main/edit_character.html', context)
+        else:
+            print("FORM NOT VALID. ERROR:",charform.errors)
+    else:
+        charform = CharBase.objects.get(name=name)
+        print("Type: ", type(charform))
+    context = {'form': charform}
+    return render(request, 'main/edit_character.html', context)
 
 
 def other_page(request, page):

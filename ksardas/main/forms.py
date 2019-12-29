@@ -6,6 +6,22 @@ from django.forms import ModelForm
 from .models import AdvUser
 from .models import CharBase
 from .models import user_registrated
+import datetime
+
+
+class CharForm(forms.Form):
+    name = forms.CharField(label='Имя персонажа')
+    race = forms.CharField(label='Расса персонажа')
+    playername = forms.CharField(label='Реальное имя персонажа')
+    level = forms.IntegerField(label='Уровень персонажа')
+    expirence = forms.IntegerField(label='Опыт персонажа')
+    strength = forms.IntegerField(label='Сила персонажа')
+    dexterity = forms.IntegerField(label='Ловкость персонажа')
+    constitution = forms.IntegerField(label='Телосложение персонажа')
+    intellegence = forms.IntegerField(label='Интеллект персонажа')
+    wisdom = forms.IntegerField(label='Мудрость персонажа')
+    chrarisma = forms.IntegerField(label='Харизма персонажа')
+    modified = forms.DateTimeField(initial=format(datetime.date.today(),'%Y-%m-%d %H:%M:%S'), input_formats=['%Y-%m-%d %H:%M:%S'], label='Время модификации')
 
 
 class CreateCharForm(ModelForm):
@@ -47,12 +63,12 @@ class RegisterUserForm(forms.ModelForm):
 
     def clean(self):
         super().clean()
-        # password1 = self.cleaned_data['password1']
-        # password2 = self.cleaned_data['password2']
-        # if password1 and password2 and password1 != password2:
-        #    errors = {'password2': ValidationError('Введенные пароли не совпадают',
-        #                          code='password_mismatch')}
-        #    raise ValidationError(errors)
+        password1 = self.cleaned_data['password1']
+        password2 = self.cleaned_data['password2']
+        if password1 and password2 and password1 != password2:
+            errors = {'password2': ValidationError('Введенные пароли не совпадают',
+                                  code='password_mismatch')}
+            raise ValidationError(errors)
 
     def save(self, commit=True):
         user = super().save(commit=False)

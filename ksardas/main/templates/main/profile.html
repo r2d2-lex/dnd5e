@@ -16,6 +16,7 @@
 {% for ch in chars %}
 <div>
     Name: <a href="{% url 'main:profile_character' ch.name %}">{{ ch.name }}</a><br>
+    <a href="{% url 'main:edit_character' ch.name %}">Редактировать персонажа</a><br>
     Race: {{ ch.race }} <br>
     Playername:  {{ ch.playername }} <br>
     Level: {{ ch.level }} <br>
