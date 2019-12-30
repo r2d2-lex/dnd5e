@@ -9,7 +9,7 @@ from .views import DeleteUserView
 from .views import index, other_page, profile
 from .views import RegisterUserView, RegisterDoneView
 from .views import user_activate
-from .views import profile_character
+from .views import view_character
 
 app_name = 'main'
 urlpatterns = [
@@ -21,7 +21,7 @@ urlpatterns = [
     path('accounts/profile/delete/', DeleteUserView.as_view(), name='profile_delete'),
     path('accounts/profile/char/create/', CharCreateView.as_view(), name='create_character'),
     path('accounts/profile/char/<str:name>/edit/', edit_character, name='edit_character'),
-    path('accounts/profile/char/<str:name>/', profile_character, name='profile_character'),
+    path('accounts/profile/char/<str:name>/', view_character, name='view_character'),
     path('accounts/password/change/', BBPasswordChangeView.as_view(), name='password_change'),
     path('accounts/login/', BBLoginView.as_view(), name='login'),
     path('accounts/logout/', BBLogoutView.as_view(), name='logout'),
