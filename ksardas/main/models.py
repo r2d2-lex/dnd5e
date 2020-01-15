@@ -30,20 +30,22 @@ class CharSpells(models.Model):
     char = models.ForeignKey('CharBase', on_delete=models.PROTECT)
     spell = models.IntegerField()
 
-
 # Таблица для заклинаний
 class Spell(models.Model):
     name = models.CharField(null=False, max_length=20, verbose_name='Название заклинания')
     level = models.IntegerField(verbose_name='Уровень заклинания')
-    components = models.IntegerField(verbose_name='Компоненты заклинания')
-    distance_type = models.IntegerField(default=False, verbose_name='Тип дистанции')
-    distance = models.CharField(null=False, max_length=20, verbose_name='Дистанция заклинания')
-    diration = models.IntegerField(verbose_name='Длительность заклинания')
-    cast_time = models.IntegerField(verbose_name='Время накладывания')
+    school = models.IntegerField(verbose_name='Школа заклинания')
+    comp_is_verbal = models.BooleanField(default=False ,verbose_name='Вербальные требования')
+    comp_is_somatic = models.BooleanField(default=False ,verbose_name='Соматичесские требования')
+    comp_is_material = models.BooleanField(default=False ,verbose_name='Материальные компоненты')
+    components = models.CharField(verbose_name='Компоненты заклинания')
+    distance = models.CharField(verbose_name='Дистанция заклинания')
+    diration = models.CharField(verbose_name='Дистанция заклинания')
+    cast_time = models.CharField(verbose_name='Дистанция заклинания')
     is_concentrate = models.BooleanField(default=False ,verbose_name='Концентрация')
     is_ritual = models.BooleanField(default=False, verbose_name='Ритуал')
-    school = models.IntegerField(verbose_name='Школа заклинания')
     description = models.TextField(null=False, verbose_name='Описание заклинания')
+    gold = models.IntegerField(verbose_name='Золото')
 
 
 class CharBase(models.Model):
