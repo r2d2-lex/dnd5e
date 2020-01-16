@@ -25,32 +25,26 @@ class AdvUser(AbstractUser):
         return self.username
 
 
-# Промежуточная таблица для заклинаний
-class CharSpells(models.Model):
-    char = models.ForeignKey('CharBase', on_delete=models.PROTECT)
-    spell = models.IntegerField()
-
 # Таблица для заклинаний
 class Spell(models.Model):
-    name = models.CharField(null=False, max_length=20, verbose_name='Название заклинания')
+    name = models.CharField(unique=True, null=False, max_length=20, verbose_name='Название заклинания')
     level = models.IntegerField(verbose_name='Уровень заклинания')
     school = models.IntegerField(verbose_name='Школа заклинания')
     comp_is_verbal = models.BooleanField(default=False ,verbose_name='Вербальные требования')
     comp_is_somatic = models.BooleanField(default=False ,verbose_name='Соматичесские требования')
     comp_is_material = models.BooleanField(default=False ,verbose_name='Материальные компоненты')
-    components = models.CharField(verbose_name='Компоненты заклинания')
-    distance = models.CharField(verbose_name='Дистанция заклинания')
-    duration = models.CharField(verbose_name='Длительность заклинания')
-    cast_time = models.CharField(verbose_name='Время сотворения заклинания')
+    components = models.CharField(max_length=2048*64, verbose_name='Компоненты заклинания')
+    distance = models.CharField(max_length=1024*64, verbose_name='Дистанция заклинания')
+    duration = models.CharField(max_length=1024*64, verbose_name='Длительность заклинания')
+    cast_time = models.CharField(max_length=1024*64, verbose_name='Время сотворения заклинания')
     is_concentrate = models.BooleanField(default=False ,verbose_name='Концентрация')
     is_ritual = models.BooleanField(default=False, verbose_name='Ритуал')
     description = models.TextField(null=False, verbose_name='Описание заклинания')
-    gold = models.IntegerField(verbose_name='Золото')
+    gold = models.IntegerField(null=True, verbose_name='Золото')
 
 
 class CharBase(models.Model):
     owner = models.ForeignKey('AdvUser', null=False, on_delete=models.PROTECT, verbose_name='Владелец персонажа')
-    #owner = models.OneToOneField(AdvUser, unique=True, on_delete=models.CASCADE, verbose_name='Владелец персонажа')
     name = models.CharField(db_index=True, unique=True, null=False, max_length=20, verbose_name='Имя персонажа')
     RACE_CHOICES = (
         ('ELF', "Эльф"),
@@ -68,6 +62,7 @@ class CharBase(models.Model):
     wisdom = models.IntegerField(null=False, default=8, verbose_name='Мудрость персонажа')
     chrarisma = models.IntegerField(null=False, default=8, verbose_name='Харизма персонажа')
     modified = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Время модификации')
+    spells = models.ManyToManyField(Spell)
     #gold  = models.IntegerField(null=False, default=0, verbose_name='Интеллект персонажа')
 
     def __str__(self):
