@@ -43,9 +43,13 @@
             <label for="chrarisma">Your chrarisma: </label>
             <input id="chrarisma" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}"><br>
 
-            <label for="modified">Your modified: </label>
-            <input id="modified" type="datetime-local" name="modified" value="{{ form.modified }}"><br>
+            <select name="sel">
+            {% for spellname in spells %}
+                <option value="{{ spellname }}">{{ spellname }}</option>
+            {% endfor %}
+            </select>
 
+            <p>Modified:  {{ form.modified }}</p>
 
             <input type="submit" value="Изменить">
     </form>

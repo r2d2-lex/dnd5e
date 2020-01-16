@@ -20,7 +20,7 @@ from .forms import CharForm
 from .forms import CreateCharForm
 from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
-from .models import AdvUser, CharBase
+from .models import AdvUser, CharBase, Spell
 from .utilites import signer
 import datetime
 
@@ -170,17 +170,22 @@ def edit_character(request, name):
             charbase.intellegence = charform.cleaned_data['intellegence']
             charbase.wisdom = charform.cleaned_data['wisdom']
             charbase.chrarisma = charform.cleaned_data['chrarisma']
-            charbase.modified = format(datetime.date.today(),'%Y-%m-%d %H:%M:%S')
+            charbase.modified = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             charbase.save()
             charform = CharBase.objects.get(name=name)
 
             context = {'form': charform}
             return render(request, 'main/edit_character.html', context)
         else:
-            print("FORM NOT VALID. ERROR:",charform.errors)
+            print("FORM NOT VALID. ERROR:", charform.errors)
     else:
+        # Загрузка персонажа
         charform = CharBase.objects.get(name=name)
-    context = {'form': charform}
+
+        #Загрузка имён спеллов
+        spells_name = Spell.objects.values_list('name', flat=True).order_by('name')
+
+    context = {'form': charform, 'spells': spells_name}
     return render(request, 'main/edit_character.html', context)
 
 

@@ -21,7 +21,9 @@ class CharForm(forms.Form):
     intellegence = forms.IntegerField(label='Интеллект персонажа')
     wisdom = forms.IntegerField(label='Мудрость персонажа')
     chrarisma = forms.IntegerField(label='Харизма персонажа')
-    modified = forms.DateTimeField(initial=format(datetime.date.today(),'%Y-%m-%d %H:%M:%S'), input_formats=['%Y-%m-%d %H:%M:%S'], label='Время модификации')
+    modified = forms.DateTimeField(required=False, initial=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                                   input_formats=['%Y-%m-%d %H:%M:%S'], label='Время модификации')
+    spells = forms.ComboField(fields=[forms.CharField(max_length=20),], label='Заклинания персонажа')
 
 
 class CreateCharForm(ModelForm):
