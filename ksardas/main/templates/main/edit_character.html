@@ -43,7 +43,26 @@
             <label for="chrarisma">Your chrarisma: </label>
             <input id="chrarisma" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}"><br>
 
-            <select name="sel">
+            <!--
+            <p>You spells:<br>
+                {% for spell in char_spells %}
+                    {{ spell.name }} <b>Level: {{ spell.level }}</b><br>
+                {% endfor %}
+            </p>
+            -->
+
+            <br>
+            <div id="checkboxes">
+                <label for="checkboxes">You spells: </label>
+              <ul>
+                  {% for spell in char_spells %}
+                    <li><input type="checkbox">{{ spell.name }}</li>
+                  {% endfor %}
+              </ul>
+            </div>
+
+            <label for="spells">Choise spells: </label>
+            <select id="spells" name="spells" size="5">
             {% for spellname in spells %}
                 <option value="{{ spellname }}">{{ spellname }}</option>
             {% endfor %}
@@ -51,7 +70,9 @@
 
             <p>Modified:  {{ form.modified }}</p>
 
-            <input type="submit" value="Изменить">
+            <input type="submit" value="Add Spell" name="do_addspell">
+            <input type="submit" value="Delete Spell" name="do_delspell">
+            <input type="submit" value="Изменить" name="do_change">
     </form>
 </div>
 

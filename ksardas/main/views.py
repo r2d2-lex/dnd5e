@@ -156,6 +156,7 @@ def view_character(request, name):
 def edit_character(request, name):
     if request.method == 'POST':
         charform = CharForm(request.POST)
+        print("\r\n*\r\n", request.POST, "\r\n*\r\n")
         if charform.is_valid():
             name = charform.cleaned_data['name']
             charbase = CharBase.objects.get(name=name)
@@ -171,21 +172,31 @@ def edit_character(request, name):
             charbase.wisdom = charform.cleaned_data['wisdom']
             charbase.chrarisma = charform.cleaned_data['chrarisma']
             charbase.modified = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            charbase.save()
-            charform = CharBase.objects.get(name=name)
 
-            context = {'form': charform}
-            return render(request, 'main/edit_character.html', context)
+            # добавление заклинаний
+            if 'do_addspell' in request.POST:
+                spell = charform.cleaned_data['spells']
+                if spell != '':
+                    spell = Spell.objects.get(name=spell)
+                    charbase.spells.add(spell)
+
+            if 'do_delspell' in request.POST:
+                pass
+
+            charbase.save()
         else:
             print("FORM NOT VALID. ERROR:", charform.errors)
-    else:
-        # Загрузка персонажа
-        charform = CharBase.objects.get(name=name)
 
-        #Загрузка имён спеллов
-        spells_name = Spell.objects.values_list('name', flat=True).order_by('name')
+    # Загрузка персонажа
+    charform = CharBase.objects.get(name=name)
 
-    context = {'form': charform, 'spells': spells_name}
+    # Загрузка спеллов персонажа
+    char_spells = charform.spells.all()
+
+    # Загрузка имён спеллов
+    spells_name = Spell.objects.values_list('name', flat=True).order_by('name')
+
+    context = {'form': charform, 'spells': spells_name, 'char_spells': char_spells}
     return render(request, 'main/edit_character.html', context)
 
 
