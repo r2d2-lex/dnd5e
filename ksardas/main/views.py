@@ -181,7 +181,10 @@ def edit_character(request, name):
                     charbase.spells.add(spell)
 
             if 'do_delspell' in request.POST:
-                pass
+                char_spells = request.POST.getlist('char_spells')
+                for spell in char_spells:
+                    remove_spell = Spell.objects.get(name=spell)
+                    charbase.spells.remove(remove_spell)
 
             charbase.save()
         else:

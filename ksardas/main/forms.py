@@ -24,7 +24,8 @@ class CharForm(forms.Form):
     modified = forms.DateTimeField(required=False, initial=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                                    input_formats=['%Y-%m-%d %H:%M:%S'], label='Время модификации')
     #spells = forms.ComboField(required=False, fields=[forms.CharField(max_length=20),], label='Заклинания персонажа')
-    spells = forms.CharField(required=False, label='Заклинания персонажа')
+    spells = forms.CharField(required=False, label='Доступные заклинания персонажа')
+    char_spells = forms.CharField(required=False, label='Заклинания персонажа')
 
 
 class CreateCharForm(ModelForm):

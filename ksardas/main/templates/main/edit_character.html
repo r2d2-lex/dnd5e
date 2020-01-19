@@ -56,7 +56,7 @@
                 <label for="checkboxes">You spells: </label>
               <ul>
                   {% for spell in char_spells %}
-                    <li><input type="checkbox">{{ spell.name }}</li>
+                    <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
                   {% endfor %}
               </ul>
             </div>
