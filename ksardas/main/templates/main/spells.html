@@ -1,0 +1,43 @@
+{% extends "layout/basic.html" %}
+
+{% load bootstrap4 %}
+
+{% block title %}Список заклинаний{% endblock %}
+
+{% block content %}
+
+ <form method="post">
+     {% csrf_token %}
+     <label for="name">Поиск заклинаний: </label>
+     <input id="name" type="text" name="name" value="Введите название заклинания..."><br>
+     <input type="submit" value="Поиск" name="do_change">
+ </form>
+
+{% for spell in spells %}
+<div>
+    <h2>Name: {{ spell.name }} </h2><br>
+    level: {{ spell.level }} <br>
+    School:  {{ spell.school }} <br>
+    Components: {{ spell.components }} <br>
+    distance: {{ spell.distance }} <br>
+    duration: {{ spell.duration }} <br>
+    cast_time : {{ spell.cast_time }} <br>
+    description: {{ spell.description }} <br>
+    <br><br>
+</div>
+{% endfor %}
+
+<div id="pages" align="center">
+    {% if spells.has_previous %}
+        <a href="?page={{ spells.previous_page_number }}">Previous</a>
+    {% endif %}
+    <span class="current">
+        Page {{ spells.number }} of {{ spells.paginator.num_pages }}.
+    </span>
+    {% if spells.has_next %}
+        <a href="?page={{ spells.next_page_number }}">Next</a>
+    {% endif %}
+</div>
+
+
+{% endblock %}

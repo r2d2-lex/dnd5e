@@ -9,6 +9,9 @@ from .models import user_registrated
 import datetime
 
 
+class FindSpellForm(forms.Form):
+    name = forms.CharField(label='Поиск заклинания')
+
 class CharForm(forms.Form):
     name = forms.CharField(label='Имя персонажа')
     race = forms.CharField(label='Расса персонажа')

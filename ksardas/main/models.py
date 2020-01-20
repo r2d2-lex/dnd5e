@@ -27,7 +27,7 @@ class AdvUser(AbstractUser):
 
 # Таблица для заклинаний
 class Spell(models.Model):
-    name = models.CharField(unique=True, null=False, max_length=20, verbose_name='Название заклинания')
+    name = models.CharField(db_index=True ,unique=True, null=False, max_length=20, verbose_name='Название заклинания')
     level = models.IntegerField(verbose_name='Уровень заклинания')
     school = models.IntegerField(verbose_name='Школа заклинания')
     comp_is_verbal = models.BooleanField(default=False ,verbose_name='Вербальные требования')

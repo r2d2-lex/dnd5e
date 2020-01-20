@@ -20,6 +20,7 @@
                 Регистрация</a></li>
                 {% if user.is_authenticated %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'main:create_character' %}">Создать персонажа</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'main:view_spells' %}">Список заклинаний</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown"
                     href="#" role="button" aria-haspopup="true"

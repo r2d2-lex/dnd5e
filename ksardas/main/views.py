@@ -1,4 +1,5 @@
 from django.core.signing import BadSignature
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -18,6 +19,7 @@ from django.views.generic.edit import UpdateView, CreateView, DeleteView
 
 from .forms import CharForm
 from .forms import CreateCharForm
+from .forms import FindSpellForm
 from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
 from .models import AdvUser, CharBase, Spell
@@ -149,6 +151,36 @@ def view_character(request, name):
     print("Current char: ", name)
     ch = CharBase.objects.get(name=name)
     return render(request, 'main/character.html', {'char': ch})
+
+
+# Все заклинания
+@login_required
+def view_spells(request):
+    spells = None
+    if request.method == 'POST':
+        find_spell_form = FindSpellForm(request.POST)
+
+        if find_spell_form.is_valid():
+            name = find_spell_form.cleaned_data['name']
+            name = name.upper()
+            spells = Spell.objects.filter(name__contains=name)
+        else:
+            spells = Spell.objects.all()
+    else:
+        spells = Spell.objects.all()
+
+
+    spells_list = Spell.objects.all()
+    paginator = Paginator(spells_list, 8)
+    page = request.GET.get('page')
+    try:
+        spells = paginator.page(page)
+    except PageNotAnInteger:
+        spells = paginator.page(1)
+    except EmptyPage:
+        spells = paginator.page(paginator.num_pages)
+
+    return render(request, 'main/spells.html', {'spells': spells})
 
 
 # Редактирование персонажа
