@@ -1,16 +1,16 @@
 Name: Testuser
-Email: test@yandex.ru
+Email: test@example.ru
 Testpass22
 Test User
 
 
 Name: Masha1
-Email: test@yandex.ru
+Email: test@example.ru
 Mashapass33
 Masha User
 
 
 Name: Stan
-Email: stan@yandex.ru
+Email: stan@example.ru
 Stanpass44
 Eminem Stan

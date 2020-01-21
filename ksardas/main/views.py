@@ -156,21 +156,18 @@ def view_character(request, name):
 # Все заклинания
 @login_required
 def view_spells(request):
-    spells = None
     if request.method == 'POST':
         find_spell_form = FindSpellForm(request.POST)
 
         if find_spell_form.is_valid():
             name = find_spell_form.cleaned_data['name']
             name = name.upper()
-            spells = Spell.objects.filter(name__contains=name)
+            spells_list = Spell.objects.filter(name__contains=name)
         else:
-            spells = Spell.objects.all()
+            spells_list = Spell.objects.all()
     else:
-        spells = Spell.objects.all()
+        spells_list = Spell.objects.all()
 
-
-    spells_list = Spell.objects.all()
     paginator = Paginator(spells_list, 8)
     page = request.GET.get('page')
     try:
