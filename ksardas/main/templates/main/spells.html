@@ -23,6 +23,10 @@
     duration: {{ spell.duration }} <br>
     cast_time : {{ spell.cast_time }} <br>
     description: {{ spell.description }} <br>
+    <b>allow for classes:</b><br>
+    {% for spc in spell.spell_classes.all %}
+    {{ spc.name }}<br>
+    {% endfor %}
     <br><br>
 </div>
 {% endfor %}

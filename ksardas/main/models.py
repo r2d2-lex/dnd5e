@@ -81,7 +81,17 @@ class CharBase(models.Model):
     hitpoints_curr = models.IntegerField(null=True, default=0, verbose_name='Текущее здоровье')
     hitpoints_temp = models.IntegerField(null=True, default=0, verbose_name='Временные очки здоровья')
 
-    char_class = models.ManyToManyField(CharClasses, verbose_name='Класс персонажа')
+    CLASS_CHOICES = (
+        ('Бард', "Бард"),
+        ('Волшебник', "Волшебник"),
+        ('Друид', "Друид"),
+        ('Жрец', "Жрец"),
+        ('Колдун', "Колдун"),
+        ('Паладин', "Паладин"),
+        ('Следопыт', "Следопыт"),
+        ('Чародей', "Чародей"),
+    )
+    char_class = models.ManyToManyField(CharClasses, choices=CLASS_CHOICES, verbose_name='Класс персонажа')
     world_view = models.IntegerField(null=True, default=0, verbose_name='Мировозрение')
     gender = models.BooleanField(default=True, verbose_name='Пол')
     age = models.IntegerField(null=True, default=21, verbose_name='Возраст персонажа')

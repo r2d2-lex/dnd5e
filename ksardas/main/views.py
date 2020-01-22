@@ -220,15 +220,12 @@ def edit_character(request, name):
             print("FORM NOT VALID. ERROR:", charform.errors)
 
     # Загрузка персонажа
-    charform = CharBase.objects.get(name=name)
-
-    # Загрузка спеллов персонажа
-    char_spells = charform.spells.all()
+    charform_qs = CharBase.objects.get(name=name)
 
     # Загрузка имён спеллов
     spells_name = Spell.objects.values_list('name', flat=True).order_by('name')
 
-    context = {'form': charform, 'spells': spells_name, 'char_spells': char_spells}
+    context = {'form': charform_qs, 'spells': spells_name}
     return render(request, 'main/edit_character.html', context)
 
 

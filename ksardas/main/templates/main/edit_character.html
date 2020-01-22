@@ -22,6 +22,12 @@
             <label for="level">Your Level: </label>
             <input id="level" type="number" name="level" step="1" min="0" value="{{ form.level }}"><br>
 
+            <label for="chclass">Your Class: </label>
+            {% for char_class in form.char_class.all %}
+            <input id="chclass" type="text" name="chclass" value="{{ char_class.name }}"><br>
+            {% endfor %}
+            <br>
+
             <label for="expirence">Your expirence: </label>
             <input id="expirence" type="number" name="expirence" step="1" min="0" value="{{ form.expirence }}"><br>
 
@@ -55,7 +61,7 @@
             <div id="checkboxes">
                 <label for="checkboxes">You spells: </label>
               <ul>
-                  {% for spell in char_spells %}
+                  {% for spell in form.spells.all %}
                     <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
                   {% endfor %}
               </ul>

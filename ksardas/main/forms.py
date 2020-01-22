@@ -44,7 +44,9 @@ class CreateCharForm(ModelForm):
                  'constitution',
                  'intellegence',
                  'wisdom',
-                 'chrarisma',)
+                 'chrarisma',
+                 'char_class',
+                  )
 
 
 class ChangeUserInfoForm(forms.ModelForm):
