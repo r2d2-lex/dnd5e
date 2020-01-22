@@ -14,3 +14,7 @@ Name: Stan
 Email: stan@example.ru
 Stanpass44
 Eminem Stan
+
+
+Name(Admin): super
+Pass: user

@@ -25,6 +25,12 @@ class AdvUser(AbstractUser):
         return self.username
 
 
+# Таблица класса персонажа
+class CharClasses(models.Model):
+    name = models.CharField(db_index=True ,unique=True, null=False, max_length=20, verbose_name='Имя класса персонажа')
+    description = models.CharField(null=True, max_length=1024 * 64, verbose_name='Описание класса')
+
+
 # Таблица для заклинаний
 class Spell(models.Model):
     name = models.CharField(db_index=True ,unique=True, null=False, max_length=20, verbose_name='Название заклинания')
@@ -41,11 +47,8 @@ class Spell(models.Model):
     is_ritual = models.BooleanField(default=False, verbose_name='Ритуал')
     description = models.TextField(null=False, verbose_name='Описание заклинания')
     gold = models.IntegerField(null=True, verbose_name='Золото')
+    spell_classes = models.ManyToManyField(CharClasses, verbose_name='Класс персонажа')
 
-# Таблица класса персонажа
-class CharClasses(models.Model):
-    name = models.CharField(db_index=True ,unique=True, null=False, max_length=20, verbose_name='Имя класса персонажа')
-    description = models.CharField(null=True, max_length=1024 * 64, verbose_name='Описание класса')
 
 # Основная таблица персонажа
 class CharBase(models.Model):
@@ -78,7 +81,7 @@ class CharBase(models.Model):
     hitpoints_curr = models.IntegerField(null=True, default=0, verbose_name='Текущее здоровье')
     hitpoints_temp = models.IntegerField(null=True, default=0, verbose_name='Временные очки здоровья')
 
-    char_class = models.CharField(null=False, choices=RACE_CHOICES, max_length=20, verbose_name='Класс персонажа')
+    char_class = models.ManyToManyField(CharClasses, verbose_name='Класс персонажа')
     world_view = models.IntegerField(null=True, default=0, verbose_name='Мировозрение')
     gender = models.BooleanField(default=True, verbose_name='Пол')
     age = models.IntegerField(null=True, default=21, verbose_name='Возраст персонажа')
@@ -92,7 +95,7 @@ class CharBase(models.Model):
     ideals = models.CharField(null=True, max_length=20, verbose_name='Идеалы')
     bonds = models.CharField(null=True, max_length=20, verbose_name='Привязанности')
     flaws = models.CharField(null=True, max_length=20, verbose_name='Пороки')
-    char_history = models.TextField(verbose_name='История персонажа')
+    char_history = models.TextField(default='', verbose_name='История персонажа')
 
     gold_count = models.IntegerField(null=True, default=0, verbose_name='Золото персонажа')
     silver_count = models.IntegerField(null=True, default=0, verbose_name='Серебро персонажа')
