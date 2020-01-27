@@ -101,6 +101,7 @@ class CharBase(models.Model):
     hair = models.CharField(null=True, max_length=20, verbose_name='Цвет волос')
     eyes = models.CharField(null=True, max_length=20, verbose_name='Цвет глаз')
     skin = models.CharField(null=True, max_length=20, verbose_name='Цвет кожы')
+    avatar = models.ImageField(null=True, blank=True, upload_to='avatars/', verbose_name='Аватар')
 
     pers_traits = models.CharField(null=True, max_length=20, verbose_name='Персональные черты')
     ideals = models.CharField(null=True, max_length=20, verbose_name='Идеалы')

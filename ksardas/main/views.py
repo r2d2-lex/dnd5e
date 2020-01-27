@@ -1,5 +1,6 @@
 from django.core.signing import BadSignature
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -225,6 +226,20 @@ def edit_character(request, name):
             charbase.save()
         else:
             print("FORM NOT VALID. ERROR:", charform.errors)
+
+    # Загрузка изображения
+    if request.method == 'POST' and request.FILES['avatar']:
+        avatar = request.FILES['avatar']
+        char_name = request.POST.getlist('name')[0]
+
+        charbase = CharBase.objects.get(name=char_name)
+        charbase.avatar = avatar
+        charbase.save()
+
+        fs = FileSystemStorage()
+        filename = fs.save(avatar.name, avatar)
+        uploaded_file_url = fs.url(filename)
+        print("AVATAR URL:", uploaded_file_url, " For character:", char_name)
 
     # Загрузка персонажа
     charform_qs = CharBase.objects.get(name=name)

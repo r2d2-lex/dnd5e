@@ -80,6 +80,17 @@
             <input type="submit" value="Delete Spell" name="do_delspell">
             <input type="submit" value="Изменить" name="do_change">
     </form>
+    <br><br>
+    Avatar:
+    <img src="{{ form.avatar.url }}"><br>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="name" value="{{ form.name }}">
+        <label for="avatar">Load your avatar:</label>
+        <input id="avatar" type="file" name="avatar">
+        <button type="submit">Upload avatar</button><br>
+    </form>
+
 </div>
 
 {% endblock %}
