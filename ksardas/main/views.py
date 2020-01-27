@@ -180,6 +180,13 @@ def view_spells(request):
     return render(request, 'main/spells.html', {'spells': spells})
 
 
+@login_required
+def edit_spell(request, id):
+    spell = Spell.objects.get(id=id)
+    context = {'spell':spell}
+    return render(request, 'main/edit_spell.html', context)
+
+
 # Редактирование персонажа
 @login_required
 def edit_character(request, name):

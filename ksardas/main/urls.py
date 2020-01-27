@@ -5,6 +5,7 @@ from .views import BBPasswordChangeView
 from .views import ChangeUserInfoView
 from .views import CharCreateView
 from .views import edit_character
+from .views import edit_spell
 from .views import DeleteUserView
 from .views import index, other_page, profile
 from .views import RegisterUserView, RegisterDoneView
@@ -24,6 +25,7 @@ urlpatterns = [
     path('accounts/profile/char/<str:name>/edit/', edit_character, name='edit_character'),
     path('accounts/profile/char/<str:name>/', view_character, name='view_character'),
     path('accounts/profile/allspells/', view_spells, name='view_spells'),
+    path('accounts/profile/editspell/<int:id>/', edit_spell, name='edit_spell'),
     path('accounts/password/change/', BBPasswordChangeView.as_view(), name='password_change'),
     path('accounts/login/', BBLoginView.as_view(), name='login'),
     path('accounts/logout/', BBLogoutView.as_view(), name='logout'),

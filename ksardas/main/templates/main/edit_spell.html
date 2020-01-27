@@ -1,0 +1,63 @@
+{% extends "layout/basic.html" %}
+
+{% load bootstrap4 %}
+
+{% block title %}Редактировать заклинание{% endblock %}
+
+{% block content %}
+<h2>Редактировать заклинание</h2>
+
+<div>
+    <form method="post">
+        {% csrf_token %}
+            <label for="name">Spell name: </label>
+            <input id="name" type="text" name="name" value="{{ spell.name }}"><br>
+
+            <label for="level">Spell level: </label>
+            <input id="level" type="number" step="1" min="0" name="level" value="{{ spell.level }}"><br>
+
+            <label for="school">Spell school: </label>
+            <input id="school" type="number" name="school" step="1" min="0" value="{{ spell.school }}"><br>
+
+            <label for="distance">Spell distance: </label>
+            <input id="distance" type="text" name="distance" value="{{ spell.distance }}"><br>
+
+            <label for="duration">Spell duration: </label>
+            <input id="duration" type="text" name="duration" value="{{ spell.duration }}"><br>
+
+            <label for="cast_time">Spell cast_time: </label>
+            <input id="cast_time" type="text" name="cast_time" value="{{ spell.cast_time }}"><br>
+
+            <b>Spell for classes:</b><br>
+            {% for spell_class in spell.spell_classes.all %}
+            {{ spell_class.name }}<br>
+            {% endfor %}
+            <br>
+
+            <label for="concentrate">Is contentrate:</label>
+            <input type="checkbox" id="concentrate" name="concentrate" value="" {% if spell.is_concentrate %}checked{% endif %}><Br>
+
+            <label for="ritual">Is ritual:</label>
+            <input type="checkbox" id="ritual" name="ritual" value="" {% if spell.is_ritual %}checked{% endif %}><Br>
+
+            <label for="verbal">Verbal component:</label>
+            <input type="checkbox" id="verbal" name="verbal" value="" {% if spell.comp_is_verbal %}checked{% endif %}><Br>
+
+            <label for="somatic">Somatic component:</label>
+            <input type="checkbox" id="somatic"  name="somatic" value="" {% if spell.comp_is_somatic %}checked{% endif %}><Br>
+
+            <label for="material">Material component:</label>
+            <input type="checkbox" id="material"  name="material" value="" {% if spell.comp_is_material %}checked{% endif %}><Br>
+
+            <label for="components">Components: </label><br>
+            <textarea id="components" name="components" rows="2" cols="45">{{ spell.components }}</textarea><Br><Br>
+
+            <label for="description">Description: </label><br>
+            <textarea id="description" name="description" rows="10" cols="45">{{ spell.description }}</textarea><Br><Br>
+
+            <input type="submit" value="Изменить" name="do_change">
+            <input type="submit" value="Удалить" name="do_delete">
+    </form>
+</div>
+
+{% endblock %}

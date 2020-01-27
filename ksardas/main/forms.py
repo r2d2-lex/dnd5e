@@ -5,12 +5,31 @@ from django.forms import ModelForm
 
 from .models import AdvUser
 from .models import CharBase
-from .models import user_registrated
+#from .models import user_registrated
 import datetime
 
 
 class FindSpellForm(forms.Form):
     name = forms.CharField(label='Поиск заклинания')
+
+
+class SpellForm(forms.Form):
+    name = forms.CharField(label='Название заклинания')
+    level = forms.IntegerField(label='Уровень заклинания')
+    school = forms.IntegerField(label='Школа заклинания')
+    comp_is_verbal = forms.BooleanField(label='Вербальные требования')
+    comp_is_somatic = forms.BooleanField(label='Соматичесские требования')
+    comp_is_material = forms.BooleanField(label='Материальные компоненты')
+    components = forms.CharField(label='Компоненты заклинания')
+    distance = forms.CharField(label='Дистанция заклинания')
+    duration = forms.CharField(label='Длительность заклинания')
+    cast_time = forms.CharField(label='Время сотворения заклинания')
+    is_concentrate = forms.BooleanField(label='Концентрация')
+    is_ritual = forms.BooleanField(label='Ритуал')
+    description = forms.CharField(label='Описание заклинания')
+    #gold =  = forms.IntegerField(label='Золото')
+    spell_classes = forms.CharField(required=False, label='Класс персонажа')
+
 
 class CharForm(forms.Form):
     name = forms.CharField(label='Имя персонажа')
@@ -26,7 +45,7 @@ class CharForm(forms.Form):
     chrarisma = forms.IntegerField(label='Харизма персонажа')
     modified = forms.DateTimeField(required=False, initial=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                                    input_formats=['%Y-%m-%d %H:%M:%S'], label='Время модификации')
-    #spells = forms.ComboField(required=False, fields=[forms.CharField(max_length=20),], label='Заклинания персонажа')
+    #spells = forms.ModelMultipleChoiceField(queryset=Spell.objects.all())
     spells = forms.CharField(required=False, label='Доступные заклинания персонажа')
     char_spells = forms.CharField(required=False, label='Заклинания персонажа')
 

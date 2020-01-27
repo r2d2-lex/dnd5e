@@ -91,7 +91,8 @@ class CharBase(models.Model):
         ('Следопыт', "Следопыт"),
         ('Чародей', "Чародей"),
     )
-    char_class = models.ManyToManyField(CharClasses, choices=CLASS_CHOICES, verbose_name='Класс персонажа')
+    #char_class = models.ManyToManyField(CharClasses, choices=CLASS_CHOICES, verbose_name='Класс персонажа')
+    char_class = models.ManyToManyField(CharClasses, verbose_name='Класс персонажа')
     world_view = models.IntegerField(null=True, default=0, verbose_name='Мировозрение')
     gender = models.BooleanField(default=True, verbose_name='Пол')
     age = models.IntegerField(null=True, default=21, verbose_name='Возраст персонажа')

@@ -15,7 +15,8 @@
 
 {% for spell in spells %}
 <div>
-    <h2>Name: {{ spell.name }} </h2><br>
+    <h2>Name: {{ spell.name }}</h2><br>
+    <a href="{% url 'main:edit_spell' spell.id %}">Редактировать заклинание</a><br>
     level: {{ spell.level }} <br>
     School:  {{ spell.school }} <br>
     Components: {{ spell.components }} <br>
