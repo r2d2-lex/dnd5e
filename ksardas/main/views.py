@@ -1,6 +1,5 @@
 from django.core.signing import BadSignature
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -14,7 +13,7 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
 from django.template import TemplateDoesNotExist
-from django.template import loader
+#from django.template import loader
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
 
@@ -23,6 +22,7 @@ from .forms import CreateCharForm
 from .forms import FindSpellForm
 from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
+from .forms import UploadAvatarForm
 from .models import AdvUser, CharBase, Spell
 from .utilites import signer
 import datetime
@@ -172,13 +172,13 @@ def view_spells(request):
     paginator = Paginator(spells_list, 8)
     page = request.GET.get('page')
     try:
-        spells = paginator.page(page)
+        spells_pages = paginator.page(page)
     except PageNotAnInteger:
-        spells = paginator.page(1)
+        spells_pages = paginator.page(1)
     except EmptyPage:
-        spells = paginator.page(paginator.num_pages)
+        spells_pages = paginator.page(paginator.num_pages)
 
-    return render(request, 'main/spells.html', {'spells': spells})
+    return render(request, 'main/spells.html', {'spells': spells_pages})
 
 
 @login_required
@@ -191,12 +191,13 @@ def edit_spell(request, id):
 # Редактирование персонажа
 @login_required
 def edit_character(request, name):
+    # Сохранение данынх в базу
     if request.method == 'POST':
         charform = CharForm(request.POST)
         print("\r\n*\r\n", request.POST, "\r\n*\r\n")
         if charform.is_valid():
             name = charform.cleaned_data['name']
-            charbase = CharBase.objects.get(name=name)
+            charbase = CharBase.objects.get(owner=request.user, name=name)
             charbase.name = charform.cleaned_data['name']
             charbase.playername = charform.cleaned_data['playername']
             charbase.race = charform.cleaned_data['race']
@@ -214,13 +215,13 @@ def edit_character(request, name):
             if 'do_addspell' in request.POST:
                 spell = charform.cleaned_data['spells']
                 if spell != '':
-                    spell = Spell.objects.get(name=spell)
+                    spell = get_object_or_404(Spell, name=spell)
                     charbase.spells.add(spell)
 
             if 'do_delspell' in request.POST:
                 char_spells = request.POST.getlist('char_spells')
                 for spell in char_spells:
-                    remove_spell = Spell.objects.get(name=spell)
+                    remove_spell = get_object_or_404(Spell, name=spell)
                     charbase.spells.remove(remove_spell)
 
             charbase.save()
@@ -228,26 +229,26 @@ def edit_character(request, name):
             print("FORM NOT VALID. ERROR:", charform.errors)
 
     # Загрузка изображения
-    if request.method == 'POST' and request.FILES['avatar']:
-        avatar = request.FILES['avatar']
-        char_name = request.POST.getlist('name')[0]
+    if bool(request.FILES.get('avatar', False)):
+        if request.method == 'POST':
+            avatar_form = UploadAvatarForm(request.POST)
+            if avatar_form.is_valid():
+                char_name = avatar_form.cleaned_data['name']
+                avatar = request.FILES.get('avatar', False)
 
-        charbase = CharBase.objects.get(name=char_name)
-        charbase.avatar = avatar
-        charbase.save()
-
-        fs = FileSystemStorage()
-        filename = fs.save(avatar.name, avatar)
-        uploaded_file_url = fs.url(filename)
-        print("AVATAR URL:", uploaded_file_url, " For character:", char_name)
+                charbase = get_object_or_404(CharBase, owner=request.user, name=char_name)
+                charbase.avatar = avatar
+                charbase.save(update_fields=["avatar"])
+            else:
+                print("avatar_form NOT VALID. ERROR:", avatar_form.errors)
 
     # Загрузка персонажа
-    charform_qs = CharBase.objects.get(name=name)
+    charbase_qs = get_object_or_404(CharBase, owner=request.user, name=name)
 
     # Загрузка имён спеллов
     spells_name = Spell.objects.values_list('name', flat=True).order_by('name')
 
-    context = {'form': charform_qs, 'spells': spells_name}
+    context = {'form': charbase_qs, 'spells': spells_name}
     return render(request, 'main/edit_character.html', context)
 
 

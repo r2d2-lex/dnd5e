@@ -49,14 +49,6 @@
             <label for="chrarisma">Your chrarisma: </label>
             <input id="chrarisma" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}"><br>
 
-            <!--
-            <p>You spells:<br>
-                {% for spell in char_spells %}
-                    {{ spell.name }} <b>Level: {{ spell.level }}</b><br>
-                {% endfor %}
-            </p>
-            -->
-
             <br>
             <div id="checkboxes">
                 <label for="checkboxes">You spells: </label>
@@ -81,8 +73,15 @@
             <input type="submit" value="Изменить" name="do_change">
     </form>
     <br><br>
+
     Avatar:
-    <img src="{{ form.avatar.url }}"><br>
+    {% if form.avatar %}
+        <img src="{{ form.avatar.url }}" width="120" height="120">
+    {% else %}
+        <b>No avatar</b>
+    {% endif %}
+
+    <br><br>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="name" value="{{ form.name }}">

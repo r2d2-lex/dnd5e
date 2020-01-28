@@ -1,20 +1,11 @@
 Name: Testuser
-Email: test@example.ru
 Testpass22
-Test User
-
 
 Name: Masha1
-Email: test@example.ru
 Mashapass33
-Masha User
-
 
 Name: Stan
-Email: stan@example.ru
 Stanpass44
-Eminem Stan
-
 
 Name(Admin): super
 Pass: user

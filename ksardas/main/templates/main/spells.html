@@ -34,15 +34,14 @@
 
 <div id="pages" align="center">
     {% if spells.has_previous %}
-        <a href="?page={{ spells.previous_page_number }}">Previous</a>
+        <a href="?page=1">First</a> &nbsp&nbsp<a href="?page={{ spells.previous_page_number }}">Previous</a>
     {% endif %}
     <span class="current">
         Page {{ spells.number }} of {{ spells.paginator.num_pages }}.
     </span>
     {% if spells.has_next %}
-        <a href="?page={{ spells.next_page_number }}">Next</a>
+        <a href="?page={{ spells.next_page_number }}">Next</a>&nbsp&nbsp<a href="?page={{ spells.paginator.num_pages }}">Last</a>
     {% endif %}
 </div>
-
 
 {% endblock %}
