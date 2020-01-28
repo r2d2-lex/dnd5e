@@ -191,8 +191,20 @@ def edit_spell(request, id):
 # Редактирование персонажа
 @login_required
 def edit_character(request, name):
+    # Загрузка изображения
+    if bool(request.FILES.get('avatar', False)):
+        if request.method == 'POST':
+            avatar_form = UploadAvatarForm(request.POST, request.FILES)
+            if avatar_form.is_valid():
+                char_name = avatar_form.cleaned_data['name']
+                charbase = get_object_or_404(CharBase, owner=request.user, name=char_name)
+                charbase.avatar = avatar_form.cleaned_data['avatar']
+                charbase.save(update_fields=["avatar"])
+            else:
+                print("avatar_form NOT VALID. ERROR:", avatar_form.errors)
+
     # Сохранение данынх в базу
-    if request.method == 'POST':
+    elif request.method == 'POST':
         charform = CharForm(request.POST)
         print("\r\n*\r\n", request.POST, "\r\n*\r\n")
         if charform.is_valid():
@@ -226,21 +238,7 @@ def edit_character(request, name):
 
             charbase.save()
         else:
-            print("FORM NOT VALID. ERROR:", charform.errors)
-
-    # Загрузка изображения
-    if bool(request.FILES.get('avatar', False)):
-        if request.method == 'POST':
-            avatar_form = UploadAvatarForm(request.POST)
-            if avatar_form.is_valid():
-                char_name = avatar_form.cleaned_data['name']
-                avatar = request.FILES.get('avatar', False)
-
-                charbase = get_object_or_404(CharBase, owner=request.user, name=char_name)
-                charbase.avatar = avatar
-                charbase.save(update_fields=["avatar"])
-            else:
-                print("avatar_form NOT VALID. ERROR:", avatar_form.errors)
+            print("charform NOT VALID. ERROR:", charform.errors)
 
     # Загрузка персонажа
     charbase_qs = get_object_or_404(CharBase, owner=request.user, name=name)

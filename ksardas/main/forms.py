@@ -15,7 +15,8 @@ class FindSpellForm(forms.Form):
 
 class UploadAvatarForm(forms.Form):
     name = forms.CharField(label='Имя персонажа')
-    #avatar = forms.ImageField(label='Аватар персонажа')
+    avatar = forms.ImageField(label='Аватар персонажа')
+
 
 class SpellForm(forms.Form):
     name = forms.CharField(label='Название заклинания')
