@@ -38,7 +38,7 @@ class SpellForm(forms.Form):
 
 class CharForm(forms.Form):
     name = forms.CharField(label='Имя персонажа')
-    race = forms.CharField(label='Расса персонажа')
+    race = forms.ChoiceField(choices=CharBase.RACE_CHOICES, label='Расса персонажа')
     playername = forms.CharField(label='Реальное имя персонажа')
     level = forms.IntegerField(label='Уровень персонажа')
     expirence = forms.IntegerField(label='Опыт персонажа')

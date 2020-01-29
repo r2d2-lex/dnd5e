@@ -23,9 +23,11 @@
             <input id="level" type="number" name="level" step="1" min="0" value="{{ form.level }}"><br>
 
             <label for="chclass">Your Class: </label>
+            <select id="chclass" name="chclass" size="{{ form.char_class.count }}">
             {% for char_class in form.char_class.all %}
-            <input id="chclass" type="text" name="chclass" value="{{ char_class.name }}"><br>
+                <option value="{{ char_class.name }}">{{ char_class.name }}</option>
             {% endfor %}
+            </select>
             <br>
 
             <label for="expirence">Your expirence: </label>
@@ -47,9 +49,8 @@
             <input id="wisdom" type="number" name="wisdom" step="1" min="0" value="{{ form.wisdom }}"><br>
 
             <label for="chrarisma">Your chrarisma: </label>
-            <input id="chrarisma" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}"><br>
+            <input id="chrarisma" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}"><br><br>
 
-            <br>
             <div id="checkboxes">
                 <label for="checkboxes">You spells: </label>
               <ul>
