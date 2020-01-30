@@ -13,17 +13,16 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
 from django.template import TemplateDoesNotExist
-#from django.template import loader
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
 
-from .forms import CharForm
-from .forms import CreateCharForm
+from .forms import CharForm, CreateCharForm
+from .forms import CreateCharViewForm
 from .forms import FindSpellForm
 from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
 from .forms import UploadAvatarForm
-from .models import AdvUser, CharBase, Spell
+from .models import AdvUser, CharBase, CharClasses, CharRaces, Spell
 from .utilites import signer
 import datetime
 
@@ -116,27 +115,14 @@ def profile(request):
     chars = CharBase.objects.filter(owner=request.user)
     return render(request, 'main/profile.html', {'chars': chars})
 
-    #
-    # template = loader.get_template('main/profile.html')
-    # chars = CharBase.objects.all()
-    # context = {'chars': chars}
-    # return HttpResponse(template.render(context, request=request))
-    #
-
 
 # Операции с персонажем
 # Создание персонажа
 class CharCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
-    template_name = 'main/create_character.html'
-    form_class = CreateCharForm
+    template_name = 'main/create_char_view.html'
+    form_class = CreateCharViewForm
     success_url = reverse_lazy('main:profile')
     success_message = 'Персонаж создан'
-
-    #def get_context_data(self, **kwargs):
-    #    context = super().get_context_data(**kwargs)
-    #    context['chars'] = CharBase.objects.all()
-    #    return context
-
     model = CharBase
 
     def form_valid(self, form):
@@ -150,7 +136,7 @@ class CharCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 @login_required
 def view_character(request, name):
     print("Current char: ", name)
-    ch = CharBase.objects.get(name=name)
+    ch = get_object_or_404(CharBase, name=name)
     return render(request, 'main/character.html', {'char': ch})
 
 
@@ -183,9 +169,25 @@ def view_spells(request):
 
 @login_required
 def edit_spell(request, id):
-    spell = Spell.objects.get(id=id)
+    spell = get_object_or_404(Spell, id=id)
     context = {'spell':spell}
     return render(request, 'main/edit_spell.html', context)
+
+
+@login_required
+def create_character(request):
+    if request.method == 'POST':
+        charform = CreateCharForm(request.POST)
+        if charform.is_valid():
+            pass
+            #create_char = CharBase.objects.create()
+            #return render(request, 'main/create_character.html', context)
+
+    char_classes = CharClasses.objects.values_list('name', flat=True).order_by('name')
+    char_races = CharRaces.objects.values_list('name', flat=True).order_by('name')
+
+    context = {'char_classes': char_classes, 'char_races': char_races}
+    return render(request, 'main/create_character.html', context)
 
 
 # Редактирование персонажа
@@ -209,7 +211,7 @@ def edit_character(request, name):
         print("\r\n*\r\n", request.POST, "\r\n*\r\n")
         if charform.is_valid():
             name = charform.cleaned_data['name']
-            charbase = CharBase.objects.get(owner=request.user, name=name)
+            charbase = get_object_or_404(CharBase, owner=request.user, name=name)
             charbase.name = charform.cleaned_data['name']
             charbase.playername = charform.cleaned_data['playername']
             charbase.race = charform.cleaned_data['race']

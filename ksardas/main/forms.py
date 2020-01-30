@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
 from .models import AdvUser
-from .models import CharBase
+from .models import CharBase, CharClasses, CharRaces
 #from .models import user_registrated
 import datetime
 
@@ -36,10 +36,18 @@ class SpellForm(forms.Form):
     spell_classes = forms.CharField(required=False, label='Класс персонажа')
 
 
+class CreateCharForm(forms.Form):
+    name = forms.CharField(label='Имя персонажа')
+    race = forms.ChoiceField(choices=CharRaces.RACE_CHOICES, label='Расса персонажа')
+    playername = forms.CharField(label='Реальное имя персонажа')
+    char_class = forms.ChoiceField(choices=CharClasses.CLASS_CHOICES, label='Класс персонажа')
+
+
 class CharForm(forms.Form):
     name = forms.CharField(label='Имя персонажа')
-    race = forms.ChoiceField(choices=CharBase.RACE_CHOICES, label='Расса персонажа')
+    race = forms.ChoiceField(choices=CharRaces.RACE_CHOICES, label='Расса персонажа')
     playername = forms.CharField(label='Реальное имя персонажа')
+    char_class = forms.ChoiceField(choices=CharClasses.CLASS_CHOICES, label='Класс персонажа')
     level = forms.IntegerField(label='Уровень персонажа')
     expirence = forms.IntegerField(label='Опыт персонажа')
     strength = forms.IntegerField(label='Сила персонажа')
@@ -55,7 +63,7 @@ class CharForm(forms.Form):
     char_spells = forms.CharField(required=False, label='Заклинания персонажа')
 
 
-class CreateCharForm(ModelForm):
+class CreateCharViewForm(ModelForm):
     class Meta:
         model = CharBase
         fields = ('name',

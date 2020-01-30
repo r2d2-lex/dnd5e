@@ -46,6 +46,23 @@ class CharClasses(models.Model):
     description = models.CharField(null=True, max_length=1024 * 64, verbose_name='Описание класса')
 
 
+class CharRaces(models.Model):
+    RACE_CHOICES = (
+        ('dwarf', "Дварф"),
+        ('elf', "Эльф"),
+        ('half', "Полурослик"),
+        ('human', "Человек"),
+        ('dragon', "Драконорождённый"),
+        ('gnom', "Гном"),
+        ('halfelf', "Полуэльф"),
+        ('halfork', "Полуорк"),
+        ('tifling', "Тифлинг"),
+    )
+    name = models.CharField(db_index=True, choices=RACE_CHOICES, unique=True, null=False, max_length=20,
+                            verbose_name='Имя рассы персонажа')
+    description = models.CharField(null=True, max_length=1024 * 64, verbose_name='Описание рассы')
+
+
 # Таблица для заклинаний
 class Spell(models.Model):
     name = models.CharField(db_index=True ,unique=True, null=False, max_length=20, verbose_name='Название заклинания')
@@ -69,18 +86,8 @@ class Spell(models.Model):
 class CharBase(models.Model):
     owner = models.ForeignKey('AdvUser', null=False, on_delete=models.PROTECT, verbose_name='Владелец персонажа')
     name = models.CharField(db_index=True, unique=True, null=False, max_length=20, verbose_name='Имя персонажа')
-    RACE_CHOICES = (
-        ('dwarf', "Дварф"),
-        ('elf', "Эльф"),
-        ('half', "Полурослик"),
-        ('human', "Человек"),
-        ('dragon', "Драконорождённый"),
-        ('gnom', "Гном"),
-        ('halfelf', "Полуэльф"),
-        ('halfork', "Полуорк"),
-        ('tifling', "Тифлинг"),
-    )
-    race = models.CharField(null=False, choices=RACE_CHOICES, max_length=20, verbose_name='Расса персонажа')
+
+    race = models.CharField(null=False, choices=CharRaces.RACE_CHOICES, max_length=20, verbose_name='Расса персонажа')
     playername = models.CharField(null=True, max_length=20, verbose_name='Реальное имя персонажа')
     level = models.IntegerField(null=False, default=1, verbose_name='Уровень персонажа')
     expirence = models.IntegerField(null=False, default=0, verbose_name='Опыт персонажа')

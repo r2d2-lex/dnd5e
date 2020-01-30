@@ -10,8 +10,28 @@
 <div>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Добавить">
+            <label for="name">Character name: </label>
+            <input id="name" type="text" name="name" value="Enter name"><br>
+
+            <label for="playername">Character realname: </label>
+            <input id="playername" type="text" name="playername" value="Enter playername"><br>
+
+            <label for="race">Choise character race: </label>
+            <select id="race" name="race" size="5">
+            {% for race in char_races %}
+                <option value="{{ race }}">{{ race }}</option>
+            {% endfor %}
+            </select><br><br>
+
+            <label for="chclass">Character Class: </label>
+            <select id="chclass" name="chclass" size="{{ char_classes.count }}">
+            {% for char_class in char_classes %}
+                <option value="{{ char_class }}">{{ char_class }}</option>
+            {% endfor %}
+            </select>
+            <br>
+
+        <input type="submit" value="Создать">
     </form>
 </div>
 

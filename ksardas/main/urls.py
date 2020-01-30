@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 from .views import BBLoginView, BBLogoutView
 from .views import BBPasswordChangeView
 from .views import ChangeUserInfoView
-from .views import CharCreateView
+#from .views import CharCreateView
+from .views import create_character
 from .views import edit_character
 from .views import edit_spell
 from .views import DeleteUserView
@@ -23,7 +24,8 @@ urlpatterns = [
     path('accounts/profile/', profile, name='profile'),
     path('accounts/profile/change/', ChangeUserInfoView.as_view(), name='profile_change'),
     path('accounts/profile/delete/', DeleteUserView.as_view(), name='profile_delete'),
-    path('accounts/profile/char/create/', CharCreateView.as_view(), name='create_character'),
+    #path('accounts/profile/char/create/', CharCreateView.as_view(), name='create_character'),
+    path('accounts/profile/char/create/', create_character, name='create_character'),
     path('accounts/profile/char/<str:name>/edit/', edit_character, name='edit_character'),
     path('accounts/profile/char/<str:name>/', view_character, name='view_character'),
     path('accounts/profile/allspells/', view_spells, name='view_spells'),
