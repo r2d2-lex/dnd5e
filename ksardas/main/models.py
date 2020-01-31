@@ -25,6 +25,20 @@ class AdvUser(AbstractUser):
         return self.username
 
 
+class ClassManager(models.Manager):
+
+    def create_db(self):
+        for rc in CharClasses.CLASS_CHOICES:
+            self.create(name=rc[0], caption=rc[1], description=rc[1])
+        return True
+
+    def get_classes_captions(self):
+        class_record = []
+        for char_class in self.all():
+            class_record.append([char_class.name, char_class.caption])
+        return class_record
+
+
 # Таблица класса персонажа
 class CharClasses(models.Model):
     CLASS_CHOICES = (
@@ -43,7 +57,28 @@ class CharClasses(models.Model):
     )
     name = models.CharField(db_index=True, choices=CLASS_CHOICES, unique=True, null=False, max_length=20,
                             verbose_name='Имя класса персонажа')
+    caption = models.CharField(null=True, max_length=24, verbose_name='Caption класса')
     description = models.CharField(null=True, max_length=1024 * 64, verbose_name='Описание класса')
+    charclass = ClassManager()
+    objects = models.Manager()
+
+
+class RaceManager(models.Manager):
+    # Класс модели всегда доступен управляющему классу через
+    # self.model.
+    def get_races(self):
+        return self.values_list('name', flat=True).order_by('name')
+
+    def create_db(self):
+        for rc in CharRaces.RACE_CHOICES:
+            self.create(name=rc[0], caption=rc[1], description=rc[1])
+        return True
+
+    def get_races_captions(self):
+        race_capt = []
+        for race in self.all():
+            race_capt.append([race.name, race.caption])
+        return race_capt
 
 
 class CharRaces(models.Model):
@@ -60,12 +95,18 @@ class CharRaces(models.Model):
     )
     name = models.CharField(db_index=True, choices=RACE_CHOICES, unique=True, null=False, max_length=20,
                             verbose_name='Имя рассы персонажа')
+    caption = models.CharField(null=True, max_length=24, verbose_name='Caption рассы')
     description = models.CharField(null=True, max_length=1024 * 64, verbose_name='Описание рассы')
+
+    # Новый управляющий класс модели
+    race = RaceManager()
+    # Управляющий класс по умолчанию теперь нужно определять явно
+    objects = models.Manager()
 
 
 # Таблица для заклинаний
 class Spell(models.Model):
-    name = models.CharField(db_index=True ,unique=True, null=False, max_length=20, verbose_name='Название заклинания')
+    name = models.CharField(db_index=True, unique=True, null=False, max_length=20, verbose_name='Название заклинания')
     level = models.IntegerField(verbose_name='Уровень заклинания')
     school = models.IntegerField(verbose_name='Школа заклинания')
     comp_is_verbal = models.BooleanField(default=False ,verbose_name='Вербальные требования')
@@ -87,7 +128,7 @@ class CharBase(models.Model):
     owner = models.ForeignKey('AdvUser', null=False, on_delete=models.PROTECT, verbose_name='Владелец персонажа')
     name = models.CharField(db_index=True, unique=True, null=False, max_length=20, verbose_name='Имя персонажа')
 
-    race = models.CharField(null=False, choices=CharRaces.RACE_CHOICES, max_length=20, verbose_name='Расса персонажа')
+    race = models.ManyToManyField(CharRaces, choices=CharRaces.RACE_CHOICES, max_length=20, verbose_name='Расса персонажа')
     playername = models.CharField(null=True, max_length=20, verbose_name='Реальное имя персонажа')
     level = models.IntegerField(null=False, default=1, verbose_name='Уровень персонажа')
     expirence = models.IntegerField(null=False, default=0, verbose_name='Опыт персонажа')

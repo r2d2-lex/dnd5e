@@ -183,8 +183,8 @@ def create_character(request):
             #create_char = CharBase.objects.create()
             #return render(request, 'main/create_character.html', context)
 
-    char_classes = CharClasses.objects.values_list('name', flat=True).order_by('name')
-    char_races = CharRaces.objects.values_list('name', flat=True).order_by('name')
+    char_classes = CharClasses.charclass.get_classes_captions()
+    char_races = CharRaces.race.get_races_captions()
 
     context = {'char_classes': char_classes, 'char_races': char_races}
     return render(request, 'main/create_character.html', context)
@@ -247,8 +247,22 @@ def edit_character(request, name):
 
     # Загрузка имён спеллов
     spells_name = Spell.objects.values_list('name', flat=True).order_by('name')
+    char_classes = CharClasses.charclass.get_classes_captions()
+    char_races = CharRaces.race.get_races_captions()
 
-    context = {'form': charbase_qs, 'spells': spells_name}
+    # Получаем текущую рассу
+    cur_race = False
+    for cr in charbase_qs.race.all():
+        cur_race = cr.name
+        break
+
+    # Получаем текущий класс
+    cur_class = []
+    for cc in charbase_qs.char_class.all():
+        cur_class.append(cc.name)
+
+    context = {'form': charbase_qs, 'spells': spells_name, 'races': char_races, 'classes': char_classes,
+               'cur_race': cur_race, 'cur_class':cur_class}
     return render(request, 'main/edit_character.html', context)
 
 

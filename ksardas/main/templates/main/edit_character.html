@@ -16,8 +16,15 @@
             <label for="playername">Your realname: </label>
             <input id="playername" type="text" name="playername" value="{{ form.playername }}"><br>
 
-            <label for="race">Your race: </label>
-            <input id="race" type="text" name="race" value="{{ form.race }}"><br>
+            <label for="races">Your race:</label>
+            <select id="races" name="races" size="1">
+            {% for race1,race2 in races %}
+                <option value="{{ race1 }}"
+                        {% if race1 == cur_race %}selected="selected"{% endif %}
+                >{{ race2 }}
+                </option>
+            {% endfor %}
+            </select><br>
 
             <label for="level">Your Level: </label>
             <input id="level" type="number" name="level" step="1" min="0" value="{{ form.level }}"><br>
