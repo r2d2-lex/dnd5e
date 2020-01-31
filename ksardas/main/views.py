@@ -23,6 +23,7 @@ from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
 from .forms import UploadAvatarForm
 from .models import AdvUser, CharBase, CharClasses, CharRaces, Spell
+from .models import get_current_race, get_current_charclass
 from .utilites import signer
 import datetime
 
@@ -251,15 +252,10 @@ def edit_character(request, name):
     char_races = CharRaces.race.get_races_captions()
 
     # Получаем текущую рассу
-    cur_race = False
-    for cr in charbase_qs.race.all():
-        cur_race = cr.name
-        break
-
+    cur_race = get_current_race(charbase_qs)
     # Получаем текущий класс
-    cur_class = []
-    for cc in charbase_qs.char_class.all():
-        cur_class.append(cc.name)
+    cur_class = get_current_charclass(charbase_qs)
+    print('Current RACE:', cur_race, '  Current CLASS:', cur_class)
 
     context = {'form': charbase_qs, 'spells': spells_name, 'races': char_races, 'classes': char_classes,
                'cur_race': cur_race, 'cur_class':cur_class}

@@ -123,6 +123,25 @@ class Spell(models.Model):
     spell_classes = models.ManyToManyField(CharClasses, verbose_name='Класс персонажа')
 
 
+def get_current_race(model):
+    cur_race = False
+    for cr in model.race.all():
+        cur_race = cr.name
+        break
+    return cur_race
+
+
+def get_current_charclass(model):
+    cur_class = []
+    for cc in model.char_class.all():
+        cur_class.append(cc.name)
+    return cur_class
+
+
+class CharacterManager(models.Manager):
+    pass
+
+
 # Основная таблица персонажа
 class CharBase(models.Model):
     owner = models.ForeignKey('AdvUser', null=False, on_delete=models.PROTECT, verbose_name='Владелец персонажа')
@@ -170,6 +189,9 @@ class CharBase(models.Model):
     gold_count = models.IntegerField(null=True, default=0, verbose_name='Золото персонажа')
     silver_count = models.IntegerField(null=True, default=0, verbose_name='Серебро персонажа')
     copper_count = models.IntegerField(null=True, default=0, verbose_name='Медь персонажа')
+
+    char = CharacterManager()
+    objects = models.Manager()
 
     def __str__(self):
         return self.name
