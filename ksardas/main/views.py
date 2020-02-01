@@ -215,7 +215,6 @@ def edit_character(request, name):
             charbase = get_object_or_404(CharBase, owner=request.user, name=name)
             charbase.name = charform.cleaned_data['name']
             charbase.playername = charform.cleaned_data['playername']
-            charbase.race = charform.cleaned_data['race']
             charbase.level = charform.cleaned_data['level']
             charbase.expirence = charform.cleaned_data['expirence']
             charbase.strength = charform.cleaned_data['strength']
@@ -225,6 +224,9 @@ def edit_character(request, name):
             charbase.wisdom = charform.cleaned_data['wisdom']
             charbase.chrarisma = charform.cleaned_data['chrarisma']
             charbase.modified = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+            charbase.race.set([CharBase.char.race_set(charform.cleaned_data['race'])])
+            charbase.char_class.set([CharBase.char.charclass_set(charform.cleaned_data['char_class'])])
 
             # добавление заклинаний
             if 'do_addspell' in request.POST:
@@ -247,14 +249,15 @@ def edit_character(request, name):
     charbase_qs = get_object_or_404(CharBase, owner=request.user, name=name)
 
     # Загрузка имён спеллов
-    spells_name = Spell.objects.values_list('name', flat=True).order_by('name')
+    spells_name = Spell.spells.get_spell_names()
     char_classes = CharClasses.charclass.get_classes_captions()
     char_races = CharRaces.race.get_races_captions()
 
     # Получаем текущую рассу
     cur_race = get_current_race(charbase_qs)
-    # Получаем текущий класс
+    # Получаем текущий класс(пока только один)
     cur_class = get_current_charclass(charbase_qs)
+
     print('Current RACE:', cur_race, '  Current CLASS:', cur_class)
 
     context = {'form': charbase_qs, 'spells': spells_name, 'races': char_races, 'classes': char_classes,

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.dispatch import Signal
+from django.shortcuts import get_object_or_404
 from .utilites import send_activation_notification
 
 
@@ -104,6 +105,11 @@ class CharRaces(models.Model):
     objects = models.Manager()
 
 
+class SpellManager(models.Manager):
+    def get_spell_names(self):
+        return self.values_list('name', flat=True).order_by('name')
+
+
 # Таблица для заклинаний
 class Spell(models.Model):
     name = models.CharField(db_index=True, unique=True, null=False, max_length=20, verbose_name='Название заклинания')
@@ -121,6 +127,8 @@ class Spell(models.Model):
     description = models.TextField(null=False, verbose_name='Описание заклинания')
     gold = models.IntegerField(null=True, verbose_name='Золото')
     spell_classes = models.ManyToManyField(CharClasses, verbose_name='Класс персонажа')
+    spells = SpellManager()
+    objects = models.Manager()
 
 
 def get_current_race(model):
@@ -135,11 +143,19 @@ def get_current_charclass(model):
     cur_class = []
     for cc in model.char_class.all():
         cur_class.append(cc.name)
+    if len(cur_class) > 0:
+        cur_class = cur_class[0]
+    else:
+        cur_class = "unknown"
     return cur_class
 
 
 class CharacterManager(models.Manager):
-    pass
+    def race_set(self, race):
+        return get_object_or_404(CharRaces, name=race)
+
+    def charclass_set(self, chclass):
+        return get_object_or_404(CharClasses, name=chclass)
 
 
 # Основная таблица персонажа
