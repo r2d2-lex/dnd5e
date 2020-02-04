@@ -23,7 +23,6 @@ from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
 from .forms import UploadAvatarForm
 from .models import AdvUser, CharBase, CharClasses, CharRaces, Spell
-from .models import get_current_race, get_current_charclass
 from .utilites import signer
 import datetime
 
@@ -171,7 +170,7 @@ def view_spells(request):
 @login_required
 def edit_spell(request, id):
     spell = get_object_or_404(Spell, id=id)
-    context = {'spell':spell}
+    context = {'spell': spell}
     return render(request, 'main/edit_spell.html', context)
 
 
@@ -181,8 +180,8 @@ def create_character(request):
         charform = CreateCharForm(request.POST)
         if charform.is_valid():
             pass
-            #create_char = CharBase.objects.create()
-            #return render(request, 'main/create_character.html', context)
+            # create_char = CharBase.objects.create()
+            # return render(request, 'main/create_character.html', context)
 
     char_classes = CharClasses.charclass.get_classes_captions()
     char_races = CharRaces.race.get_races_captions()
@@ -225,21 +224,12 @@ def edit_character(request, name):
             charbase.chrarisma = charform.cleaned_data['chrarisma']
             charbase.modified = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-            charbase.race.set([CharBase.char.race_set(charform.cleaned_data['race'])])
-            charbase.char_class.set([CharBase.char.charclass_set(charform.cleaned_data['char_class'])])
+            charbase.race_set(charform.cleaned_data['race'])
+            charbase.charclass_set(charform.cleaned_data['char_class'])
 
-            # добавление заклинаний
-            if 'do_addspell' in request.POST:
-                spell = charform.cleaned_data['spells']
-                if spell != '':
-                    spell = get_object_or_404(Spell, name=spell)
-                    charbase.spells.add(spell)
-
-            if 'do_delspell' in request.POST:
-                char_spells = request.POST.getlist('char_spells')
-                for spell in char_spells:
-                    remove_spell = get_object_or_404(Spell, name=spell)
-                    charbase.spells.remove(remove_spell)
+            # добавление заклинаний и удаления заклинаний
+            charbase.add_spell(request.POST, charform)
+            charbase.remove_spell(request.POST)
 
             charbase.save()
         else:
@@ -254,14 +244,14 @@ def edit_character(request, name):
     char_races = CharRaces.race.get_races_captions()
 
     # Получаем текущую рассу
-    cur_race = get_current_race(charbase_qs)
+    cur_race = charbase_qs.get_current_race()
     # Получаем текущий класс(пока только один)
-    cur_class = get_current_charclass(charbase_qs)
+    cur_class = charbase_qs.get_current_charclass()
 
     print('Current RACE:', cur_race, '  Current CLASS:', cur_class)
 
     context = {'form': charbase_qs, 'spells': spells_name, 'races': char_races, 'classes': char_classes,
-               'cur_race': cur_race, 'cur_class':cur_class}
+               'cur_race': cur_race, 'cur_class': cur_class}
     return render(request, 'main/edit_character.html', context)
 
 

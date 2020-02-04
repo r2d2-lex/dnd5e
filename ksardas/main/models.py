@@ -31,7 +31,6 @@ class ClassManager(models.Manager):
     def create_db(self):
         for rc in CharClasses.CLASS_CHOICES:
             self.create(name=rc[0], caption=rc[1], description=rc[1])
-        return True
 
     def get_classes_captions(self):
         class_record = []
@@ -131,31 +130,8 @@ class Spell(models.Model):
     objects = models.Manager()
 
 
-def get_current_race(model):
-    cur_race = False
-    for cr in model.race.all():
-        cur_race = cr.name
-        break
-    return cur_race
-
-
-def get_current_charclass(model):
-    cur_class = []
-    for cc in model.char_class.all():
-        cur_class.append(cc.name)
-    if len(cur_class) > 0:
-        cur_class = cur_class[0]
-    else:
-        cur_class = "unknown"
-    return cur_class
-
-
 class CharacterManager(models.Manager):
-    def race_set(self, race):
-        return get_object_or_404(CharRaces, name=race)
-
-    def charclass_set(self, chclass):
-        return get_object_or_404(CharClasses, name=chclass)
+    pass
 
 
 # Основная таблица персонажа
@@ -208,6 +184,47 @@ class CharBase(models.Model):
 
     char = CharacterManager()
     objects = models.Manager()
+
+    def add_spell(self, post, form):
+        if 'do_addspell' in post:
+            spell = form.cleaned_data['spells']
+            if spell != '':
+                add_spell = get_object_or_404(Spell, name=spell)
+                self.spells.add(add_spell)
+                return True
+            else:
+                return False
+
+    def remove_spell(self, post):
+        if 'do_delspell' in post:
+            # Требуется проверка?
+            char_spells = post.getlist('char_spells')
+            for spell in char_spells:
+                remove_spell = get_object_or_404(Spell, name=spell)
+                self.spells.remove(remove_spell)
+
+    def race_set(self, race):
+        self.race.set([get_object_or_404(CharRaces, name=race)])
+
+    def charclass_set(self, chclass):
+        self.char_class.set([get_object_or_404(CharClasses, name=chclass)])
+
+    def get_current_race(self):
+        cur_race = False
+        for cr in self.race.all():
+            cur_race = cr.name
+            break
+        return cur_race
+
+    def get_current_charclass(self):
+        cur_class = []
+        for cc in self.char_class.all():
+            cur_class.append(cc.name)
+        if len(cur_class) > 0:
+            cur_class = cur_class[0]
+        else:
+            cur_class = "unknown"
+        return cur_class
 
     def __str__(self):
         return self.name
