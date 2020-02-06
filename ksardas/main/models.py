@@ -30,7 +30,10 @@ class ClassManager(models.Manager):
 
     def create_db(self):
         for rc in CharClasses.CLASS_CHOICES:
-            self.create(name=rc[0], caption=rc[1], description=rc[1])
+            try:
+                self.create(name=rc[0], caption=rc[1], description=rc[1])
+            except:
+                pass
 
     def get_classes_captions(self):
         class_record = []
@@ -71,7 +74,10 @@ class RaceManager(models.Manager):
 
     def create_db(self):
         for rc in CharRaces.RACE_CHOICES:
-            self.create(name=rc[0], caption=rc[1], description=rc[1])
+            try:
+                self.create(name=rc[0], caption=rc[1], description=rc[1])
+            except:
+                pass
         return True
 
     def get_races_captions(self):
@@ -184,6 +190,13 @@ class CharBase(models.Model):
 
     char = CharacterManager()
     objects = models.Manager()
+
+    def delete(self, *args, **kwargs):
+        for ch in self.char_class.all():
+            ch.remove()
+        for rc in self.race.all():
+            rc.remove()
+        super().delete(*args, **kwargs)
 
     def add_spell(self, post, form):
         if 'do_addspell' in post:

@@ -26,6 +26,10 @@ from .models import AdvUser, CharBase, CharClasses, CharRaces, Spell
 from .utilites import signer
 import datetime
 
+from django.urls import reverse
+from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
+
 
 # Операции с учётной записью пользователя
 class DeleteUserView(LoginRequiredMixin, DeleteView):
@@ -179,15 +183,37 @@ def create_character(request):
     if request.method == 'POST':
         charform = CreateCharForm(request.POST)
         if charform.is_valid():
-            pass
-            # create_char = CharBase.objects.create()
-            # return render(request, 'main/create_character.html', context)
+            char_name = charform.cleaned_data['name']
+            create_char = CharBase(name=char_name, playername=charform.cleaned_data['playername'], owner=request.user)
+            print(charform.cleaned_data['race'])
+            print(charform.cleaned_data['char_class'])
+            create_char.save()
+            # Можно добавлять только после сохранения
+            create_char.race_set(charform.cleaned_data['race'])
+            create_char.charclass_set(charform.cleaned_data['char_class'])
+            #return redirect(reverse('main:profile'))
+            return HttpResponseRedirect(reverse('main:edit_character', args=create_char.name))
+
+        else:
+            print("charform NOT VALID. ERROR:", charform.errors)
+
+    #CharRaces.race.create_db()
+    #CharClasses.charclass.create_db()
 
     char_classes = CharClasses.charclass.get_classes_captions()
     char_races = CharRaces.race.get_races_captions()
-
     context = {'char_classes': char_classes, 'char_races': char_races}
     return render(request, 'main/create_character.html', context)
+
+
+@login_required
+def delete_character(request, name):
+    if request.method == 'POST':
+        charbase = get_object_or_404(CharBase, owner=request.user, name=name)
+        charbase.delete()
+        return redirect(reverse('main:profile'))
+    context = {'name': name}
+    return render(request, 'main/delete_character.html', context)
 
 
 # Редактирование персонажа

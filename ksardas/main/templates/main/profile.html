@@ -17,14 +17,15 @@
 <div>
     Name: <a href="{% url 'main:view_character' ch.name %}">{{ ch.name }}</a><br>
     <a href="{% url 'main:edit_character' ch.name %}">Редактировать персонажа</a><br>
+    <a href="{% url 'main:delete_character' ch.name %}">Удалить персонажа</a><br>
     <b>Race:</b>
     {% for race in ch.race.all %}
-        {{ race.name }}<br>
+        {{ race.name }}
     {% endfor %}
     <br>
     <b>Class:</b>
     {% for char_class in ch.char_class.all %}
-        {{ char_class.name }}<br>
+        {{ char_class.name }}
     {% endfor %}
     <br>
     Playername:  {{ ch.playername }} <br>
