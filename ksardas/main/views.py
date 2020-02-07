@@ -191,9 +191,7 @@ def create_character(request):
             # Можно добавлять только после сохранения
             create_char.race_set(charform.cleaned_data['race'])
             create_char.charclass_set(charform.cleaned_data['char_class'])
-            #return redirect(reverse('main:profile'))
-            return HttpResponseRedirect(reverse('main:edit_character', args=create_char.name))
-
+            return HttpResponseRedirect(reverse('main:edit_character', kwargs={'name': char_name}))
         else:
             print("charform NOT VALID. ERROR:", charform.errors)
 
@@ -228,8 +226,10 @@ def edit_character(request, name):
                 charbase = get_object_or_404(CharBase, owner=request.user, name=char_name)
                 charbase.avatar = avatar_form.cleaned_data['avatar']
                 charbase.save(update_fields=["avatar"])
+                messages.add_message(request, messages.SUCCESS, 'Аватар сохранён')
             else:
                 print("avatar_form NOT VALID. ERROR:", avatar_form.errors)
+                messages.add_message(request, messages.WARNING, avatar_form.errors)
 
     # Сохранение данынх в базу
     elif request.method == 'POST':
@@ -258,8 +258,10 @@ def edit_character(request, name):
             charbase.remove_spell(request.POST)
 
             charbase.save()
+            messages.add_message(request, messages.SUCCESS, 'Изменения сохранены')
         else:
-            print("charform NOT VALID. ERROR:", charform.errors)
+            print("charform NOT VALID. ERROR:\r\n", charform.errors)
+            messages.add_message(request, messages.WARNING, charform.errors)
 
     # Загрузка персонажа
     charbase_qs = get_object_or_404(CharBase, owner=request.user, name=name)

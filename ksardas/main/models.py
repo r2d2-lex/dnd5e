@@ -192,10 +192,7 @@ class CharBase(models.Model):
     objects = models.Manager()
 
     def delete(self, *args, **kwargs):
-        for ch in self.char_class.all():
-            ch.remove()
-        for rc in self.race.all():
-            rc.remove()
+        # Удаление аватара
         super().delete(*args, **kwargs)
 
     def add_spell(self, post, form):
