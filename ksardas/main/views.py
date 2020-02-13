@@ -145,19 +145,24 @@ def view_character(request, name):
 
 
 # Все заклинания
+from django.db.models import Q
 @login_required
-def view_spells(request):
-    if request.method == 'POST':
-        find_spell_form = FindSpellForm(request.POST)
+def find_spells(request):
+    context = {}
+    spells_list = Spell.objects.all()
+
+    if request.method == 'GET':
+        find_spell_form = FindSpellForm(request.GET)
 
         if find_spell_form.is_valid():
             name = find_spell_form.cleaned_data['name']
-            name = name.upper()
-            spells_list = Spell.objects.filter(name__contains=name)
+            if name != '':
+                spells_list = spells_list.filter(name__icontains=name)
+
+            if request.GET.get("is_ritual", None):
+                spells_list = spells_list.filter(is_ritual=True)
         else:
-            spells_list = Spell.objects.all()
-    else:
-        spells_list = Spell.objects.all()
+            messages.add_message(request, messages.ERROR, find_spell_form.errors)
 
     paginator = Paginator(spells_list, 8)
     page = request.GET.get('page')
@@ -168,7 +173,9 @@ def view_spells(request):
     except EmptyPage:
         spells_pages = paginator.page(paginator.num_pages)
 
-    return render(request, 'main/spells.html', {'spells': spells_pages})
+    context = {'spells': spells_pages}
+
+    return render(request, 'main/find-spells.html', context)
 
 
 @login_required
@@ -193,7 +200,8 @@ def create_character(request):
             create_char.charclass_set(charform.cleaned_data['char_class'])
             return HttpResponseRedirect(reverse('main:edit_character', kwargs={'name': char_name}))
         else:
-            print("charform NOT VALID. ERROR:", charform.errors)
+            messages.add_message(request, messages.ERROR, charform.errors)
+            print("charform NOT VALID. ERROR:\r\n", charform.errors)
 
     #CharRaces.race.create_db()
     #CharClasses.charclass.create_db()
@@ -209,6 +217,7 @@ def delete_character(request, name):
     if request.method == 'POST':
         charbase = get_object_or_404(CharBase, owner=request.user, name=name)
         charbase.delete()
+        messages.add_message(request, messages.WARNING, 'Персонаж удалён')
         return redirect(reverse('main:profile'))
     context = {'name': name}
     return render(request, 'main/delete_character.html', context)

@@ -135,6 +135,9 @@ class Spell(models.Model):
     spells = SpellManager()
     objects = models.Manager()
 
+    class Meta:
+        ordering = ['name']
+
 
 class CharacterManager(models.Manager):
     pass

@@ -10,7 +10,8 @@ import datetime
 
 
 class FindSpellForm(forms.Form):
-    name = forms.CharField(label='Поиск заклинания')
+    name = forms.CharField(required=False, label='Поиск заклинания')
+    is_ritual = forms.BooleanField(required=False, label='Поиск ритуалов')
 
 
 class UploadAvatarForm(forms.Form):

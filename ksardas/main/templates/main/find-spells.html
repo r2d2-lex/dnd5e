@@ -6,11 +6,15 @@
 
 {% block content %}
 
- <form method="post">
+ <form method="get">
      {% csrf_token %}
-     <label for="name">Поиск заклинаний: </label>
-     <input id="name" type="text" name="name" value="Введите название заклинания..."><br>
-     <input type="submit" value="Поиск" name="do_change">
+     <label for="name">Поиск заклинаний(Введите название заклинания):</label>
+     <input id="name" type="text" name="name" value=""><br>
+
+     <label for="is_ritual">Is ritual:</label>
+     <input type="checkbox" id="is_ritual" name="is_ritual"><Br>
+
+     <input type="submit" value="Поиск" name="do_find">
  </form>
 
 {% for spell in spells %}
@@ -34,13 +38,15 @@
 
 <div id="pages" align="center">
     {% if spells.has_previous %}
-        <a href="?page=1">First</a> &nbsp&nbsp<a href="?page={{ spells.previous_page_number }}">Previous</a>
+        <a href="?page=1{% if request.GET.name %}&name={{ request.GET.name }}{% endif %}">First</a>&nbsp&nbsp
+        <a href="?page={{ spells.previous_page_number }}{% if request.GET.name %}&name={{ request.GET.name }}{% endif %}">Previous</a>
     {% endif %}
     <span class="current">
         Page {{ spells.number }} of {{ spells.paginator.num_pages }}.
     </span>
     {% if spells.has_next %}
-        <a href="?page={{ spells.next_page_number }}">Next</a>&nbsp&nbsp<a href="?page={{ spells.paginator.num_pages }}">Last</a>
+        <a href="?page={{ spells.next_page_number }}{% if request.GET.name %}&name={{ request.GET.name }}{% endif %}">Next</a>&nbsp&nbsp
+        <a href="?page={{ spells.paginator.num_pages }}{% if request.GET.name %}&name={{ request.GET.name }}{% endif %}">Last</a>
     {% endif %}
 </div>
 
