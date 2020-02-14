@@ -11,15 +11,36 @@
      <label for="name">Поиск заклинаний(Введите название заклинания):</label>
      <input id="name" type="text" name="name" value=""><br>
 
-     <label for="is_ritual">Is ritual:</label>
-     <input type="checkbox" id="is_ritual" name="is_ritual"><Br>
+     <label for="ritual">Is ritual:</label>
+     <input type="checkbox" id="ritual" name="ritual"{% if spell.is_ritual %}checked{% endif %}><Br>
 
-     <input type="submit" value="Поиск" name="do_find">
+     <label for="concentrate">Is contentrate:</label>
+     <input type="checkbox" id="concentrate" name="concentrate"{% if spell.is_concentrate %}checked{% endif %}><Br>
+
+     <div class="form-group">
+        <label for="charclasses">Choise character classes:</label>
+            <select multiple class="form-control" id="charclasses" size="12">
+                 {% for charclass1, charclass2 in charclasses %}
+                    <option>{{ charclass1 }}</option>
+                  {% endfor %}
+            </select>
+     </div>
+
+<!--     <div id="charclasses">-->
+<!--         <label for="charclasses">Choise character classes: </label>-->
+<!--              <ul>-->
+<!--                  {% for charclass1, charclass2 in charclasses %}-->
+<!--                    <li><input type="checkbox" name="charclasses" value="{{ charclass1 }}">{{ charclass1 }}</li>-->
+<!--                  {% endfor %}-->
+<!--              </ul>-->
+<!--     </div>-->
+
+     <input type="submit" value="Поиск">
  </form>
 
 {% for spell in spells %}
 <div>
-    <h2>Name: {{ spell.name }}</h2><br>
+    <h2>Name: <a href="{% url 'main:edit_spell' spell.id %}">{{ spell.name }}</a></h2><br>
     <a href="{% url 'main:edit_spell' spell.id %}">Редактировать заклинание</a><br>
     level: {{ spell.level }} <br>
     School:  {{ spell.school }} <br>
@@ -38,15 +59,15 @@
 
 <div id="pages" align="center">
     {% if spells.has_previous %}
-        <a href="?page=1{% if request.GET.name %}&name={{ request.GET.name }}{% endif %}">First</a>&nbsp&nbsp
-        <a href="?page={{ spells.previous_page_number }}{% if request.GET.name %}&name={{ request.GET.name }}{% endif %}">Previous</a>
+        <a href="?page=1{% if parms %}{{ parms }}{% endif %}">First</a>&nbsp&nbsp
+        <a href="?page={{ spells.previous_page_number }}{% if parms %}{{ parms }}{% endif %}">Previous</a>
     {% endif %}
     <span class="current">
         Page {{ spells.number }} of {{ spells.paginator.num_pages }}.
     </span>
     {% if spells.has_next %}
-        <a href="?page={{ spells.next_page_number }}{% if request.GET.name %}&name={{ request.GET.name }}{% endif %}">Next</a>&nbsp&nbsp
-        <a href="?page={{ spells.paginator.num_pages }}{% if request.GET.name %}&name={{ request.GET.name }}{% endif %}">Last</a>
+        <a href="?page={{ spells.next_page_number }}{% if parms %}{{ parms }}{% endif %}">Next</a>&nbsp&nbsp
+        <a href="?page={{ spells.paginator.num_pages }}{% if parms %}{{ parms }}{% endif %}">Last</a>
     {% endif %}
 </div>
 

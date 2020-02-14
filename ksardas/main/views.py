@@ -148,19 +148,11 @@ def view_character(request, name):
 from django.db.models import Q
 @login_required
 def find_spells(request):
-    context = {}
-    spells_list = Spell.objects.all()
-
     if request.method == 'GET':
         find_spell_form = FindSpellForm(request.GET)
 
         if find_spell_form.is_valid():
-            name = find_spell_form.cleaned_data['name']
-            if name != '':
-                spells_list = spells_list.filter(name__icontains=name)
-
-            if request.GET.get("is_ritual", None):
-                spells_list = spells_list.filter(is_ritual=True)
+            find_parms, spells_list = Spell.spells.main_search(request, find_spell_form)
         else:
             messages.add_message(request, messages.ERROR, find_spell_form.errors)
 
@@ -173,7 +165,9 @@ def find_spells(request):
     except EmptyPage:
         spells_pages = paginator.page(paginator.num_pages)
 
-    context = {'spells': spells_pages}
+    # Prepare context
+    char_classes = CharClasses.charclass.get_classes_captions()
+    context = {'spells': spells_pages, 'parms': find_parms, 'charclasses': char_classes}
 
     return render(request, 'main/find-spells.html', context)
 
@@ -263,8 +257,8 @@ def edit_character(request, name):
             charbase.charclass_set(charform.cleaned_data['char_class'])
 
             # добавление заклинаний и удаления заклинаний
-            charbase.add_spell(request.POST, charform)
-            charbase.remove_spell(request.POST)
+            charbase.add_spell(request, charform)
+            charbase.remove_spell(request)
 
             charbase.save()
             messages.add_message(request, messages.SUCCESS, 'Изменения сохранены')

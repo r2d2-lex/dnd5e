@@ -115,6 +115,29 @@ class SpellManager(models.Manager):
         return self.values_list('name', flat=True).order_by('name')
 
 
+    '''
+        Вход: request - параметр запроса, form - фор
+        Возвращает: find_parms - строка параметров со значениями, spells_list - queryset списка заклинаний
+    '''
+    def main_search(self, request, form):
+        spells_list = self.all()
+        find_parms = ""
+        name = form.cleaned_data['name']
+        name = name.upper()
+        if name != '':
+            spells_list = spells_list.filter(name__icontains=name)
+            find_parms += "&name={}".format(name)
+
+        if request.GET.get("ritual", None):
+            spells_list = spells_list.filter(is_ritual=True)
+            find_parms += "&ritual={}".format("on")
+
+        if request.GET.get("concentrate", None):
+            spells_list = spells_list.filter(is_concentrate=True)
+            find_parms += "&concentrate={}".format("on")
+        return find_parms, spells_list
+
+
 # Таблица для заклинаний
 class Spell(models.Model):
     name = models.CharField(db_index=True, unique=True, null=False, max_length=20, verbose_name='Название заклинания')
@@ -198,8 +221,8 @@ class CharBase(models.Model):
         # Удаление аватара
         super().delete(*args, **kwargs)
 
-    def add_spell(self, post, form):
-        if 'do_addspell' in post:
+    def add_spell(self, request, form):
+        if 'do_addspell' in request.POST:
             spell = form.cleaned_data['spells']
             if spell != '':
                 add_spell = get_object_or_404(Spell, name=spell)
@@ -208,10 +231,10 @@ class CharBase(models.Model):
             else:
                 return False
 
-    def remove_spell(self, post):
-        if 'do_delspell' in post:
+    def remove_spell(self, request):
+        if 'do_delspell' in request.POST:
             # Требуется проверка?
-            char_spells = post.getlist('char_spells')
+            char_spells = request.POST.getlist('char_spells')
             for spell in char_spells:
                 remove_spell = get_object_or_404(Spell, name=spell)
                 self.spells.remove(remove_spell)
