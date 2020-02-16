@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 
 from django.urls import reverse_lazy
 from django.shortcuts import render
@@ -149,6 +149,12 @@ from django.db.models import Q
 @login_required
 def find_spells(request):
     if request.method == 'GET':
+        # Ajax trip
+        if request.GET.get('fspells', None):
+            fspells = request.GET.get('fspells')
+            print('FSPELLS:', fspells)
+            return JsonResponse({ 'is_taken' : fspells })
+
         find_spell_form = FindSpellForm(request.GET)
 
         if find_spell_form.is_valid():

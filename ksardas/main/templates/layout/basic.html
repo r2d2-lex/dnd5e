@@ -8,7 +8,8 @@
         <title>{% block title %}Главная{% endblock %} - DnD5</title>
         {% bootstrap_css %}
         <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
-        {% bootstrap_javascript jquery='slim' %}
+<!--        {% bootstrap_javascript jquery='slim' %}-->
+        {% block js %}{% endblock %}
     </head>
     <body class="container-fluid">
         <header class="mb-4">

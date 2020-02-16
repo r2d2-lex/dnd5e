@@ -4,12 +4,17 @@
 
 {% block title %}Список заклинаний{% endblock %}
 
-{% block content %}
+{% load static %}
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="{% static 'js/jfind.js' %}"></script>
+{% endblock %}
 
+{% block content %}
  <form method="get">
      {% csrf_token %}
-     <label for="name">Поиск заклинаний(Введите название заклинания):</label>
-     <input id="name" type="text" name="name" value=""><br>
+     <label for>Поиск заклинаний(Введите название заклинания):</label>
+     <input id="id_name" type="text" name="name" required><br>
 
      <label for="ritual">Is ritual:</label>
      <input type="checkbox" id="ritual" name="ritual"{% if spell.is_ritual %}checked{% endif %}><Br>
@@ -26,6 +31,9 @@
             </select>
      </div>
 
+     <br>
+     <p id="id_findstat"></p>
+     <br>
 <!--     <div id="charclasses">-->
 <!--         <label for="charclasses">Choise character classes: </label>-->
 <!--              <ul>-->
@@ -34,7 +42,7 @@
 <!--                  {% endfor %}-->
 <!--              </ul>-->
 <!--     </div>-->
-
+     <button id="btn" type="submit">Butt</button>
      <input type="submit" value="Поиск">
  </form>
 
