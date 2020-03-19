@@ -148,6 +148,9 @@ def view_character(request, name):
 from django.db.models import Q
 @login_required
 def find_spells(request):
+    char_classes = CharClasses.charclass.get_classes_captions()
+    spell_levels = Spell.spells.get_spell_levels()
+
     if request.method == 'GET':
         # Ajax trip
         if request.GET.get('fspells', None):
@@ -172,9 +175,7 @@ def find_spells(request):
         spells_pages = paginator.page(paginator.num_pages)
 
     # Prepare context
-    char_classes = CharClasses.charclass.get_classes_captions()
-    context = {'spells': spells_pages, 'parms': find_parms, 'charclasses': char_classes}
-
+    context = {'spells': spells_pages, 'parms': find_parms, 'charclasses': char_classes, 'spell_levels': spell_levels}
     return render(request, 'main/find-spells.html', context)
 
 

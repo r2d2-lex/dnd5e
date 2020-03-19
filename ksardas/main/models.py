@@ -4,7 +4,6 @@ from django.dispatch import Signal
 from django.shortcuts import get_object_or_404
 from .utilites import send_activation_notification
 
-
 user_registrated = Signal(providing_args=['instance'])
 
 
@@ -114,12 +113,19 @@ class SpellManager(models.Manager):
     def get_spell_names(self):
         return self.values_list('name', flat=True).order_by('name')
 
+    def get_spell_levels(self):
+        lst = []
+        val = 0
+        for i in range(10):
+            lst.append(str(val))
+            val += 1
+        return lst
 
-    '''
-        Вход: request - параметр запроса, form - фор
-        Возвращает: find_parms - строка параметров со значениями, spells_list - queryset списка заклинаний
-    '''
     def main_search(self, request, form):
+        """
+            Вход: request - параметр запроса, form - фор
+            Возвращает: find_parms - строка параметров со значениями, spells_list - queryset списка заклинаний
+        """
         spells_list = self.all()
         find_parms = ""
         name = form.cleaned_data['name']
@@ -143,13 +149,13 @@ class Spell(models.Model):
     name = models.CharField(db_index=True, unique=True, null=False, max_length=20, verbose_name='Название заклинания')
     level = models.IntegerField(verbose_name='Уровень заклинания')
     school = models.IntegerField(verbose_name='Школа заклинания')
-    comp_is_verbal = models.BooleanField(default=False ,verbose_name='Вербальные требования')
-    comp_is_somatic = models.BooleanField(default=False ,verbose_name='Соматичесские требования')
-    comp_is_material = models.BooleanField(default=False ,verbose_name='Материальные компоненты')
-    components = models.CharField(max_length=2048*64, verbose_name='Компоненты заклинания')
-    distance = models.CharField(max_length=1024*64, verbose_name='Дистанция заклинания')
-    duration = models.CharField(max_length=1024*64, verbose_name='Длительность заклинания')
-    cast_time = models.CharField(max_length=1024*64, verbose_name='Время сотворения заклинания')
+    comp_is_verbal = models.BooleanField(default=False, verbose_name='Вербальные требования')
+    comp_is_somatic = models.BooleanField(default=False, verbose_name='Соматичесские требования')
+    comp_is_material = models.BooleanField(default=False, verbose_name='Материальные компоненты')
+    components = models.CharField(max_length=2048 * 64, verbose_name='Компоненты заклинания')
+    distance = models.CharField(max_length=1024 * 64, verbose_name='Дистанция заклинания')
+    duration = models.CharField(max_length=1024 * 64, verbose_name='Длительность заклинания')
+    cast_time = models.CharField(max_length=1024 * 64, verbose_name='Время сотворения заклинания')
     is_concentrate = models.BooleanField(default=False, verbose_name='Концентрация')
     is_ritual = models.BooleanField(default=False, verbose_name='Ритуал')
     description = models.TextField(null=False, verbose_name='Описание заклинания')
@@ -171,7 +177,8 @@ class CharBase(models.Model):
     owner = models.ForeignKey('AdvUser', null=False, on_delete=models.PROTECT, verbose_name='Владелец персонажа')
     name = models.CharField(db_index=True, unique=True, null=False, max_length=20, verbose_name='Имя персонажа')
 
-    race = models.ManyToManyField(CharRaces, choices=CharRaces.RACE_CHOICES, max_length=20, verbose_name='Расса персонажа')
+    race = models.ManyToManyField(CharRaces, choices=CharRaces.RACE_CHOICES, max_length=20,
+                                  verbose_name='Расса персонажа')
     playername = models.CharField(null=True, max_length=20, verbose_name='Реальное имя персонажа')
     level = models.IntegerField(null=False, default=1, verbose_name='Уровень персонажа')
     expirence = models.IntegerField(null=False, default=0, verbose_name='Опыт персонажа')

@@ -1,69 +1,94 @@
 {% extends "layout/basic.html" %}
 
-{% load bootstrap4 %}
+<!--{% load bootstrap4 %}-->
 
 {% block title %}Список заклинаний{% endblock %}
 
 {% load static %}
 {% block js %}
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="{% static 'js/jfind.js' %}"></script>
 {% endblock %}
 
 {% block content %}
- <form method="get">
-     {% csrf_token %}
-     <label for>Поиск заклинаний(Введите название заклинания):</label>
-     <input id="id_name" type="text" name="name" required><br>
+<form method="get">
+    <div class="input-group mt-3 mb-3">
+        <input id="id_name" type="text" name="name" class="form-control" placeholder="Введите название заклинания" aria-label="Введите название заклинания" aria-describedby="button-search">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit" id="button-search">Поиск</button>
+        </div>
+    </div>
 
-     <label for="ritual">Is ritual:</label>
-     <input type="checkbox" id="ritual" name="ritual"{% if spell.is_ritual %}checked{% endif %}><Br>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="ritual" name="ritual"{% if spell.is_ritual %}checked{% endif %}>
+        <label class="form-check-label" for="ritual">Is ritual</label>
+    </div>
 
-     <label for="concentrate">Is contentrate:</label>
-     <input type="checkbox" id="concentrate" name="concentrate"{% if spell.is_concentrate %}checked{% endif %}><Br>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="concentrate" name="concentrate"{% if spell.is_concentrate %}checked{% endif %}><Br>
+        <label class="form-check-label" for="concentrate">Is contentrate</label>
+    </div>
 
-     <div class="form-group">
-        <label for="charclasses">Choise character classes:</label>
-            <select multiple class="form-control" id="charclasses" size="12">
-                 {% for charclass1, charclass2 in charclasses %}
+    <div class="container">
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label for="charclasses">Выберите класс персонажа:</label>
+                <select multiple class="form-control" id="charclasses" size="12">
+                {% for charclass1, charclass2 in charclasses %}
                     <option>{{ charclass1 }}</option>
-                  {% endfor %}
-            </select>
-     </div>
+                {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="spell_levels">Выберите уровень заклинания:</label>
+                <select multiple class="form-control" id="spell_levels" size="10">
+                {% for level in spell_levels %}
+                    <option>{{ level }}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
 
-     <br>
-     <p id="id_findstat"></p>
-     <br>
-<!--     <div id="charclasses">-->
-<!--         <label for="charclasses">Choise character classes: </label>-->
-<!--              <ul>-->
-<!--                  {% for charclass1, charclass2 in charclasses %}-->
-<!--                    <li><input type="checkbox" name="charclasses" value="{{ charclass1 }}">{{ charclass1 }}</li>-->
-<!--                  {% endfor %}-->
-<!--              </ul>-->
-<!--     </div>-->
-     <button id="btn" type="submit">Butt</button>
-     <input type="submit" value="Поиск">
- </form>
+    <br>
+    <p id="id_findstat"></p>
+    <br>
+    <!--     <div id="charclasses">-->
+    <!--         <label for="charclasses">Choise character classes: </label>-->
+    <!--              <ul>-->
+    <!--                  {% for charclass1, charclass2 in charclasses %}-->
+    <!--                    <li><input type="checkbox" name="charclasses" value="{{ charclass1 }}">{{ charclass1 }}</li>-->
+    <!--                  {% endfor %}-->
+    <!--              </ul>-->
+    <!--     </div>-->
+    <button id="btn" type="submit">Butt</button>
+    <input type="submit" value="Поиск">
+</form>
+
 
 {% for spell in spells %}
-<div>
-    <h2>Name: <a href="{% url 'main:edit_spell' spell.id %}">{{ spell.name }}</a></h2><br>
-    <a href="{% url 'main:edit_spell' spell.id %}">Редактировать заклинание</a><br>
-    level: {{ spell.level }} <br>
-    School:  {{ spell.school }} <br>
-    Components: {{ spell.components }} <br>
-    distance: {{ spell.distance }} <br>
-    duration: {{ spell.duration }} <br>
-    cast_time : {{ spell.cast_time }} <br>
-    description: {{ spell.description }} <br>
-    <b>allow for classes:</b><br>
-    {% for spc in spell.spell_classes.all %}
-    {{ spc.name }}<br>
-    {% endfor %}
-    <br><br>
-</div>
+    <div class="row">
+        <div class="card border-primary mt-5">
+            <div class="card-header bg-light">
+                <h4 class="card-title"><a href="{% url 'main:edit_spell' spell.id %}">{{ spell.name }}</a></h4>
+            </div>
+            <div class="card-body"><!-- Начало текстового контента -->
+                <b>Уровень:</b> {{ spell.level }} <br>
+                <b>Школа:</b>  {{ spell.school }} <br>
+                <b>Компоненты:</b> {{ spell.components }} <br>
+                <b>Дистанция:</b> {{ spell.distance }} <br>
+                <b>Длительность:</b> {{ spell.duration }} <br>
+                <b>Время чтения:</b> {{ spell.cast_time }} <br>
+                <b>Описание:</b> {{ spell.description }} <br>
+                <br><b>Доступно для классов:</b><br>
+                {% for spc in spell.spell_classes.all %}
+                    {{ spc.name }}<br>
+                {% endfor %}
+                <br><a class="badge badge-light" href="{% url 'main:edit_spell' spell.id %}">Редактировать заклинание</a><br>
+            </div><!-- Конец текстового контента -->
+        </div>
+    </div>
 {% endfor %}
+
 
 <div id="pages" align="center">
     {% if spells.has_previous %}

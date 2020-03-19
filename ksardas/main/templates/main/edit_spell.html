@@ -50,13 +50,15 @@
             <input type="checkbox" id="material"  name="material" value="" {% if spell.comp_is_material %}checked{% endif %}><Br>
 
             <label for="components">Components: </label><br>
-            <textarea id="components" name="components" rows="2" cols="45">{{ spell.components }}</textarea><Br><Br>
+            <textarea class="form-control" id="components" name="components" rows="2">{{ spell.components }}</textarea><Br><Br>
 
             <label for="description">Description: </label><br>
-            <textarea id="description" name="description" rows="10" cols="45">{{ spell.description }}</textarea><Br><Br>
+            <textarea class="form-control" id="description" name="description" rows="10">{{ spell.description }}</textarea><Br><Br>
 
-            <input type="submit" value="Изменить" name="do_change">
-            <input type="submit" value="Удалить" name="do_delete">
+<!--            <button type="button" class="btn btn-success" name="do_change">Success</button>-->
+<!--            <button type="button" class="btn btn-danger" name="do_delete">Danger</button>-->
+            <input class="btn btn-success" type="submit" value="Изменить" name="do_change">
+            <input class="btn btn-danger" type="submit" value="Удалить" name="do_delete">
     </form>
 </div>
 
