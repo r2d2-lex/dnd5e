@@ -188,6 +188,9 @@ def edit_spell(request, id):
 
 @login_required
 def create_character(request):
+    CharRaces.race.create_db()
+    CharClasses.charclass.create_db()
+
     if request.method == 'POST':
         charform = CreateCharForm(request.POST)
         if charform.is_valid():
@@ -203,9 +206,6 @@ def create_character(request):
         else:
             messages.add_message(request, messages.ERROR, charform.errors)
             print("charform NOT VALID. ERROR:\r\n", charform.errors)
-
-    #CharRaces.race.create_db()
-    #CharClasses.charclass.create_db()
 
     char_classes = CharClasses.charclass.get_classes_captions()
     char_races = CharRaces.race.get_races_captions()

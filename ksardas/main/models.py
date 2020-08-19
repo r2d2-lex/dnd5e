@@ -27,13 +27,22 @@ class AdvUser(AbstractUser):
 
 class ClassManager(models.Manager):
 
+    """ Создание таблицы с классами персонажей """
     def create_db(self):
+        # Удаляем все записи перед созданием...
+        for records_to_remove in self.all():
+            records_to_remove.delete()
+
         for rc in CharClasses.CLASS_CHOICES:
             try:
-                self.create(name=rc[0], caption=rc[1], description=rc[1])
+                self.create(name=rc[0], caption=rc[1], description='Описание класса '+rc[1])
             except:
                 pass
 
+    """ 
+     Получение описаний классов...
+     Возвращает список из двух элементов: Имя, Описание
+    """
     def get_classes_captions(self):
         class_record = []
         for char_class in self.all():
@@ -71,14 +80,23 @@ class RaceManager(models.Manager):
     def get_races(self):
         return self.values_list('name', flat=True).order_by('name')
 
+    """ Создание таблицы с рассами персонажей """
     def create_db(self):
+        # Удаляем все записи перед созданием...
+        for records_to_remove in self.all():
+            records_to_remove.delete()
+
         for rc in CharRaces.RACE_CHOICES:
             try:
-                self.create(name=rc[0], caption=rc[1], description=rc[1])
+                self.create(name=rc[0], caption=rc[1], description='Описание рассы '+rc[1])
             except:
                 pass
         return True
 
+    """ 
+     Получение описаний расс...
+     Возвращает список из двух элементов: Имя рассы, Описание рассы
+    """
     def get_races_captions(self):
         race_capt = []
         for race in self.all():
