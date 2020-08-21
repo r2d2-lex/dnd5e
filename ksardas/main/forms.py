@@ -69,7 +69,7 @@ class CreateCharViewForm(ModelForm):
     class Meta:
         model = CharBase
         fields = ('name',
-                 'race',
+                 'races',
                  'playername',
                  'level',
                  'expirence',
@@ -79,7 +79,7 @@ class CreateCharViewForm(ModelForm):
                  'intellegence',
                  'wisdom',
                  'chrarisma',
-                 'char_class',
+                 'char_classes',
                   )
 
 

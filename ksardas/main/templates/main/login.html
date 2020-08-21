@@ -1,7 +1,5 @@
 {% extends "layout/basic.html" %}
 
-{% load bootstrap4 %}
-
 {% block title %}Вход{% endblock %}
 
 {% block content %}
@@ -10,11 +8,13 @@
 {% if user.is_authenticated %}
 <p> Вы уже выполнили вход</p>
 {% else %}
+
 <form method="post">
     {% csrf_token %}
-    {% bootstrap_form form layout='horizontal' %}
+    <div class="form-group row"><label class="col-md-3 col-form-label" for="id_username">Username</label><div class="col-md-9"><input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" class="form-control" placeholder="Username" title="" required id="id_username"></div></div>
+    <div class="form-group row"><label class="col-md-3 col-form-label" for="id_password">Password</label><div class="col-md-9"><input type="password" name="password" autocomplete="current-password" class="form-control" placeholder="Password" title="" required id="id_password"></div></div>
     <input type="hidden" name="next" value="{{ next }}">
-    {% buttons submit='Войти' %}{% endbuttons %}
+    <div class="form-group"><button class="btn btn-primary" type="submit">Войти</button></div>
 </form>
 {% endif %}
 {% endblock %}

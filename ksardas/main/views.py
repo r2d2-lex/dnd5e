@@ -188,8 +188,8 @@ def edit_spell(request, id):
 
 @login_required
 def create_character(request):
-    CharRaces.race.create_db()
-    CharClasses.charclass.create_db()
+    # CharRaces.race.create_db()
+    # CharClasses.charclass.create_db()
 
     if request.method == 'POST':
         charform = CreateCharForm(request.POST)
@@ -200,15 +200,15 @@ def create_character(request):
             print(charform.cleaned_data['char_class'])
             create_char.save()
             # Можно добавлять только после сохранения
-            create_char.race_set(charform.cleaned_data['race'])
-            create_char.charclass_set(charform.cleaned_data['char_class'])
+            create_char.races_set(charform.cleaned_data['race'])
+            create_char.char_classes_set(charform.cleaned_data['char_class'])
             return HttpResponseRedirect(reverse('main:edit_character', kwargs={'name': char_name}))
         else:
             messages.add_message(request, messages.ERROR, charform.errors)
             print("charform NOT VALID. ERROR:\r\n", charform.errors)
 
-    char_classes = CharClasses.charclass.get_classes_captions()
-    char_races = CharRaces.race.get_races_captions()
+    char_classes = CharClasses.char_classes.get_classes_captions()
+    char_races = CharRaces.char_races.get_races_captions()
     context = {'char_classes': char_classes, 'char_races': char_races}
     return render(request, 'main/create_character.html', context)
 
@@ -260,8 +260,8 @@ def edit_character(request, name):
             charbase.chrarisma = charform.cleaned_data['chrarisma']
             charbase.modified = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-            charbase.race_set(charform.cleaned_data['race'])
-            charbase.charclass_set(charform.cleaned_data['char_class'])
+            charbase.races_set(charform.cleaned_data['race'])
+            charbase.char_classes_set(charform.cleaned_data['char_class'])
 
             # добавление заклинаний и удаления заклинаний
             charbase.add_spell(request, charform)
@@ -278,13 +278,13 @@ def edit_character(request, name):
 
     # Загрузка имён спеллов
     spells_name = Spell.spells.get_spell_names()
-    char_classes = CharClasses.charclass.get_classes_captions()
-    char_races = CharRaces.race.get_races_captions()
+    char_classes = CharClasses.char_classes.get_classes_captions()
+    char_races = CharRaces.char_races.get_races_captions()
 
     # Получаем текущую рассу
     cur_race = charbase_qs.get_current_race()
     # Получаем текущий класс(пока только один)
-    cur_class = charbase_qs.get_current_charclass()
+    cur_class = charbase_qs.get_current_char_classes()
 
     print('Current RACE:', cur_race, '  Current CLASS:', cur_class)
 

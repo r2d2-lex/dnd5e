@@ -1,4 +1,3 @@
-<!--{% load bootstrap4 %}-->
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -6,13 +5,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>{% block title %}Главная{% endblock %} - DnD5</title>
-        <!--        {% bootstrap_css %}-->
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
 
-        <!-- {% bootstrap_javascript jquery='slim' %} -->
         {% block js %}{% endblock %}
     </head>
 
@@ -113,14 +110,15 @@
                 <a class="nav-link root" href="{% url 'main:other' page='about' %}">О сайте</a>
             </nav>
             <section class="col border py-2">
-                {% bootstrap_messages %}
-<!--                {% if messages %}-->
-<!--                <ul class="messages">-->
-<!--                    {% for message in messages %}-->
-<!--                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>-->
-<!--                    {% endfor %}-->
-<!--                </ul>-->
-<!--                {% endif %}-->
+                <!--                bootstrap_messages-->
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
                 <div class="container">
                 {% block content %}
                 {% endblock %}
