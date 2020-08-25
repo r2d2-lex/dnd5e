@@ -127,12 +127,8 @@ class SpellManager(models.Manager):
         return self.values_list('name', flat=True).order_by('name')
 
     def get_spell_levels(self):
-        lst = []
-        val = 0
-        for i in range(10):
-            lst.append(str(val))
-            val += 1
-        return lst
+        max_spell_level = 10
+        return [level for level in range(max_spell_level)]
 
     def main_search(self, request, form):
         """
@@ -248,8 +244,7 @@ class CharBase(models.Model):
                 add_spell = get_object_or_404(Spell, name=spell)
                 self.spells.add(add_spell)
                 return True
-            else:
-                return False
+        return False
 
     def remove_spell(self, request):
         if 'do_delspell' in request.POST:

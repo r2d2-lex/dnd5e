@@ -148,8 +148,8 @@ def view_character(request, name):
 from django.db.models import Q
 @login_required
 def find_spells(request):
-    char_classes = CharClasses.charclass.get_classes_captions()
-    spell_levels = Spell.spells.get_spell_levels()
+    spells_list_qs = None
+    find_options = None
 
     if request.method == 'GET':
         # Ajax trip
@@ -161,12 +161,14 @@ def find_spells(request):
         find_spell_form = FindSpellForm(request.GET)
 
         if find_spell_form.is_valid():
-            find_parms, spells_list = Spell.spells.main_search(request, find_spell_form)
+            find_options, spells_list_qs = Spell.spells.main_search(request, find_spell_form)
         else:
             messages.add_message(request, messages.ERROR, find_spell_form.errors)
 
-    paginator = Paginator(spells_list, 8)
+    # Paginator
     page = request.GET.get('page')
+    spells_limit_list = 8
+    paginator = Paginator(spells_list_qs, spells_limit_list)
     try:
         spells_pages = paginator.page(page)
     except PageNotAnInteger:
@@ -175,13 +177,18 @@ def find_spells(request):
         spells_pages = paginator.page(paginator.num_pages)
 
     # Prepare context
-    context = {'spells': spells_pages, 'parms': find_parms, 'charclasses': char_classes, 'spell_levels': spell_levels}
+    context = {
+                'spells': spells_pages,
+                'parms': find_options,
+                'charclasses': CharClasses.char_classes.get_classes_captions(),
+                'spell_levels': Spell.spells.get_spell_levels(),
+    }
     return render(request, 'main/find-spells.html', context)
 
 
 @login_required
-def edit_spell(request, id):
-    spell = get_object_or_404(Spell, id=id)
+def edit_spell(request, spell_id):
+    spell = get_object_or_404(Spell, id=spell_id)
     context = {'spell': spell}
     return render(request, 'main/edit_spell.html', context)
 
@@ -189,7 +196,7 @@ def edit_spell(request, id):
 @login_required
 def create_character(request):
     # CharRaces.race.create_db()
-    # CharClasses.charclass.create_db()
+    # CharClasses.char_classes.create_db()
 
     if request.method == 'POST':
         charform = CreateCharForm(request.POST)
@@ -202,14 +209,17 @@ def create_character(request):
             # Можно добавлять только после сохранения
             create_char.races_set(charform.cleaned_data['race'])
             create_char.char_classes_set(charform.cleaned_data['char_class'])
-            return HttpResponseRedirect(reverse('main:edit_character', kwargs={'name': char_name}))
+
+            return redirect('main:edit_character', name=create_char.name)
+            #return HttpResponseRedirect(reverse('main:edit_character', kwargs={'name': char_name}))
         else:
             messages.add_message(request, messages.ERROR, charform.errors)
             print("charform NOT VALID. ERROR:\r\n", charform.errors)
 
-    char_classes = CharClasses.char_classes.get_classes_captions()
-    char_races = CharRaces.char_races.get_races_captions()
-    context = {'char_classes': char_classes, 'char_races': char_races}
+    context = {
+                'char_classes': CharClasses.char_classes.get_classes_captions(),
+                'char_races': CharRaces.char_races.get_races_captions(),
+               }
     return render(request, 'main/create_character.html', context)
 
 
@@ -286,10 +296,16 @@ def edit_character(request, name):
     # Получаем текущий класс(пока только один)
     cur_class = charbase_qs.get_current_char_classes()
 
-    print('Current RACE:', cur_race, '  Current CLASS:', cur_class)
+    print('Current RACE:', cur_race,'\r\n  Current CLASS:', cur_class)
 
-    context = {'form': charbase_qs, 'spells': spells_name, 'races': char_races, 'classes': char_classes,
-               'cur_race': cur_race, 'cur_class': cur_class}
+    context = {
+                'form': charbase_qs,
+                'spells': spells_name,
+                'races': char_races,
+                'classes': char_classes,
+                'cur_race': cur_race,
+                'cur_class': cur_class,
+    }
     return render(request, 'main/edit_character.html', context)
 
 
