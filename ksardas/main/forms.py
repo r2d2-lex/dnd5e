@@ -44,6 +44,19 @@ class CreateCharForm(forms.Form):
     playername = forms.CharField(label='Реальное имя персонажа')
     char_class = forms.ChoiceField(choices=CharClasses.CLASS_CHOICES, label='Класс персонажа')
 
+    def create_character(self, request):
+        create_char = CharBase(
+                                name=self.cleaned_data['name'],
+                                playername=self.cleaned_data['playername'],
+                                owner=request.user,
+                               )
+        print('Расса при создании: ',self.cleaned_data['race'])
+        print('Класс при создании: ',self.cleaned_data['char_class'])
+        create_char.save()
+        create_char.races_set(self.cleaned_data['race'])
+        create_char.char_classes_set(self.cleaned_data['char_class'])
+        return create_char
+
 
 class CharForm(forms.Form):
     name = forms.CharField(label='Имя персонажа')
@@ -63,6 +76,24 @@ class CharForm(forms.Form):
     #spells = forms.ModelMultipleChoiceField(queryset=Spell.objects.all())
     spells = forms.CharField(required=False, label='Доступные заклинания персонажа')
     char_spells = forms.CharField(required=False, label='Заклинания персонажа')
+
+    def edit_character(self, char_qs, request):
+        char_qs.name = self.cleaned_data['name']
+        char_qs.playername = self.cleaned_data['playername']
+        char_qs.level = self.cleaned_data['level']
+        char_qs.expirence = self.cleaned_data['expirence']
+        char_qs.strength = self.cleaned_data['strength']
+        char_qs.dexterity = self.cleaned_data['dexterity']
+        char_qs.constitution = self.cleaned_data['constitution']
+        char_qs.intellegence = self.cleaned_data['intellegence']
+        char_qs.wisdom = self.cleaned_data['wisdom']
+        char_qs.chrarisma = self.cleaned_data['chrarisma']
+        char_qs.modified = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        char_qs.races_set(self.cleaned_data['race'])
+        char_qs.char_classes_set(self.cleaned_data['char_class'])
+        char_qs.add_spell(request, self)
+        char_qs.remove_spell(request)
+        char_qs.save()
 
 
 class CreateCharViewForm(ModelForm):

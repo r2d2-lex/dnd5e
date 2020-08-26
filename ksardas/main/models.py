@@ -26,21 +26,22 @@ class AdvUser(AbstractUser):
 
 
 class ClassManager(models.Manager):
-
     """ Создание таблицы с классами персонажей """
+
     def create_db(self):
         # Удаляем все записи перед созданием...
         for records_to_remove in self.all():
             records_to_remove.delete()
 
         for rc in CharClasses.CLASS_CHOICES:
-            self.create(name=rc[0], caption=rc[1], description='Описание класса '+rc[1])
+            self.create(name=rc[0], caption=rc[1], description='Описание класса ' + rc[1])
         return
 
     """ 
      Получение описаний классов...
      Возвращает список из двух элементов: Имя, Описание
     """
+
     def get_classes_captions(self):
         class_record = []
         for char_class in self.all():
@@ -79,19 +80,21 @@ class RaceManager(models.Manager):
         return self.values_list('name', flat=True).order_by('name')
 
     """ Создание таблицы с рассами персонажей """
+
     def create_db(self):
         # Удаляем все записи перед созданием...
         for records_to_remove in self.all():
             records_to_remove.delete()
 
         for rc in CharRaces.RACE_CHOICES:
-            self.create(name=rc[0], caption=rc[1], description='Описание рассы '+rc[1])
+            self.create(name=rc[0], caption=rc[1], description='Описание рассы ' + rc[1])
         return
 
     """ 
      Получение описаний расс...
      Возвращает список из двух элементов: Имя рассы, Описание рассы
     """
+
     def get_races_captions(self):
         race_capt = []
         for race in self.all():
@@ -187,7 +190,7 @@ class CharBase(models.Model):
     name = models.CharField(db_index=True, unique=True, null=False, max_length=20, verbose_name='Имя персонажа')
 
     races = models.ManyToManyField(CharRaces, choices=CharRaces.RACE_CHOICES, max_length=20,
-                                  verbose_name='Расса персонажа')
+                                   verbose_name='Расса персонажа')
     playername = models.CharField(null=True, max_length=20, verbose_name='Реальное имя персонажа')
     level = models.IntegerField(null=False, default=1, verbose_name='Уровень персонажа')
     expirence = models.IntegerField(null=False, default=0, verbose_name='Опыт персонажа')
@@ -209,7 +212,8 @@ class CharBase(models.Model):
     hitpoints_curr = models.IntegerField(null=True, default=0, verbose_name='Текущее здоровье')
     hitpoints_temp = models.IntegerField(null=True, default=0, verbose_name='Временные очки здоровья')
 
-    char_classes = models.ManyToManyField(CharClasses, choices=CharClasses.CLASS_CHOICES, verbose_name='Класс персонажа')
+    char_classes = models.ManyToManyField(CharClasses, choices=CharClasses.CLASS_CHOICES,
+                                          verbose_name='Класс персонажа')
     world_view = models.IntegerField(null=True, default=0, verbose_name='Мировозрение')
     gender = models.BooleanField(default=True, verbose_name='Пол')
     age = models.IntegerField(null=True, default=21, verbose_name='Возраст персонажа')

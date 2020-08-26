@@ -199,22 +199,14 @@ def create_character(request):
     # CharClasses.char_classes.create_db()
 
     if request.method == 'POST':
-        charform = CreateCharForm(request.POST)
-        if charform.is_valid():
-            char_name = charform.cleaned_data['name']
-            create_char = CharBase(name=char_name, playername=charform.cleaned_data['playername'], owner=request.user)
-            print(charform.cleaned_data['race'])
-            print(charform.cleaned_data['char_class'])
-            create_char.save()
-            # Можно добавлять только после сохранения
-            create_char.races_set(charform.cleaned_data['race'])
-            create_char.char_classes_set(charform.cleaned_data['char_class'])
-
-            return redirect('main:edit_character', name=create_char.name)
+        character_form = CreateCharForm(request.POST)
+        if character_form.is_valid():
+            created_character_db = character_form.create_character(request)
+            return redirect('main:edit_character', name=created_character_db.name)
             #return HttpResponseRedirect(reverse('main:edit_character', kwargs={'name': char_name}))
         else:
-            messages.add_message(request, messages.ERROR, charform.errors)
-            print("charform NOT VALID. ERROR:\r\n", charform.errors)
+            messages.add_message(request, messages.ERROR, character_form.errors)
+            print("charform NOT VALID. ERROR:\r\n", character_form.errors)
 
     context = {
                 'char_classes': CharClasses.char_classes.get_classes_captions(),
@@ -226,8 +218,8 @@ def create_character(request):
 @login_required
 def delete_character(request, name):
     if request.method == 'POST':
-        charbase = get_object_or_404(CharBase, owner=request.user, name=name)
-        charbase.delete()
+        character_db = get_object_or_404(CharBase, owner=request.user, name=name)
+        character_db.delete()
         messages.add_message(request, messages.WARNING, 'Персонаж удалён')
         return redirect(reverse('main:profile'))
     context = {'name': name}
@@ -237,74 +229,42 @@ def delete_character(request, name):
 # Редактирование персонажа
 @login_required
 def edit_character(request, name):
-    # Загрузка изображения
-    if bool(request.FILES.get('avatar', False)):
-        if request.method == 'POST':
+    # Загрузка персонажа
+    char_base = get_object_or_404(CharBase, owner=request.user, name=name)
+
+    if request.method == 'POST':
+        # Загрузка изображения
+        if bool(request.FILES.get('avatar', False)):
             avatar_form = UploadAvatarForm(request.POST, request.FILES)
             if avatar_form.is_valid():
                 char_name = avatar_form.cleaned_data['name']
-                charbase = get_object_or_404(CharBase, owner=request.user, name=char_name)
-                charbase.avatar = avatar_form.cleaned_data['avatar']
-                charbase.save(update_fields=["avatar"])
+                char_base = get_object_or_404(CharBase, owner=request.user, name=char_name)
+                char_base.avatar = avatar_form.cleaned_data['avatar']
+                char_base.save(update_fields=["avatar"])
                 messages.add_message(request, messages.SUCCESS, 'Аватар сохранён')
             else:
                 print("avatar_form NOT VALID. ERROR:", avatar_form.errors)
                 messages.add_message(request, messages.WARNING, avatar_form.errors)
+            return redirect('main:edit_character', name=char_base.name)
 
-    # Сохранение данынх в базу
-    elif request.method == 'POST':
-        charform = CharForm(request.POST)
-        print("\r\n*\r\n", request.POST, "\r\n*\r\n")
-        if charform.is_valid():
-            name = charform.cleaned_data['name']
-            charbase = get_object_or_404(CharBase, owner=request.user, name=name)
-            charbase.name = charform.cleaned_data['name']
-            charbase.playername = charform.cleaned_data['playername']
-            charbase.level = charform.cleaned_data['level']
-            charbase.expirence = charform.cleaned_data['expirence']
-            charbase.strength = charform.cleaned_data['strength']
-            charbase.dexterity = charform.cleaned_data['dexterity']
-            charbase.constitution = charform.cleaned_data['constitution']
-            charbase.intellegence = charform.cleaned_data['intellegence']
-            charbase.wisdom = charform.cleaned_data['wisdom']
-            charbase.chrarisma = charform.cleaned_data['chrarisma']
-            charbase.modified = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-            charbase.races_set(charform.cleaned_data['race'])
-            charbase.char_classes_set(charform.cleaned_data['char_class'])
-
-            # добавление заклинаний и удаления заклинаний
-            charbase.add_spell(request, charform)
-            charbase.remove_spell(request)
-
-            charbase.save()
+        # Сохранение данынх в базу
+        char_form = CharForm(request.POST)
+        if char_form.is_valid():
+            char_form.edit_character(char_base, request)
             messages.add_message(request, messages.SUCCESS, 'Изменения сохранены')
+            # После сохранений в форме всегда вызывай REDIRECT!
+            return redirect('main:edit_character', name=char_base.name)
         else:
-            print("charform NOT VALID. ERROR:\r\n", charform.errors)
-            messages.add_message(request, messages.WARNING, charform.errors)
-
-    # Загрузка персонажа
-    charbase_qs = get_object_or_404(CharBase, owner=request.user, name=name)
-
-    # Загрузка имён спеллов
-    spells_name = Spell.spells.get_spell_names()
-    char_classes = CharClasses.char_classes.get_classes_captions()
-    char_races = CharRaces.char_races.get_races_captions()
-
-    # Получаем текущую рассу
-    cur_race = charbase_qs.get_current_race()
-    # Получаем текущий класс(пока только один)
-    cur_class = charbase_qs.get_current_char_classes()
-
-    print('Current RACE:', cur_race,'\r\n  Current CLASS:', cur_class)
+            print("char_form NOT VALID. ERROR:\r\n", char_form.errors)
+            messages.add_message(request, messages.WARNING, char_form.errors)
 
     context = {
-                'form': charbase_qs,
-                'spells': spells_name,
-                'races': char_races,
-                'classes': char_classes,
-                'cur_race': cur_race,
-                'cur_class': cur_class,
+                'form': char_base,
+                'spells': Spell.spells.get_spell_names(),
+                'races': CharRaces.char_races.get_races_captions(),
+                'classes': CharClasses.char_classes.get_classes_captions(),
+                'cur_race': char_base.get_current_race(),
+                'cur_class': char_base.get_current_char_classes(),
     }
     return render(request, 'main/edit_character.html', context)
 

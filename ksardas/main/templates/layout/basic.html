@@ -112,11 +112,12 @@
             <section class="col border py-2">
                 <!--                bootstrap_messages-->
                 {% if messages %}
-                <ul class="messages">
+                <div class="alert alert-warning" role="alert">
                     {% for message in messages %}
-                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {{ message }}<br>
                     {% endfor %}
-                </ul>
+                </div>
+
                 {% endif %}
 
                 <div class="container">
