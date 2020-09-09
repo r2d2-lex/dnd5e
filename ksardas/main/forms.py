@@ -78,22 +78,41 @@ class CharForm(forms.Form):
     char_spells = forms.CharField(required=False, label='Заклинания персонажа')
 
     def edit_character(self, char_qs, request):
-        char_qs.name = self.cleaned_data['name']
-        char_qs.playername = self.cleaned_data['playername']
-        char_qs.level = self.cleaned_data['level']
-        char_qs.expirence = self.cleaned_data['expirence']
-        char_qs.strength = self.cleaned_data['strength']
-        char_qs.dexterity = self.cleaned_data['dexterity']
-        char_qs.constitution = self.cleaned_data['constitution']
-        char_qs.intellegence = self.cleaned_data['intellegence']
-        char_qs.wisdom = self.cleaned_data['wisdom']
-        char_qs.chrarisma = self.cleaned_data['chrarisma']
-        char_qs.modified = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        char_qs.races_set(self.cleaned_data['race'])
-        char_qs.char_classes_set(self.cleaned_data['char_class'])
-        char_qs.add_spell(request, self)
-        char_qs.remove_spell(request)
+        for form_field in self.cleaned_data.keys():
+            try:
+                if form_field == 'char_class':
+                    char_qs.char_classes_set(self.cleaned_data[form_field])
+                elif form_field == 'race':
+                    char_qs.races_set(self.cleaned_data[form_field])
+                else:
+                    set_attr = getattr(char_qs, form_field)
+                    print('Current: ', set_attr, 'New: ', self.cleaned_data[form_field])
+                    setattr(char_qs, form_field, self.cleaned_data[form_field])
+
+            except (AttributeError, TypeError) as err:
+                print('Form_field: ', form_field)
+                print('Error: ', err, '\r\n')
+                continue
+            finally:
+                char_qs.modified = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         char_qs.save()
+
+        # char_qs.name = self.cleaned_data['name']
+        # char_qs.playername = self.cleaned_data['playername']
+        # char_qs.level = self.cleaned_data['level']
+        # char_qs.expirence = self.cleaned_data['expirence']
+        # char_qs.strength = self.cleaned_data['strength']
+        # char_qs.dexterity = self.cleaned_data['dexterity']
+        # char_qs.constitution = self.cleaned_data['constitution']
+        # char_qs.intellegence = self.cleaned_data['intellegence']
+        # char_qs.wisdom = self.cleaned_data['wisdom']
+        # char_qs.chrarisma = self.cleaned_data['chrarisma']
+        # char_qs.modified = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        # char_qs.races_set(self.cleaned_data['race'])
+        # char_qs.char_classes_set(self.cleaned_data['char_class'])
+        # char_qs.add_spell(request, self)
+        # char_qs.remove_spell(request)
+        # char_qs.save()
 
 
 class CreateCharViewForm(ModelForm):

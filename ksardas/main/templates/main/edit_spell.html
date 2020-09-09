@@ -15,7 +15,10 @@
             <input id="level" type="number" step="1" min="0" name="level" value="{{ spell.level }}"><br>
 
             <label for="school">Spell school: </label>
-            <input id="school" type="number" name="school" step="1" min="0" value="{{ spell.school }}"><br>
+            <select id="school" name="school" size="1">
+                <option value="{{ spell.school }}">{{ spell.get_school_display }}</option>
+            </select><br>
+<!--            <input id="school" type="number" name="school" step="1" min="0" value="{{ spell.get_school_display }}"><br>-->
 
             <label for="distance">Spell distance: </label>
             <input id="distance" type="text" name="distance" value="{{ spell.distance }}"><br>

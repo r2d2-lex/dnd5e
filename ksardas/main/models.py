@@ -129,7 +129,8 @@ class SpellManager(models.Manager):
     def get_spell_names(self):
         return self.values_list('name', flat=True).order_by('name')
 
-    def get_spell_levels(self):
+    @staticmethod
+    def get_spell_levels():
         max_spell_level = 10
         return [level for level in range(max_spell_level)]
 
@@ -158,9 +159,21 @@ class SpellManager(models.Manager):
 
 # Таблица для заклинаний
 class Spell(models.Model):
+    SPELL_SCHOOL_CHOICES = (
+        (0, 'неизвестная'),
+        (1, 'воплощение'),
+        (2, 'очарование'),
+        (3, 'ограждение'),
+        (4, 'иллюзия'),
+        (5, 'вызов'),
+        (6, 'некромантия'),
+        (7, 'преобразование'),
+        (8, 'прорицание'),
+    )
+
     name = models.CharField(db_index=True, unique=True, null=False, max_length=20, verbose_name='Название заклинания')
     level = models.IntegerField(verbose_name='Уровень заклинания')
-    school = models.IntegerField(verbose_name='Школа заклинания')
+    school = models.IntegerField(choices=SPELL_SCHOOL_CHOICES, default=0, verbose_name='Школа заклинания')
     comp_is_verbal = models.BooleanField(default=False, verbose_name='Вербальные требования')
     comp_is_somatic = models.BooleanField(default=False, verbose_name='Соматичесские требования')
     comp_is_material = models.BooleanField(default=False, verbose_name='Материальные компоненты')
@@ -275,10 +288,7 @@ class CharBase(models.Model):
         cur_class = []
         for cc in self.char_classes.all():
             cur_class.append(cc.name)
-        if len(cur_class) > 0:
-            cur_class = cur_class[0]
-        else:
-            cur_class = "unknown"
+        cur_class = cur_class[0] if len(cur_class) > 0 else "unknown"
         return cur_class
 
     def __str__(self):

@@ -11,6 +11,5 @@ ksardas/ksardas/__pycache__/
 ksardas/main/migrations/
 ksardas/main/migrations/__pycache__/
 ksardas/ksardas/config.py
-ksardas/ksardas/cspells.html
 ksardas/ksardas/errors.txt
 ksardas/media/
