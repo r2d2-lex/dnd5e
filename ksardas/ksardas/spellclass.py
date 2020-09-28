@@ -10,13 +10,13 @@ import sys
 import config
 
 sys.path.append(config.KSA_PATH)
-settings.configure(INSTALLED_APPS=app_settings.INSTALLED_APPS,DATABASES=app_settings.DATABASES)
+settings.configure(INSTALLED_APPS=app_settings.INSTALLED_APPS, DATABASES=app_settings.DATABASES)
 
 import django
+
 django.setup()
 
 from main.models import Spell, CharClasses
-
 
 CHAR_CLASSES = [char_class[0] for char_class in CharClasses.CLASS_CHOICES]
 SPELL_BOOK = 'char_spells.html'
@@ -86,13 +86,13 @@ def main():
 
             spell_obj = db_search_spell(clean_text)
             if spell_obj:
-                print('Добавляем принадлежность класса {0} в заклинание {1}'.format(current_class,clean_text))
+                print('Добавляем принадлежность класса {0} в заклинание {1}'.format(current_class, clean_text))
                 spell_obj.spell_classes.add(current_class_qs)
             else:
                 with open(ERROR_LOGFILE, 'w') as err_file:
                     err_file.write(clean_text)
                     err_file.write('\n')
-            #input()
+            # input()
 
 
 if __name__ == '__main__':
