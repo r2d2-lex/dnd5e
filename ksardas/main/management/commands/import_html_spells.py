@@ -92,26 +92,37 @@ def spell_filter(spell_strings):
     for line in spell_strings.split('\r\n'):
 
         if line_index == SPELL_NAME_STRING:
-            # print('Строка: ', line)
-            # input()
-            if line.isupper():
-                line = line.strip()
-                sp.name = line
-                print("Имя заклинания: ", sp.name)
-            else:
+            try:
+                spell = re.findall(r"[А-Я]+.*(?<![ \t])", line)[0]
+            except IndexError:
+                print('Не найдено имя заклинания...')
+                input()
                 return False
+            sp.name = spell
+            print('Имя заклинания: ', spell)
+
+            # if line.isupper():
+            #     line = line.strip()
+            #     sp.name = line
+            #     print("Имя заклинания: ", sp.name)
+            # else:
+            #     return False
 
         elif line_index == SPELL_LEVEL_STRING:
-            spell_level_search = re.search(r"\d{1}\sуровень", line)
+            spell_level_search = re.search(r"\d\sуровень", line)
             if spell_level_search is None:
                 spell_level_search = re.search(r"Заговор", line)
                 if spell_level_search is None:
                     print('Заговор и уровень на найдены...')
-                    input("Нажмите любую клавишу...")
+                    input()
                     return False
             else:
-                spell_level_search = re.search(r"\d{1}", line)
-                spell_level = spell_level_search[0]
+                spell_level_search = re.search(r"\d", line)
+                try:
+                    spell_level = spell_level_search[0]
+                except IndexError:
+                    print('Уровень заклинания не найден')
+                    input()
 
             # Поиск школы(последнее слово!!!)
             line = line.rstrip()
@@ -121,7 +132,11 @@ def spell_filter(spell_strings):
             if len(spell_school_search) == 0:
                 spell_school_search_ritual = re.findall(r"([а-я]{3,})\s\(ритуал\)+$", line)
                 if spell_school_search_ritual:
-                    spell_school = SPELL_SCHOOL[spell_school_search_ritual[0]]
+                    try:
+                        spell_school = SPELL_SCHOOL[spell_school_search_ritual[0]]
+                    except IndexError:
+                        print('Школа заклинания не найдена')
+                        input()
                     sp.is_ritual = True
                 else:
                     print('Ритуал не найден...')
@@ -132,7 +147,7 @@ def spell_filter(spell_strings):
                     # int
                     spell_school = SPELL_SCHOOL[spell_school_search[0]]
                 except KeyError:
-                    print('Школа не найдена...')
+                    print('Школа заклинания не найдена...')
                     input("[Enter]")
                     return False
 
@@ -145,11 +160,19 @@ def spell_filter(spell_strings):
                 print("Можно использовать как ритуал...")
 
         elif 'Время накладывания' in line:
-            sp.cast_time = re.findall(r"Время накладывания:\s(.*)", line)[0]
+            try:
+                sp.cast_time = re.findall(r"Время накладывания:\s(.*)", line)[0]
+            except IndexError:
+                print('Время накладывания не найдено')
+                input()
             print('Время накладывания:', sp.cast_time)
 
         elif 'Дистанция' in line:
-            sp.distance = re.findall(r"Дистанция:\s(.*)", line)[0]
+            try:
+                sp.distance = re.findall(r"Дистанция:\s(.*)", line)[0]
+            except IndexError:
+                print('Дистанция не найдена')
+                input()
             print('Дистанция:', sp.distance)
 
         elif 'Компоненты' in line:
@@ -162,12 +185,21 @@ def spell_filter(spell_strings):
                 sp.comp_is_material = True
                 components = re.findall(r"\((.*)\)", line)
                 if components:
-                    sp.components = components[0]
+                    try:
+                        sp.components = components[0]
+                    except IndexError:
+                        print('Компоненты не найдены...')
+                        input()
                     print("Компоненты: ", sp.components)
             print("Вербальный:", sp.comp_is_verbal, "  Соматический:", sp.comp_is_somatic, "  Материальный:", sp.comp_is_material)
 
         elif 'Длительность' in line:
-            sp.duration = re.findall(r"Длительность:\s(.*)", line)[0]
+            try:
+                sp.duration = re.findall(r"Длительность:\s+(.*)", line)[0]
+            except IndexError:
+                print('Не найдена длительность заклинания')
+                input()
+
             if re.search(r"Концентрация", line):
                 sp.is_concentrate = True
                 print("Требуется концентрация...")
@@ -177,15 +209,15 @@ def spell_filter(spell_strings):
             description += line
         line_index += 1
 
-    sp.description = description
+    sp.description = description.strip()
     print('Описание: ', sp.description)
-    print('___')
 
     try:
-        sp.save()
+        pass
+        # sp.save()
     except IntegrityError:
-        print('Заклинание {} уже в БД\r\n'.format(sp.name))
-
+        print('Заклинание {} уже в БД'.format(sp.name))
+    print('___\r\n')
     return True
 
 
