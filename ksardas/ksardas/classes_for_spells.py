@@ -50,7 +50,6 @@ def db_search_spell(search_text):
     """
     req = search_text.upper()
     req = req.strip()
-    req = req.rstrip()
     req = req.strip(':')
     print('Ищем заклинание: ', req)
     try:
@@ -60,10 +59,20 @@ def db_search_spell(search_text):
 
 
 def main():
+    if len(sys.argv) > 1:
+        if sys.argv[1] in ("-h", "--help"):
+            print("usage: {0} char_spells.html".format(
+                sys.argv[0]))
+            sys.exit()
+        parse_text(sys.argv[1])
+    print('exit...')
+
+
+def parse_text(spell_book):
     current_class = None
     current_class_qs = None
 
-    with open(SPELL_BOOK, 'r') as f:
+    with open(spell_book, 'r') as f:
         rows = f.read().splitlines()
 
         for row in range(len(rows)):
