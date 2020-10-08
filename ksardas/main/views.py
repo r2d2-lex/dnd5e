@@ -1,4 +1,5 @@
 from django.core.signing import BadSignature
+from django.core import serializers
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -152,14 +153,15 @@ def find_spells(request):
     find_options = None
 
     if request.method == 'GET':
-        # Ajax trip
         if request.GET.get('fspells', None):
-            fspells = request.GET.get('fspells')
-            print('FSPELLS:', fspells)
-            return JsonResponse({ 'is_taken' : fspells })
+            search_spells = request.GET.get('fspells')
+            print('Строка поиска: ', search_spells)
+            search_spells = search_spells.upper()
+            response_db = Spell.objects.filter(name__icontains=search_spells)
+            response_serialized = serializers.serialize("json", response_db)
+            return HttpResponse(response_serialized, content_type='application/json')
 
         find_spell_form = FindSpellForm(request.GET)
-
         if find_spell_form.is_valid():
             find_options, spells_list_qs = Spell.spells.main_search(request, find_spell_form)
         else:

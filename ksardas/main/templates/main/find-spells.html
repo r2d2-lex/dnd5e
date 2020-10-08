@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-<form method="get">
+<form method="get" id="main-form">
     <div class="input-group mt-3 mb-3">
         <input id="id_name" type="text" name="name" class="form-control" placeholder="Введите название заклинания" aria-label="Введите название заклинания" aria-describedby="button-search">
         <div class="input-group-append">
@@ -50,18 +50,10 @@
     <br>
     <p id="id_findstat"></p>
     <br>
-    <!--     <div id="charclasses">-->
-    <!--         <label for="charclasses">Choise character classes: </label>-->
-    <!--              <ul>-->
-    <!--                  {% for charclass1, charclass2 in charclasses %}-->
-    <!--                    <li><input type="checkbox" name="charclasses" value="{{ charclass1 }}">{{ charclass1 }}</li>-->
-    <!--                  {% endfor %}-->
-    <!--              </ul>-->
-    <!--     </div>-->
-    <button id="btn" type="submit">Butt</button>
-    <input type="submit" value="Поиск">
 </form>
 
+
+<div id="id_spells"></div>
 
 {% for spell in spells %}
     <div class="row">
