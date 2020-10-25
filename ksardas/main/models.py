@@ -72,6 +72,9 @@ class CharClasses(models.Model):
     char_classes = ClassManager()
     objects = models.Manager()
 
+    def __str__(self):
+        return self.name
+
 
 class RaceManager(models.Manager):
     # Класс модели всегда доступен управляющему классу через
@@ -123,6 +126,10 @@ class CharRaces(models.Model):
     char_races = RaceManager()
     # Управляющий класс по умолчанию теперь нужно определять явно
     objects = models.Manager()
+
+    def __str__(self):
+        return self.name
+
 
 
 class SpellManager(models.Manager):
@@ -188,6 +195,9 @@ class Spell(models.Model):
     spell_classes = models.ManyToManyField(CharClasses, verbose_name='Класс персонажа')
     spells = SpellManager()
     objects = models.Manager()
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         ordering = ['name']
