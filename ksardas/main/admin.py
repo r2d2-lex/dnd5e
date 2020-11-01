@@ -14,12 +14,7 @@ class SpellAdmin(admin.ModelAdmin):
 
     def get_search_results(self, request, queryset, search_name):
         queryset, use_distinct = super().get_search_results(request, queryset, search_name)
-        try:
-            search_name_for_sqlite = search_name.upper()
-        except ValueError:
-            pass
-        else:
-            queryset |= self.model.objects.filter(name__icontains=search_name_for_sqlite)
+        queryset |= self.model.objects.filter(name__icontains=search_name.upper())
         return queryset, use_distinct
 
 

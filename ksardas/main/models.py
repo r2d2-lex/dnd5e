@@ -131,7 +131,6 @@ class CharRaces(models.Model):
         return self.name
 
 
-
 class SpellManager(models.Manager):
     def get_spell_names(self):
         return self.values_list('name', flat=True).order_by('name')
