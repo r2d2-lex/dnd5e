@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.dispatch import Signal
 from django.shortcuts import get_object_or_404
-from .utilites import send_activation_notification
+from .utilites import send_activation_notification, str2bool
 
 user_registrated = Signal(providing_args=['instance'])
 
@@ -140,24 +140,28 @@ class SpellManager(models.Manager):
         max_spell_level = 10
         return [level for level in range(max_spell_level)]
 
-    def main_search(self, request, form):
+    def main_search(self, request, form=None):
         """
             Вход: request - параметр запроса, form - фор
             Возвращает: find_parms - строка параметров со значениями, spells_list - queryset списка заклинаний
         """
         spells_list = self.all()
-        find_parms = ""
-        name = form.cleaned_data['name']
-        name = name.upper()
+        find_parms = ''
+
+        # name = form.cleaned_data['name']
+        name = request.GET.get("name", '')
         if name != '':
+            name = name.upper()
             spells_list = spells_list.filter(name__icontains=name)
             find_parms += "&name={}".format(name)
 
-        if request.GET.get("ritual", None):
+        if str2bool(request.GET.get("ritual", False)):
+            print('Include ritual')
             spells_list = spells_list.filter(is_ritual=True)
             find_parms += "&ritual={}".format("on")
 
-        if request.GET.get("concentrate", None):
+        if str2bool(request.GET.get("concentrate", False)):
+            print('Include concentrate')
             spells_list = spells_list.filter(is_concentrate=True)
             find_parms += "&concentrate={}".format("on")
         return find_parms, spells_list

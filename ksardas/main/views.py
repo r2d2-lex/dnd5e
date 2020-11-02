@@ -145,6 +145,14 @@ def view_character(request, name):
     return render(request, 'main/character.html', {'char': ch})
 
 
+@login_required
+def get_spells(request):
+    if request.method == 'GET':
+        find_options, spells_list_qs = Spell.spells.main_search(request)
+        response_serialized = serializers.serialize("json", spells_list_qs)
+        return HttpResponse(response_serialized, content_type='application/json')
+
+
 # Все заклинания
 from django.db.models import Q
 @login_required
@@ -153,13 +161,13 @@ def find_spells(request):
     find_options = None
 
     if request.method == 'GET':
-        if request.GET.get('fspells', None):
-            search_spells = request.GET.get('fspells')
-            print('Строка поиска: ', search_spells)
-            search_spells = search_spells.upper()
-            response_db = Spell.objects.filter(name__icontains=search_spells)
-            response_serialized = serializers.serialize("json", response_db)
-            return HttpResponse(response_serialized, content_type='application/json')
+        # if request.GET.get('fspells', None):
+        #     search_spells = request.GET.get('fspells')
+        #     print('Строка поиска: ', search_spells)
+        #     search_spells = search_spells.upper()
+        #     response_db = Spell.objects.filter(name__icontains=search_spells)
+        #     response_serialized = serializers.serialize("json", response_db)
+        #     return HttpResponse(response_serialized, content_type='application/json')
 
         find_spell_form = FindSpellForm(request.GET)
         if find_spell_form.is_valid():
@@ -178,6 +186,7 @@ def find_spells(request):
     except EmptyPage:
         spells_pages = paginator.page(paginator.num_pages)
 
+    print('Debug options: ', find_options)
     context = {
                 'spells': spells_pages,
                 'parms': find_options,
