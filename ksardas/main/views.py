@@ -178,7 +178,6 @@ def find_spells(request):
     except EmptyPage:
         spells_pages = paginator.page(paginator.num_pages)
 
-    # Prepare context
     context = {
                 'spells': spells_pages,
                 'parms': find_options,
@@ -189,10 +188,10 @@ def find_spells(request):
 
 
 @login_required
-def edit_spell(request, spell_id):
+def view_spell(request, spell_id):
     spell = get_object_or_404(Spell, id=spell_id)
     context = {'spell': spell}
-    return render(request, 'main/edit_spell.html', context)
+    return render(request, 'main/view_spell.html', context)
 
 
 @login_required

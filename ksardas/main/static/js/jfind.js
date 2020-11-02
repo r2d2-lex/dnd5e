@@ -5,7 +5,7 @@ $(document).ready(function(){
         var fspells = $('#id_name').val();
         $.ajax({
             method : "GET",
-            url: '/main/accounts/profile/find-spells/',
+            url: '/main/accounts/profile/spells/',
             data: {
                 'fspells': fspells
             },

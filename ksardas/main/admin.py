@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AdvUser, CharBase, CharClasses, Spell
+from .models import AdvUser, CharBase, CharClasses, CharRaces, Spell
 
 
 class SpellAdmin(admin.ModelAdmin):
@@ -26,8 +26,17 @@ class CharClassesAdmin(admin.ModelAdmin):
     )
 
 
+class CharRacesAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'caption',
+        'description',
+    )
+
+
 admin.site.register(AdvUser)
 admin.site.register(CharBase)
+admin.site.register(CharRaces, CharRacesAdmin)
 admin.site.register(CharClasses, CharClassesAdmin)
 admin.site.register(Spell, SpellAdmin)
 

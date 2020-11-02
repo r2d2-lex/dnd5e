@@ -6,6 +6,6 @@
 <h2>Удаление пользователя {{ object.username }}</h2>
 <form method="post">
     {% csrf_token %}
-    {% buttons submit='Удалить' %}{% endbuttons %}
+    <input type="submit" value="Удалить">
 </form>
 {% endblock %}

@@ -7,7 +7,7 @@ from .views import BBPasswordChangeView
 from .views import ChangeUserInfoView
 from .views import create_character
 from .views import edit_character
-from .views import edit_spell
+from .views import view_spell
 from .views import delete_character
 from .views import DeleteUserView
 from .views import index, other_page, profile
@@ -28,8 +28,8 @@ urlpatterns = [
     path('accounts/profile/char/<str:name>/edit/', edit_character, name='edit_character'),
     path('accounts/profile/char/<str:name>/delete/', delete_character, name='delete_character'),
     path('accounts/profile/char/<str:name>/', view_character, name='view_character'),
-    path('accounts/profile/find-spells/', find_spells, name='find_spells'),
-    path('accounts/profile/edit-spell/<int:spell_id>/', edit_spell, name='edit_spell'),
+    path('accounts/profile/spells/', find_spells, name='find_spells'),
+    path('accounts/profile/spell/<int:spell_id>/', view_spell, name='view_spell'),
     path('accounts/password/change/', BBPasswordChangeView.as_view(), name='password_change'),
     path('accounts/login/', BBLoginView.as_view(), name='login'),
     path('accounts/logout/', BBLogoutView.as_view(), name='logout'),
