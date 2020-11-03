@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/pagination.css' %}">
 <form method="get" id="main-form">
     <div class="input-group mt-3 mb-3">
         <input id="id_name" type="text" name="name" class="form-control" placeholder="Введите название заклинания" aria-label="Введите название заклинания" aria-describedby="button-search">
@@ -46,21 +47,10 @@
             </div>
         </div>
     </div>
-
-    <br>
-    <p id="id_findstat"></p>
-    <br>
 </form>
 
-
+<ul id="pagination"></ul>
 <div id="id_spells"></div>
-
-{% for spell in spells %}
-    <div class="row">
-        {% include 'main/spell_content.html' %}
-    </div>
-{% endfor %}
-
 
 <div id="pages" align="center">
     {% if spells.has_previous %}
