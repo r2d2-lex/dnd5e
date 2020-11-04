@@ -186,7 +186,7 @@ def find_spells(request):
     except EmptyPage:
         spells_pages = paginator.page(paginator.num_pages)
 
-    print('Debug options: ', find_options)
+    print('find_spells -> find_options: ', find_options)
     context = {
                 'spells': spells_pages,
                 'parms': find_options,

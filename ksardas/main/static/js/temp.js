@@ -22,3 +22,5 @@ for (var n in data)
         {% include 'main/spell_content.html' %}
     </div>
 {% endfor %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'main/pagination.css' %}">
