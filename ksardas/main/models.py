@@ -37,17 +37,6 @@ class ClassManager(models.Manager):
             self.create(name=rc[0], caption=rc[1], description='Описание класса ' + rc[1])
         return
 
-    """ 
-     Получение описаний классов...
-     Возвращает список из двух элементов: Имя, Описание
-    """
-
-    def get_classes_captions(self):
-        class_record = []
-        for char_class in self.all():
-            class_record.append([char_class.name, char_class.caption])
-        return class_record
-
 
 # Таблица класса персонажа
 class CharClasses(models.Model):
@@ -72,6 +61,14 @@ class CharClasses(models.Model):
     char_classes = ClassManager()
     objects = models.Manager()
 
+    @staticmethod
+    def get_classes_captions():
+        """
+         Получение описаний классов...
+         Возвращает список из двух элементов: Имя, Описание
+        """
+        return [(cl_name, cl_caption) for cl_name, cl_caption in CharClasses.CLASS_CHOICES]
+
     def __str__(self):
         return self.name
 
@@ -92,17 +89,6 @@ class RaceManager(models.Manager):
         for rc in CharRaces.RACE_CHOICES:
             self.create(name=rc[0], caption=rc[1], description='Описание рассы ' + rc[1])
         return
-
-    """ 
-     Получение описаний расс...
-     Возвращает список из двух элементов: Имя рассы, Описание рассы
-    """
-
-    def get_races_captions(self):
-        race_capt = []
-        for race in self.all():
-            race_capt.append([race.name, race.caption])
-        return race_capt
 
 
 class CharRaces(models.Model):
@@ -127,6 +113,14 @@ class CharRaces(models.Model):
     # Управляющий класс по умолчанию теперь нужно определять явно
     objects = models.Manager()
 
+    @staticmethod
+    def get_races_captions():
+        """
+         Получение описаний расс...
+         Возвращает список из двух элементов: Имя рассы, Описание рассы
+        """
+        return [(race_name, race_caption) for race_name, race_caption in CharRaces.RACE_CHOICES]
+
     def __str__(self):
         return self.name
 
@@ -134,11 +128,6 @@ class CharRaces(models.Model):
 class SpellManager(models.Manager):
     def get_spell_names(self):
         return self.values_list('name', flat=True).order_by('name')
-
-    @staticmethod
-    def get_spell_levels():
-        max_spell_level = 10
-        return [level for level in range(max_spell_level)]
 
     def main_search(self, request, form=None):
         """
@@ -198,6 +187,15 @@ class Spell(models.Model):
     spell_classes = models.ManyToManyField(CharClasses, verbose_name='Класс персонажа')
     spells = SpellManager()
     objects = models.Manager()
+
+    @staticmethod
+    def get_spell_levels():
+        max_spell_level = 10
+        return [level for level in range(max_spell_level)]
+
+    @staticmethod
+    def get_spell_schools():
+        return [(school_db, school_name) for school_db, school_name in Spell.SPELL_SCHOOL_CHOICES]
 
     def __str__(self):
         return self.name

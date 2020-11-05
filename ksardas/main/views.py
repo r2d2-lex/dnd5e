@@ -161,14 +161,6 @@ def find_spells(request):
     find_options = None
 
     if request.method == 'GET':
-        # if request.GET.get('fspells', None):
-        #     search_spells = request.GET.get('fspells')
-        #     print('Строка поиска: ', search_spells)
-        #     search_spells = search_spells.upper()
-        #     response_db = Spell.objects.filter(name__icontains=search_spells)
-        #     response_serialized = serializers.serialize("json", response_db)
-        #     return HttpResponse(response_serialized, content_type='application/json')
-
         find_spell_form = FindSpellForm(request.GET)
         if find_spell_form.is_valid():
             find_options, spells_list_qs = Spell.spells.main_search(request, find_spell_form)
@@ -188,10 +180,11 @@ def find_spells(request):
 
     print('find_spells -> find_options: ', find_options)
     context = {
-                'spells': spells_pages,
-                'parms': find_options,
-                'charclasses': CharClasses.char_classes.get_classes_captions(),
-                'spell_levels': Spell.spells.get_spell_levels(),
+        'spells': spells_pages,
+        'parms': find_options,
+        'charclasses': CharClasses.get_classes_captions(),
+        'spell_levels': Spell.get_spell_levels(),
+        'spell_schools': Spell.get_spell_schools(),
     }
     return render(request, 'main/find-spells.html', context)
 
@@ -219,8 +212,8 @@ def create_character(request):
             print("charform NOT VALID. ERROR:\r\n", character_form.errors)
 
     context = {
-                'char_classes': CharClasses.char_classes.get_classes_captions(),
-                'char_races': CharRaces.char_races.get_races_captions(),
+                'char_classes': CharClasses.get_classes_captions(),
+                'char_races': CharRaces.get_races_captions(),
                }
     return render(request, 'main/create_character.html', context)
 
@@ -271,8 +264,8 @@ def edit_character(request, name):
     context = {
                 'form': char_base,
                 'spells': Spell.spells.get_spell_names(),
-                'races': CharRaces.char_races.get_races_captions(),
-                'classes': CharClasses.char_classes.get_classes_captions(),
+                'races': CharRaces.get_races_captions(),
+                'classes': CharClasses.get_classes_captions(),
                 'cur_race': char_base.get_current_race(),
                 'cur_class': char_base.get_current_char_classes(),
     }
