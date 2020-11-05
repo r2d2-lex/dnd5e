@@ -24,3 +24,26 @@ for (var n in data)
 {% endfor %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'main/pagination.css' %}">
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label for="charclasses">Выберите класс персонажа:</label>
+                <select multiple class="form-control" id="charclasses" size="12">
+                {% for charclass1, charclass2 in charclasses %}
+                    <option>{{ charclass1 }}</option>
+                {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="spell_levels">Выберите уровень заклинания:</label>
+                <select multiple class="form-control" id="spell_levels" size="10">
+                {% for level in spell_levels %}
+                    <option>{{ level }}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>

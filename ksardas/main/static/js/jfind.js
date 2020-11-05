@@ -17,12 +17,10 @@ $(document).ready(function(){
             dataType: 'json',
             success: function (data) {
                 /* ----- Success ---- */
-                console.log(data);
-                console.log(data.length);
-
                 let recordsOnPage = 3;
+                let tabsOnPage = 5;
                 let countOfItems = Math.ceil(data.length / recordsOnPage);
-                countOfItems = 5;
+                // countOfItems = 5;
                 $('#pagination').empty();
                 let pagination = document.querySelector('#pagination');
 
@@ -37,18 +35,68 @@ $(document).ready(function(){
                     link.innerHTML = i;
                     link.href = '#';
                     li.appendChild(link);
+                    $(li).hide();
 
-                    items.push(link);
+                    items.push(li);
                 }
+                [].forEach.call(items,function(item) {
+                    item.addEventListener('click', function() { showPage(this); });
+                });
+
                 liNavPrepare();
                 let li_active;
                 showPage(items[0]);
 
-                [].forEach.call(items,function(item) {
-                        item.addEventListener('click', function() {
-                            showPage(this);
+                function hideAllTabs () {
+                    for (let i=0; i<= countOfItems; i++) {
+                        $(items[i]).hide();
+                    }
+                }
+
+                function calculateTabs (tabIndex) {
+                    hideAllTabs();
+                    if (items.length <= tabsOnPage) {
+                        [].forEach.call(items,function(item) {
+                                $(item).show();
                         });
-                });
+                    } else {
+                        tabsLR = 2;
+                        tabMax = items.length-1;
+                        tabToMax = tabMax - tabIndex;
+                        tabToMin = 0 + tabIndex;
+                        console.log('tabMax:', tabMax);
+                        // console.log('tabToMax:', tabToMax);
+                        // console.log('tabToMin:', tabToMin);
+                        console.log('___');
+
+                        let tabStart = 0;
+                        let tabEnd = 0;
+
+                        // Индекс в конце
+                        if (tabToMax < 2) {
+                            tabEnd = tabIndex + tabToMax;
+                            tabStart = tabIndex - 2 - tabsLR;
+                        } else {
+                            tabStart = tabIndex - 2;
+                            tabEnd = tabIndex + 2;
+                        }
+
+                        // Индекс вначале
+                        if (tabToMin < 2) {
+                            tabStart = tabIndex - tabToMin;
+                            tabEnd = tabIndex + 2 + tabsLR;
+                        } else {
+                            tabStart = tabIndex - 2;
+                            tabEnd = tabIndex + 2;
+                        }
+                        console.log('!!!!tabIndex:', tabIndex);
+                        console.log('TabStart:', tabStart);
+                        console.log('TabEnd:', tabEnd);
+                        for (let j=tabStart; j<= tabEnd; j++) {
+                            $(items[j]).show();
+                        }
+                    }
+                }
 
                 function liNavPrepare() {
                     linkAdd('prev', 'Назад');
@@ -58,6 +106,12 @@ $(document).ready(function(){
                 }
 
                 function linkAdd(action, caption) {
+                    /*
+                     action:
+                     prev - страница назад, first - первая страница,
+                     next - страница вперёд, last - последняя страница
+                     caption - заголовок таба пагинации
+                    */
                     let li = document.createElement('li');
                     li.classList.add("page-item");
 
@@ -70,9 +124,7 @@ $(document).ready(function(){
                     switch (action) {
                         case 'first':
                             pagination.insertBefore(li, pagination.firstElementChild);
-                            li.addEventListener('click', function() {
-                                showPage(items[0]);
-                            });
+                            li.addEventListener('click', function() { showPage(items[0]); });
                         break;
 
                         case 'prev':
@@ -85,7 +137,6 @@ $(document).ready(function(){
                                 if (page_number <= 0) {
                                     page_number = 0;
                                 }
-                                console.log(page_number);
                                 showPage(items[page_number]);
                             });
                         break;
@@ -98,7 +149,6 @@ $(document).ready(function(){
                                 if (page_number >= items.length-1) {
                                     page_number = items.length-1;
                                 }
-                                console.log(page_number);
                                 showPage(items[page_number]);
                             });
                         break;
@@ -112,25 +162,24 @@ $(document).ready(function(){
                     }
                 }
 
-                function showHide(elem) {
-                    $(elem).hide();
-                }
-
                 function showPage(item) {
-                            if (li_active) {
-                                li_active.parentNode.classList.remove('active');
-                            }
-                            li_active = item;
-                            item.parentNode.classList.add('active');
+                    let pageNum = +item.childNodes[0].innerHTML;
 
-                            let pageNum = +item.innerHTML;
-                            let start = (pageNum - 1) * recordsOnPage;
-                            let end = start + recordsOnPage;
-                            let records = data.slice(start, end)
-                            console.log(records);
+                    if (li_active) {
+                        li_active.classList.remove('active');
+                        calculateTabs(pageNum-1);
+                    } else {
+                        calculateTabs(0);
+                    }
+                    li_active = item;
+                    item.classList.add('active');
 
-                            $('#id_spells').empty();
-                            addRecords(records);
+                    let start = (pageNum - 1) * recordsOnPage;
+                    let end = start + recordsOnPage;
+                    let records = data.slice(start, end);
+
+                    $('#id_spells').empty();
+                    addRecords(records);
                 }
 
                 function addRecords(records) {
