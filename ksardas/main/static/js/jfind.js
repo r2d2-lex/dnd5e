@@ -4,7 +4,7 @@ $(document).ready(function(){
     searchspell();
     function searchspell() {
         var rit = $('#id_ritual').prop('checked');
-        var con = $('#id_concentrate').prop('checked');
+        var con = $('#id_concentrate').val();
         var name = $('#id_name').val();
         var level = $('#id_spell_levels').val();
         var spc = $('#id_spell_classes').val();
@@ -17,13 +17,13 @@ $(document).ready(function(){
                 'ritual': rit,
                 'concentrate': con,
                 'level': level,
-                'class' : spc,
+                'spc' : spc,
                 'school': school,
             },
             dataType: 'json',
-            success: function (data) {
+            success: function (data, textStatus) {
                 /* ----- Success ---- */
-                let recordsOnPage = 3;
+                let recordsOnPage = 5;
                 let tabsOnPage = 5;
                 let countOfItems = Math.ceil(data.length / recordsOnPage);
                 // countOfItems = 5;

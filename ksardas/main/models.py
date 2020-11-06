@@ -108,9 +108,7 @@ class CharRaces(models.Model):
     caption = models.CharField(null=True, max_length=24, verbose_name='Caption рассы')
     description = models.CharField(null=True, max_length=1024 * 64, verbose_name='Описание рассы')
 
-    # Новый управляющий класс модели
     char_races = RaceManager()
-    # Управляющий класс по умолчанию теперь нужно определять явно
     objects = models.Manager()
 
     @staticmethod
@@ -129,7 +127,7 @@ class SpellManager(models.Manager):
     def get_spell_names(self):
         return self.values_list('name', flat=True).order_by('name')
 
-    def main_search(self, request, form):
+    def main_search(self, form):
         """
             Вход: request - параметр запроса, form - форма
             Возвращает: find_parms - строка параметров со значениями, spells_list - queryset списка заклинаний
@@ -151,10 +149,10 @@ class SpellManager(models.Manager):
             spells_list = spells_list.filter(level=spell_level)
             find_parms += "&level={}".format(spell_level)
 
-        # spc = form.cleaned_data['class']
-        # if spc:
-        #     spells_list = spells_list.filter()
-        #     find_parms += "&spc={}".format(spc)
+        spc = form.cleaned_data['spc']
+        if spc:
+            spells_list = spells_list.filter(spell_classes__name=spc)
+            find_parms += "&spc={}".format(spc)
 
         school = form.cleaned_data['school']
         if school:
@@ -168,7 +166,7 @@ class SpellManager(models.Manager):
 
         concentrate = form.cleaned_data['concentrate']
         if concentrate:
-            spells_list = spells_list.filter(is_concentrate=True)
+            spells_list = spells_list.filter(is_concentrate=str2bool(concentrate))
             find_parms += "&concentrate={}".format("on")
         return find_parms, spells_list
 
@@ -187,7 +185,7 @@ class Spell(models.Model):
         (8, 'прорицание'),
     )
 
-    name = models.CharField(db_index=True, unique=True, null=False, max_length=20, verbose_name='Название заклинания')
+    name = models.CharField(db_index=True, unique=True, null=False, max_length=64, verbose_name='Название заклинания')
     level = models.IntegerField(verbose_name='Уровень заклинания')
     school = models.IntegerField(choices=SPELL_SCHOOL_CHOICES, default=0, verbose_name='Школа заклинания')
     comp_is_verbal = models.BooleanField(default=False, verbose_name='Вербальные требования')

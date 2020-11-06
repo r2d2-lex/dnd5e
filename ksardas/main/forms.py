@@ -5,14 +5,14 @@ from django.forms import ModelForm
 
 from .models import AdvUser
 from .models import CharBase, CharClasses, CharRaces
-#from .models import user_registrated
+# from .models import user_registrated
 import datetime
 
 
 class FindSpellForm(forms.Form):
     name = forms.CharField(required=False, label='Поиск заклинания')
     ritual = forms.BooleanField(required=False, label='Поиск ритуалов')
-    concentrate = forms.BooleanField(required=False, label='Концентрация')
+    concentrate = forms.CharField(required=False, label='Концентрация')
     level = forms.CharField(required=False, label='Уровень заклинания')
     school = forms.CharField(required=False, label='Школа заклинания')
     spc = forms.CharField(required=False, label='Класс заклинания')
@@ -30,7 +30,7 @@ class SpellForm(forms.Form):
     comp_is_verbal = forms.BooleanField(label='Вербальные требования')
     comp_is_somatic = forms.BooleanField(label='Соматичесские требования')
     comp_is_material = forms.BooleanField(label='Материальные компоненты')
-    components = forms.CharField(label='Компоненты заклинания')
+    components = forms.CharField(label='Компоненты заклинания', required=False)
     distance = forms.CharField(label='Дистанция заклинания')
     duration = forms.CharField(label='Длительность заклинания')
     cast_time = forms.CharField(label='Время сотворения заклинания')
