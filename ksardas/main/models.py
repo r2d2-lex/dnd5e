@@ -129,28 +129,45 @@ class SpellManager(models.Manager):
     def get_spell_names(self):
         return self.values_list('name', flat=True).order_by('name')
 
-    def main_search(self, request, form=None):
+    def main_search(self, request, form):
         """
-            Вход: request - параметр запроса, form - фор
+            Вход: request - параметр запроса, form - форма
             Возвращает: find_parms - строка параметров со значениями, spells_list - queryset списка заклинаний
         """
         spells_list = self.all()
         find_parms = ''
 
-        # name = form.cleaned_data['name']
-        name = request.GET.get("name", '')
+        for name, value in form.cleaned_data.items():
+            print('Key: {}, Val: {}'.format(name, value))
+
+        name = form.cleaned_data['name']
         if name != '':
             name = name.upper()
-            spells_list = spells_list.filter(name__icontains=name)
+            spells_list = spells_list.filter(name__startswith=name)
             find_parms += "&name={}".format(name)
 
-        if str2bool(request.GET.get("ritual", False)):
-            print('Include ritual')
+        spell_level = form.cleaned_data['level']
+        if spell_level != '':
+            spells_list = spells_list.filter(level=spell_level)
+            find_parms += "&level={}".format(spell_level)
+
+        # spc = form.cleaned_data['class']
+        # if spc:
+        #     spells_list = spells_list.filter()
+        #     find_parms += "&spc={}".format(spc)
+
+        school = form.cleaned_data['school']
+        if school:
+            spells_list = spells_list.filter(school=school)
+            find_parms += "&school={}".format(school)
+
+        ritual = form.cleaned_data['ritual']
+        if ritual:
             spells_list = spells_list.filter(is_ritual=True)
             find_parms += "&ritual={}".format("on")
 
-        if str2bool(request.GET.get("concentrate", False)):
-            print('Include concentrate')
+        concentrate = form.cleaned_data['concentrate']
+        if concentrate:
             spells_list = spells_list.filter(is_concentrate=True)
             find_parms += "&concentrate={}".format("on")
         return find_parms, spells_list

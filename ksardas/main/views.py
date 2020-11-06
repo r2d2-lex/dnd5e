@@ -148,9 +148,13 @@ def view_character(request, name):
 @login_required
 def get_spells(request):
     if request.method == 'GET':
-        find_options, spells_list_qs = Spell.spells.main_search(request)
-        response_serialized = serializers.serialize("json", spells_list_qs)
-        return HttpResponse(response_serialized, content_type='application/json')
+        find_spell_form = FindSpellForm(request.GET)
+        if find_spell_form.is_valid():
+            find_options, spells_list_qs = Spell.spells.main_search(request, find_spell_form)
+            response_serialized = serializers.serialize("json", spells_list_qs)
+            return HttpResponse(response_serialized, content_type='application/json')
+        else:
+            print('Form invalid: ', find_spell_form.errors)
 
 
 # Все заклинания
@@ -182,7 +186,7 @@ def find_spells(request):
     context = {
         'spells': spells_pages,
         'parms': find_options,
-        'charclasses': CharClasses.get_classes_captions(),
+        'spell_classes': CharClasses.get_classes_captions(),
         'spell_levels': Spell.get_spell_levels(),
         'spell_schools': Spell.get_spell_schools(),
     }

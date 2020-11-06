@@ -17,13 +17,14 @@
         </div>
     </div>
 
-    <!-- Уровень, школа, класс, концентрация -->
+    <!-- Уровень, школа, класс, концентрация, ритуал -->
     <div class="container">
         <div class="row">
+
             <div class="form-group col-md-3">
-                <label for="spell_levels">Выберите уровень заклинания:</label>
-                <select class="form-control form-control-sm" id="spell_levels">
-                    <option>Все уровни</option>
+                <label for="id_spell_levels">Уровень заклинания:</label>
+                <select class="form-control form-control-sm" id="id_spell_levels">
+                    <option value="">Все уровни</option>
                     {% for level in spell_levels %}
                         <option>{{ level }}</option>
                     {% endfor %}
@@ -31,24 +32,25 @@
             </div>
 
             <div class="form-group col-md-3">
-                <label for="spell_schools">Выберите школу персонажа:</label>
-                <select class="form-control form-control-sm" id="spell_schools">
-                    <option>Все школы</option>
-                    {% for school_id, school_name in spell_schools %}
-                        <option>{{ school_name }}</option>
+                <label for="id_spell_classes">Класс заклинания:</label>
+                <select class="form-control form-control-sm" id="id_spell_classes">
+                    <option value="">Все классы</option>
+                    {% for cl_name, cl_caption in spell_classes %}
+                        <option>{{ cl_name }}</option>
                     {% endfor %}
                 </select>
             </div>
 
             <div class="form-group col-md-3">
-                <label for="charclasses">Выберите класс персонажа:</label>
-                <select class="form-control form-control-sm" id="charclasses">
-                    <option>Все классы</option>
-                    {% for charclass1, charclass2 in charclasses %}
-                        <option>{{ charclass1 }}</option>
+                <label for="id_spell_schools">Школа заклинания:</label>
+                <select class="form-control form-control-sm" id="id_spell_schools">
+                    <option value="">Все школы</option>
+                    {% for school_id, school_name in spell_schools %}
+                        <option value="{{ school_id }}">{{ school_name }}</option>
                     {% endfor %}
                 </select>
             </div>
+
         </div>
     </div>
 

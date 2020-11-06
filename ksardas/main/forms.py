@@ -13,6 +13,9 @@ class FindSpellForm(forms.Form):
     name = forms.CharField(required=False, label='Поиск заклинания')
     ritual = forms.BooleanField(required=False, label='Поиск ритуалов')
     concentrate = forms.BooleanField(required=False, label='Концентрация')
+    level = forms.CharField(required=False, label='Уровень заклинания')
+    school = forms.CharField(required=False, label='Школа заклинания')
+    spc = forms.CharField(required=False, label='Класс заклинания')
 
 
 class UploadAvatarForm(forms.Form):

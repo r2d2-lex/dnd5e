@@ -1,11 +1,14 @@
 $(document).ready(function(){
     $('#id_name').on('input', searchspell);
-    $('#id_ritual, #id_concentrate').on('change', searchspell);
+    $('#id_ritual, #id_concentrate, #id_spell_levels, #id_spell_classes, #id_spell_schools').on('change', searchspell);
     searchspell();
     function searchspell() {
         var rit = $('#id_ritual').prop('checked');
         var con = $('#id_concentrate').prop('checked');
         var name = $('#id_name').val();
+        var level = $('#id_spell_levels').val();
+        var spc = $('#id_spell_classes').val();
+        var school = $('#id_spell_schools').val();
         $.ajax({
             method : "GET",
             url: '/main/accounts/profile/get-spells/',
@@ -13,6 +16,9 @@ $(document).ready(function(){
                 'name': name,
                 'ritual': rit,
                 'concentrate': con,
+                'level': level,
+                'class' : spc,
+                'school': school,
             },
             dataType: 'json',
             success: function (data) {
@@ -27,25 +33,26 @@ $(document).ready(function(){
                 let items = [];
                 for (let i=1; i<= countOfItems; i++) {
                     let li = document.createElement('li');
-                    li.classList.add("page-item");
-                    pagination.appendChild(li);
+                    createTab(li, i);
+                    $(li).hide();
+                    li.addEventListener('click', function() { showPage(this); });
+                    items.push(li);
+                }
+
+                tabsNavPrepare();
+                let tab_active;
+                showPage(items[0]);
+
+                function createTab (elem, index) {
+                    elem.classList.add("page-item");
+                    pagination.appendChild(elem);
 
                     let link = document.createElement('a');
                     link.classList.add("page-link");
-                    link.innerHTML = i;
+                    link.innerHTML = index;
                     link.href = '#';
-                    li.appendChild(link);
-                    $(li).hide();
-
-                    items.push(li);
+                    elem.appendChild(link);
                 }
-                [].forEach.call(items,function(item) {
-                    item.addEventListener('click', function() { showPage(this); });
-                });
-
-                liNavPrepare();
-                let li_active;
-                showPage(items[0]);
 
                 function hideAllTabs () {
                     for (let i=0; i<= countOfItems; i++) {
@@ -64,16 +71,10 @@ $(document).ready(function(){
                         tabMax = items.length-1;
                         tabToMax = tabMax - tabIndex;
                         tabToMin = 0 + tabIndex;
-                        console.log('tabMax:', tabMax);
-                        // console.log('tabToMax:', tabToMax);
-                        // console.log('tabToMin:', tabToMin);
-                        console.log('___');
+                        let tabStart = NaN;
+                        let tabEnd = NaN;
 
-                        let tabStart = 0;
-                        let tabEnd = 0;
-
-                        // Индекс в конце
-                        if (tabToMax < 2) {
+                        if (tabToMax < 2) { // Индекс в конце списка
                             tabEnd = tabIndex + tabToMax;
                             tabStart = tabIndex - 2 - tabsLR;
                         } else {
@@ -81,16 +82,17 @@ $(document).ready(function(){
                             tabEnd = tabIndex + 2;
                         }
 
-                        // Индекс вначале
-                        if (tabToMin < 2) {
+                        if (tabToMin < 2) { // Индекс в начале списка
                             tabStart = tabIndex - tabToMin;
                             tabEnd = tabIndex + 2 + tabsLR;
                         } else {
                             tabStart = tabIndex - 2;
                             tabEnd = tabIndex + 2;
                         }
-                        console.log('!!!!tabIndex:', tabIndex);
+
+                        console.log('___');
                         console.log('TabStart:', tabStart);
+                        console.log('tabIndex:', tabIndex);
                         console.log('TabEnd:', tabEnd);
                         for (let j=tabStart; j<= tabEnd; j++) {
                             $(items[j]).show();
@@ -98,7 +100,7 @@ $(document).ready(function(){
                     }
                 }
 
-                function liNavPrepare() {
+                function tabsNavPrepare() {
                     linkAdd('prev', 'Назад');
                     linkAdd('first', '<<');
                     linkAdd('next', 'Вперёд');
@@ -113,13 +115,7 @@ $(document).ready(function(){
                      caption - заголовок таба пагинации
                     */
                     let li = document.createElement('li');
-                    li.classList.add("page-item");
-
-                    let link = document.createElement('a');
-                    link.classList.add("page-link");
-                    link.innerHTML = caption;
-                    link.href = '#';
-                    li.appendChild(link);
+                    createTab(li, caption);
 
                     switch (action) {
                         case 'first':
@@ -130,8 +126,7 @@ $(document).ready(function(){
                         case 'prev':
                             pagination.insertBefore(li, pagination.firstElementChild);
                             li.addEventListener('click', function() {
-                                let li_active = document.querySelector('#pagination li.active');
-                                let page_number = +li_active.textContent;
+                                let page_number = +tab_active.textContent;
                                 // отсчёт в массиве с 0 + -1 страница == -2
                                 page_number = page_number - 2;
                                 if (page_number <= 0) {
@@ -144,8 +139,7 @@ $(document).ready(function(){
                         case 'next':
                             pagination.insertBefore(li, pagination.lastElementChild.nextSibling);
                             li.addEventListener('click', function() {
-                                let li_active = document.querySelector('#pagination li.active');
-                                let page_number = +li_active.textContent;
+                                let page_number = +tab_active.textContent;
                                 if (page_number >= items.length-1) {
                                     page_number = items.length-1;
                                 }
@@ -165,13 +159,13 @@ $(document).ready(function(){
                 function showPage(item) {
                     let pageNum = +item.childNodes[0].innerHTML;
 
-                    if (li_active) {
-                        li_active.classList.remove('active');
+                    if (tab_active) {
+                        tab_active.classList.remove('active');
                         calculateTabs(pageNum-1);
                     } else {
                         calculateTabs(0);
                     }
-                    li_active = item;
+                    tab_active = item;
                     item.classList.add('active');
 
                     let start = (pageNum - 1) * recordsOnPage;
@@ -183,12 +177,13 @@ $(document).ready(function(){
                 }
 
                 function addRecords(records) {
+                    let reqUrl = '/main/accounts/profile/spell/';
                     for (let record in records) {
                         $('#id_spells').append('<div class="row">'+
                             '<div class="card border-primary mt-5">'+
                             '<div class="card-header bg-light">'+
-                            '<h4 class="card-title"><a href="/main/accounts/profile/spell/'+records[record].pk+'">'+
-                            records[record].fields.name+'_JS</a></h4>'+
+                            '<h4 class="card-title"><a href="'+reqUrl+records[record].pk+'">'+
+                            records[record].fields.name+'</a></h4>'+
                             '</div>'+
                             '<div class="card-body">'+
                             '<b>Уровень:</b> '+records[record].fields.level+'<br>'+
@@ -197,7 +192,7 @@ $(document).ready(function(){
                             '<b>Длительность:</b> '+records[record].fields.duration+'<br>'+
                             '<b>Время чтения:</b> '+records[record].fields.cast_time+'<br>'+
                             '<b>Описание:</b> '+records[record].fields.description+'<br>'+
-                            '<a class="badge badge-light" href="/main/accounts/profile/spell/'+records[record].pk+'">'+
+                            '<a class="badge badge-light" href="'+reqUrl+records[record].pk+'">'+
                             'Просмотреть заклинание</a><br>'+
                             '</div></div></div>');
                     }
