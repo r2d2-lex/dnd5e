@@ -151,8 +151,23 @@ def get_spells(request):
         find_spell_form = FindSpellForm(request.GET)
         if find_spell_form.is_valid():
             find_options, spells_list_qs = Spell.spells.main_search(find_spell_form)
-            response_serialized = serializers.serialize("json", spells_list_qs)
-            return HttpResponse(response_serialized, content_type='application/json')
+            # response_serialized = serializers.serialize("json", spells_list_qs)
+            # return HttpResponse(response_serialized, content_type='application/json')
+            if spells_list_qs.exists():
+                spell_list = Spell.spells.spell_list(spells_list_qs)
+                context = {
+                    'spells': spell_list,
+                    'status': spells_list_qs.count(),
+                }
+                # messages.add_message(request, messages.SUCCESS, 'Найдено {} записей'.format(spells_list_qs.count()))
+            else:
+                context = {
+                    'spells': '',
+                    'status': 0,
+                }
+                # messages.add_message(request, messages.INFO, 'Ничего не найдено')
+            return JsonResponse(context)
+
         else:
             print('Form invalid: ', find_spell_form.errors)
 

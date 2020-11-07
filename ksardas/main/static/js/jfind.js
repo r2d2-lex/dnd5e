@@ -21,12 +21,15 @@ $(document).ready(function(){
                 'school': school,
             },
             dataType: 'json',
-            success: function (data, textStatus) {
+            success: function (data) {
                 /* ----- Success ---- */
+                let status = data.status;
                 let recordsOnPage = 5;
                 let tabsOnPage = 5;
-                let countOfItems = Math.ceil(data.length / recordsOnPage);
+                let countOfItems = Math.ceil(data.spells.length / recordsOnPage);
                 // countOfItems = 5;
+                let tab_active;
+                $('#id_spells').empty();
                 $('#pagination').empty();
                 let pagination = document.querySelector('#pagination');
 
@@ -38,10 +41,25 @@ $(document).ready(function(){
                     li.addEventListener('click', function() { showPage(this); });
                     items.push(li);
                 }
+                showData(status);
 
-                tabsNavPrepare();
-                let tab_active;
-                showPage(items[0]);
+                function showData(status) {
+                    if (status > 0) {
+                        $('#id_status').empty();
+                        $('#id_status').append('<div class="alert alert-success" role="alert" id="status-message">'+
+                            'Найдено '+status+' записей'+
+                        '</div>');
+                        tabsNavPrepare();
+                        showPage(items[0]);
+                    } else {
+                        $('#id_status').empty();
+                        $('#id_status').append('<div class="alert alert-info" role="alert" id="status-message">'+
+                            'Найдено '+status+' записей'+
+                        '</div>');
+                        // $("#status-message").removeClass("alert-info");
+                        tabsNavPrepare();
+                    }
+                }
 
                 function createTab (elem, index) {
                     elem.classList.add("page-item");
@@ -170,10 +188,14 @@ $(document).ready(function(){
 
                     let start = (pageNum - 1) * recordsOnPage;
                     let end = start + recordsOnPage;
-                    let records = data.slice(start, end);
+                    let records = data.spells.slice(start, end);
 
                     $('#id_spells').empty();
                     addRecords(records);
+
+                    // Копируем панель навигации для footer
+                    // $('#id_footer').empty();
+                    // $('#pagination').clone(true, true).appendTo("#id_footer");
                 }
 
                 function addRecords(records) {
@@ -183,15 +205,15 @@ $(document).ready(function(){
                             '<div class="card border-primary mt-5">'+
                             '<div class="card-header bg-light">'+
                             '<h4 class="card-title"><a href="'+reqUrl+records[record].pk+'">'+
-                            records[record].fields.name+'</a></h4>'+
+                            records[record].name+'</a></h4>'+
                             '</div>'+
                             '<div class="card-body">'+
-                            '<b>Уровень:</b> '+records[record].fields.level+'<br>'+
-                            '<b>Компоненты:</b> '+records[record].fields.components+'<br>'+
-                            '<b>Дистанция:</b> '+records[record].fields.distance+'<br>'+
-                            '<b>Длительность:</b> '+records[record].fields.duration+'<br>'+
-                            '<b>Время чтения:</b> '+records[record].fields.cast_time+'<br>'+
-                            '<b>Описание:</b> '+records[record].fields.description+'<br>'+
+                            '<b>Уровень:</b> '+records[record].level+'<br>'+
+                            '<b>Компоненты:</b> '+records[record].components+'<br>'+
+                            '<b>Дистанция:</b> '+records[record].distance+'<br>'+
+                            '<b>Длительность:</b> '+records[record].duration+'<br>'+
+                            '<b>Время чтения:</b> '+records[record].cast_time+'<br>'+
+                            '<b>Описание:</b> '+records[record].description+'<br>'+
                             '<a class="badge badge-light" href="'+reqUrl+records[record].pk+'">'+
                             'Просмотреть заклинание</a><br>'+
                             '</div></div></div>');
@@ -200,7 +222,7 @@ $(document).ready(function(){
             /* ----- END of Success ---- */
             },
             error: function(data){
-                 $('#id_spells').empty();
+                $('#id_spells').empty();
                 console.log(data);
             }
         })

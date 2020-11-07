@@ -127,6 +127,13 @@ class SpellManager(models.Manager):
     def get_spell_names(self):
         return self.values_list('name', flat=True).order_by('name')
 
+    @staticmethod
+    def spell_list(qs):
+        spells = []
+        for spell in qs:
+            spells.append(spell.dict())
+        return spells
+
     def main_search(self, form):
         """
             Вход: request - параметр запроса, form - форма
@@ -202,6 +209,26 @@ class Spell(models.Model):
     spell_classes = models.ManyToManyField(CharClasses, verbose_name='Класс персонажа')
     spells = SpellManager()
     objects = models.Manager()
+
+    def dict(self):
+        obj = {
+            'pk': self.pk,
+            'name': self.name,
+            'level': self.level,
+            'school': self.school,
+            'comp_is_verbal': self.comp_is_verbal,
+            'comp_is_somatic': self.comp_is_somatic,
+            'comp_is_material': self.comp_is_material,
+            'components': self.components,
+            'distance': self.distance ,
+            'duration': self.duration,
+            'cast_time': self.cast_time,
+            'is_concentrate': self.is_concentrate,
+            'is_ritual': self.is_ritual,
+            'description': self.description,
+            'gold': self.gold,
+        }
+        return obj
 
     @staticmethod
     def get_spell_levels():
