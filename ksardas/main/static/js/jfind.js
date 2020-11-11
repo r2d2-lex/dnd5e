@@ -35,8 +35,7 @@ $(document).ready(function(){
 
                 let items = [];
                 for (let i=1; i<= countOfItems; i++) {
-                    let li = document.createElement('li');
-                    createTab(li, i);
+                    let li = createTab(i);
                     $(li).hide();
                     li.addEventListener('click', function() { showPage(this); });
                     items.push(li);
@@ -46,22 +45,29 @@ $(document).ready(function(){
                 function showData(status) {
                     if (status > 0) {
                         $('#id_status').empty();
-                        $('#id_status').append('<div class="alert alert-success" role="alert" id="status-message">'+
-                            'Найдено '+status+' записей'+
-                        '</div>');
+                        let div = showMessage('Найдено '+status+' записей', 'alert-success');
+                        $('#id_status').append(div);
                         tabsNavPrepare();
                         showPage(items[0]);
                     } else {
                         $('#id_status').empty();
-                        $('#id_status').append('<div class="alert alert-info" role="alert" id="status-message">'+
-                            'Найдено '+status+' записей'+
-                        '</div>');
-                        // $("#status-message").removeClass("alert-info");
+                        let div = showMessage('Найдено '+status+' записей', 'alert-info');
+                        $('#id_status').append(div);
                         tabsNavPrepare();
                     }
                 }
 
-                function createTab (elem, index) {
+                function showMessage(message, classAlert) {
+                    let div = document.createElement('div');
+                    div.classList.add("alert");
+                    div.classList.add(classAlert);
+                    div.setAttribute("role", "alert");
+                    div.innerHTML = message
+                    return div
+                }
+
+                function createTab (index) {
+                    let elem = document.createElement('li');
                     elem.classList.add("page-item");
                     pagination.appendChild(elem);
 
@@ -70,6 +76,7 @@ $(document).ready(function(){
                     link.innerHTML = index;
                     link.href = '#';
                     elem.appendChild(link);
+                    return elem;
                 }
 
                 function hideAllTabs () {
@@ -132,9 +139,7 @@ $(document).ready(function(){
                      next - страница вперёд, last - последняя страница
                      caption - заголовок таба пагинации
                     */
-                    let li = document.createElement('li');
-                    createTab(li, caption);
-
+                    let li = createTab(caption);
                     switch (action) {
                         case 'first':
                             pagination.insertBefore(li, pagination.firstElementChild);
