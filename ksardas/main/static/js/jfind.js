@@ -45,13 +45,13 @@ $(document).ready(function(){
                 function showData(status) {
                     if (status > 0) {
                         $('#id_status').empty();
-                        let div = showMessage('Найдено '+status+' записей', 'alert-success');
+                        let div = showMessage('Найдено '+status+' заклинаний', 'alert-success');
                         $('#id_status').append(div);
                         tabsNavPrepare();
                         showPage(items[0]);
                     } else {
                         $('#id_status').empty();
-                        let div = showMessage('Найдено '+status+' записей', 'alert-info');
+                        let div = showMessage('Найдено '+status+' заклинаний', 'alert-info');
                         $('#id_status').append(div);
                         tabsNavPrepare();
                     }
@@ -115,10 +115,10 @@ $(document).ready(function(){
                             tabEnd = tabIndex + 2;
                         }
 
-                        console.log('___');
-                        console.log('TabStart:', tabStart);
-                        console.log('tabIndex:', tabIndex);
-                        console.log('TabEnd:', tabEnd);
+//                        console.log('___');
+//                        console.log('TabStart:', tabStart);
+//                        console.log('tabIndex:', tabIndex);
+//                        console.log('TabEnd:', tabEnd);
                         for (let j=tabStart; j<= tabEnd; j++) {
                             $(items[j]).show();
                         }
@@ -130,6 +130,16 @@ $(document).ready(function(){
                     linkAdd('first', '<<');
                     linkAdd('next', 'Вперёд');
                     linkAdd('last', '>>');
+                }
+
+                function cloneTabs() {
+                    //$('#id_footer').empty();
+                    $('#pagination').clone(true, true).appendTo("#id_footer");
+                    let ul = $("#id_footer").children();
+                    let liArr = $(ul).find('li');
+                    [].forEach.call(liArr,function(item) {
+                        item.addEventListener('click', function() { showPage(item); });
+                    });
                 }
 
                 function linkAdd(action, caption) {
@@ -197,10 +207,6 @@ $(document).ready(function(){
 
                     $('#id_spells').empty();
                     addRecords(records);
-
-                    // Копируем панель навигации для footer
-                    // $('#id_footer').empty();
-                    // $('#pagination').clone(true, true).appendTo("#id_footer");
                 }
 
                 function addRecords(records) {

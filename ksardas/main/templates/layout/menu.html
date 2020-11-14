@@ -32,8 +32,7 @@
                         </div>
                   </li>
               </ul>
-              <a class="nav-link disabled" href="{% url 'main:register' %}">[ Регистрация ]</a>
-              <a class="nav-link disabled" href="{% url 'main:login' %}">[ Вход ]</a>
+              Пользователь: {{ user.username }}
               <a class="nav-link" href="{% url 'main:logout' %}">[ Выйти ]</a>
               {% else %}
               <a class="nav-link" href="{% url 'main:register' %}">[ Регистрация ]</a>

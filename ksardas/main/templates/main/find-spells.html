@@ -84,22 +84,9 @@
 </nav>
     <div id="id_spells"></div>
 
+<br><br>
 <nav aria-label="Page navigation spells footer">
     <div id="id_footer"></div>
 </nav>
-
-<div id="pages" align="center">
-    {% if spells.has_previous %}
-        <a href="?page=1{% if parms %}{{ parms }}{% endif %}">First</a>&nbsp&nbsp
-        <a href="?page={{ spells.previous_page_number }}{% if parms %}{{ parms }}{% endif %}">Previous</a>
-    {% endif %}
-    <span class="current">
-        Page {{ spells.number }} of {{ spells.paginator.num_pages }}.
-    </span>
-    {% if spells.has_next %}
-        <a href="?page={{ spells.next_page_number }}{% if parms %}{{ parms }}{% endif %}">Next</a>&nbsp&nbsp
-        <a href="?page={{ spells.paginator.num_pages }}{% if parms %}{{ parms }}{% endif %}">Last</a>
-    {% endif %}
-</div>
 
 {% endblock %}
