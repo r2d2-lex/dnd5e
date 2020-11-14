@@ -2,13 +2,16 @@
 {% block title %}Создание персонажа{% endblock %}
 {% block content %}
 
-<div class="card border-success mt-5">
-    <div class="card-header bg-light">
-        <h4 class="card-title">Новый персонаж</h4>
-    </div>
-    <div class="card-body">
-        <div class="row main-form">
-            <form class="" method="post" action="#">
+<div class="row">
+    <div class="col"></div>
+
+    <div class="col-6">
+        <div class="card border-success mt-5">
+            <div class="card-header bg-light">
+                <h4 class="card-title">Новый персонаж</h4>
+            </div>
+            <div class="card-body">
+                <form class="" method="post" action="#">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="name">Имя персонажа: </label>
@@ -40,10 +43,14 @@
                     </select>
                 </div>
 
+
                 <input class="btn btn-success" type="submit" value="Создать">
-            </form>
+                </form>
+            </div>
         </div>
     </div>
+
+    <div class="col"></div>
 </div>
 
 {% endblock %}

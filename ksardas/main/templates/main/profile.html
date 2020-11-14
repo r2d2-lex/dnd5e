@@ -3,33 +3,38 @@
 {% block title %}Профиль пользователя  {% endblock %}
 
 {% block content %}
-Ваши персонажи...
 {% for ch in chars %}
-<div>
-    Name: <a href="{% url 'main:view_character' ch.name %}">{{ ch.name }}</a><br>
-    <a href="{% url 'main:edit_character' ch.name %}">Редактировать персонажа</a><br>
-    <a href="{% url 'main:delete_character' ch.name %}">Удалить персонажа</a><br>
-    <b>Race:</b>
-    {% for race in ch.race.all %}
-        {{ race.name }}
-    {% endfor %}
-    <br>
-    <b>Class:</b>
-    {% for char_class in ch.char_class.all %}
-        {{ char_class.name }}
-    {% endfor %}
-    <br>
-    Playername:  {{ ch.playername }} <br>
-    Level: {{ ch.level }} <br>
-    Expirence: {{ ch.expirence }} <br>
-    Strength: {{ ch.strength }} <br>
-    Dexterity : {{ ch.dexterity }} <br>
-    Constitution: {{ ch.constitution }} <br>
-    Intellegence: {{ ch.intellegence }} <br>
-    Wisdom: {{ ch.wisdom }} <br>
-    Chrarisma: {{ ch.chrarisma }} <br>
-    Modified:  {{ ch.modified }} <br>
-    <br><br>
+<div class="card border-danger mt-5">
+    <div class="card-header bg-light">
+        <h5 class="card-title">
+            <a href="{% url 'main:view_character' ch.name %}">{{ ch.name }}</a>
+            &nbsp&nbsp(
+            <b>Класс:</b>
+            {% for char_class in ch.char_classes.all %}
+                {{ char_class.name }}
+            {% endfor %}&nbsp
+            <b>Расса:</b>
+            {% for race in ch.races.all %}
+                {{ race.name }}
+            {% endfor %}&nbsp
+            Уровень: {{ ch.level }}&nbsp)
+        </h5>
+    </div>
+    <div class="card-body">
+        Имя игрока:  {{ ch.playername }} <br>
+        Опыт: {{ ch.expirence }} <br>
+        Сила: {{ ch.strength }} <br>
+        Ловкость : {{ ch.dexterity }} <br>
+        Телосложение: {{ ch.constitution }} <br>
+        Интеллект: {{ ch.intellegence }} <br>
+        Мудрость: {{ ch.wisdom }} <br>
+        Харизма: {{ ch.chrarisma }} <br>
+    </div>
+    <div class="card-footer">
+        <a class="badge badge-info" href="{% url 'main:edit_character' ch.name %}">Редактировать персонажа</a>
+        <a class="badge badge-info" href="{% url 'main:delete_character' ch.name %}">Удалить персонажа</a>
+        &nbsp&nbsp<span class="text-right text-muted">Изменено:  {{ ch.modified }}</span>
+    </div>
 </div>
 {% endfor %}
 {% endblock %}
