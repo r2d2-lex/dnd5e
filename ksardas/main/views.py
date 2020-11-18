@@ -1,5 +1,4 @@
 from django.core.signing import BadSignature
-from django.core import serializers
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,21 +17,17 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
 
 from .forms import CharForm, CreateCharForm
-from .forms import CreateCharViewForm
 from .forms import FindSpellForm
 from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
 from .forms import UploadAvatarForm
 from .models import AdvUser, CharBase, CharClasses, CharRaces, Spell
 from .utilites import signer
-import datetime
 
 from django.urls import reverse
 from django.shortcuts import redirect
-# from django.http import HttpResponseRedirect
 
 
-# Операции с учётной записью пользователя
 class DeleteUserView(LoginRequiredMixin, DeleteView):
     model = AdvUser
     template_name = 'main/delete_user.html'
@@ -121,23 +116,6 @@ def profile(request):
     return render(request, 'main/profile.html', {'chars': chars})
 
 
-# Операции с персонажем
-# Создание персонажа
-class CharCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
-    template_name = 'main/create_char_view.html'
-    form_class = CreateCharViewForm
-    success_url = reverse_lazy('main:profile')
-    success_message = 'Персонаж создан'
-    model = CharBase
-
-    def form_valid(self, form):
-        object = form.save(commit=False)
-        object.owner = self.request.user
-        object.save()
-        return super().form_valid(form)
-
-
-# Просмотр персонажа
 @login_required
 def view_character(request, name):
     print("Current char: ", name)
@@ -151,29 +129,20 @@ def get_spells(request):
         find_spell_form = FindSpellForm(request.GET)
         if find_spell_form.is_valid():
             find_options, spells_list_qs = Spell.spells.main_search(find_spell_form)
-            # response_serialized = serializers.serialize("json", spells_list_qs)
-            # return HttpResponse(response_serialized, content_type='application/json')
             if spells_list_qs.exists():
                 spell_list = Spell.spells.spell_list(spells_list_qs)
                 context = {
                     'spells': spell_list,
                     'status': spells_list_qs.count(),
                 }
-                # messages.add_message(request, messages.SUCCESS, 'Найдено {} записей'.format(spells_list_qs.count()))
             else:
                 context = {
                     'spells': '',
                     'status': 0,
                 }
-                # messages.add_message(request, messages.INFO, 'Ничего не найдено')
             return JsonResponse(context)
 
-        else:
-            print('Form invalid: ', find_spell_form.errors)
 
-
-# Все заклинания
-from django.db.models import Q
 @login_required
 def find_spells(request):
     spells_list_qs = None
@@ -186,7 +155,6 @@ def find_spells(request):
         else:
             messages.add_message(request, messages.ERROR, find_spell_form.errors)
 
-    # Paginator
     page = request.GET.get('page')
     spells_limit_list = 8
     paginator = Paginator(spells_list_qs, spells_limit_list)
@@ -217,18 +185,13 @@ def view_spell(request, spell_id):
 
 @login_required
 def create_character(request):
-    # CharRaces.race.create_db()
-    # CharClasses.char_classes.create_db()
-
     if request.method == 'POST':
         character_form = CreateCharForm(request.POST)
         if character_form.is_valid():
             created_character_db = character_form.create_character(request)
             return redirect('main:edit_character', name=created_character_db.name)
-            #return HttpResponseRedirect(reverse('main:edit_character', kwargs={'name': char_name}))
         else:
             messages.add_message(request, messages.ERROR, character_form.errors)
-            print("charform NOT VALID. ERROR:\r\n", character_form.errors)
 
     context = {
                 'char_classes': CharClasses.get_classes_captions(),
@@ -248,10 +211,8 @@ def delete_character(request, name):
     return render(request, 'main/delete_character.html', context)
 
 
-# Редактирование персонажа
 @login_required
 def edit_character(request, name):
-    # Загрузка персонажа
     char_base = get_object_or_404(CharBase, owner=request.user, name=name)
 
     if request.method == 'POST':
@@ -269,12 +230,10 @@ def edit_character(request, name):
                 messages.add_message(request, messages.WARNING, avatar_form.errors)
             return redirect('main:edit_character', name=char_base.name)
 
-        # Сохранение данынх в базу
         char_form = CharForm(request.POST)
         if char_form.is_valid():
             char_form.edit_character(char_base, request)
             messages.add_message(request, messages.SUCCESS, 'Изменения сохранены')
-            # После сохранений в форме всегда вызывай REDIRECT!
             return redirect('main:edit_character', name=char_base.name)
         else:
             print("char_form NOT VALID. ERROR:\r\n", char_form.errors)
@@ -283,8 +242,10 @@ def edit_character(request, name):
     context = {
                 'form': char_base,
                 'spells': Spell.spells.get_spell_names(),
-                'races': CharRaces.get_races_captions(),
-                'classes': CharClasses.get_classes_captions(),
+
+                'char_classes': CharClasses.get_classes_captions(),
+                'char_races': CharRaces.get_races_captions(),
+
                 'cur_race': char_base.get_current_race(),
                 'cur_class': char_base.get_current_char_classes(),
     }

@@ -3,101 +3,141 @@
 {% block title %}Редактор персонажа{% endblock %}
 
 {% block content %}
-<h2>Редактор персонажа</h2>
 
-<div>
-    <form method="post">
-        {% csrf_token %}
-            <label for="name">Your name: </label>
-            <input id="name" type="text" name="name" value="{{ form.name }}"><br>
+<div class="card border-success mt-5">
+    <div class="card-header bg-light">
+        <h4 class="card-title">Изменить персонаж</h4>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
 
-            <label for="playername">Your realname: </label>
-            <input id="playername" type="text" name="playername" value="{{ form.playername }}"><br>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="name">Имя персонажа: </label>
+                    <input id="name" class="form-control" type="text" name="name" value="{{ form.name }}">
+                </div>
 
-            <label for="race">Your race:</label>
-            <select id="race" name="race" size="1">
-            {% for race1,race2 in races %}
-                <option value="{{ race1 }}"
-                        {% if race1 == cur_race %}selected="selected"{% endif %}
-                >{{ race2 }}
-                </option>
-            {% endfor %}
-            </select><br>
+                <div class="form-group col-md-4">
+                    <label for="playername">Имя игрока: </label>
+                    <input id="playername" class="form-control" type="text" name="playername" value="{{ form.playername }}">
+                </div>
 
-            <label for="level">Your Level: </label>
-            <input id="level" type="number" name="level" step="1" min="0" value="{{ form.level }}"><br>
-
-            <label for="char_class">Your Class: </label>
-            <select id="char_class" name="char_class" size="1">
-            {% for charclass1, charclass2 in classes %}
-                <option value="{{ charclass1 }}"
-                        {% if charclass1 == cur_class %}selected="selected"{% endif %}
-                >{{ charclass2 }}</option>
-            {% endfor %}
-            </select>
-            <br>
-
-            <label for="expirence">Your expirence: </label>
-            <input id="expirence" type="number" name="expirence" step="1" min="0" value="{{ form.expirence }}"><br>
-
-            <label for="strength">Your strength: </label>
-            <input id="strength" type="number" name="strength" step="1" min="0" value="{{ form.strength }}"><br>
-
-            <label for="dexterity">Your dexterity: </label>
-            <input id="dexterity" type="number" name="dexterity" step="1" min="0" value="{{ form.dexterity }}"><br>
-
-            <label for="constitution">Your constitution: </label>
-            <input id="constitution" type="number" name="constitution" step="1" min="0" value="{{ form.constitution }}"><br>
-
-            <label for="intellegence">Your intellegence: </label>
-            <input id="intellegence" type="number" name="intellegence" step="1" min="0" value="{{ form.intellegence }}"><br>
-
-            <label for="wisdom">Your wisdom: </label>
-            <input id="wisdom" type="number" name="wisdom" step="1" min="0" value="{{ form.wisdom }}"><br>
-
-            <label for="chrarisma">Your chrarisma: </label>
-            <input id="chrarisma" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}"><br><br>
-
-            <div id="checkboxes">
-                <label for="checkboxes">You spells: </label>
-              <ul>
-                  {% for spell in form.spells.all %}
-                    <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
-                  {% endfor %}
-              </ul>
+                <div class="form-group col-md-4">
+                    <label for="level">Уровень: </label>
+                    <input id="level"  class="form-control" type="number" name="level" step="1" min="0" value="{{ form.level }}">
+                </div>
             </div>
 
-            <label for="spells">Choise spells: </label>
-            <select id="spells" name="spells" size="5">
-            {% for spellname in spells %}
-                <option value="{{ spellname }}">{{ spellname }}</option>
-            {% endfor %}
-            </select>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="race">Расса персонажа:</label>
+                    <select id="race" class="form-control form-control-sm" name="race" size="1">
+                    {% for race1,race2 in char_races %}
+                        <option value="{{ race1 }}"
+                                {% if race1 == cur_race %}selected="selected"{% endif %}
+                        >{{ race2 }}
+                        </option>
+                    {% endfor %}
+                    </select>
+                </div>
 
-            <p>Modified:  {{ form.modified }}</p>
+                <div class="form-group col-md-4">
+                    <label for="char_class">Клас персонажа: </label>
+                    <select id="char_class" class="form-control form-control-sm" name="char_class" size="1">
+                    {% for charclass1, charclass2 in char_classes %}
+                        <option value="{{ charclass1 }}"
+                                {% if charclass1 == cur_class %}selected="selected"{% endif %}
+                        >{{ charclass2 }}</option>
+                    {% endfor %}
+                    </select>
+                </div>
 
-            <input type="submit" value="Add Spell" name="do_addspell">
-            <input type="submit" value="Delete Spell" name="do_delspell">
-            <input type="submit" value="Изменить" name="do_change">
-    </form>
-    <br><br>
+                <div class="form-group col-md-1">
+                    <label for="expirence">Опыт: </label>
+                    <input id="expirence" type="number" name="expirence" step="1" min="0" value="{{ form.expirence }}"><br>
+                </div>
 
-    Avatar:
-    {% if form.avatar %}
-        <img src="{{ form.avatar.url }}" width="120" height="120">
-    {% else %}
-        <b>No avatar</b>
-    {% endif %}
+            </div>
 
-    <br><br>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="hidden" name="name" value="{{ form.name }}">
-        <label for="avatar">Load your avatar:</label>
-        <input id="avatar" type="file" name="avatar">
-        <button type="submit">Upload avatar</button><br>
-    </form>
 
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="strength">Сила: </label>
+                    <input id="strength" class="form-control" type="number" name="strength" step="1" min="0" value="{{ form.strength }}"><br>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="dexterity">Ловкость: </label>
+                    <input id="dexterity" class="form-control" type="number" name="dexterity" step="1" min="0" value="{{ form.dexterity }}"><br>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="constitution">Телосложение: </label>
+                    <input id="constitution" class="form-control" type="number" name="constitution" step="1" min="0" value="{{ form.constitution }}"><br>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="intellegence">Интеллект: </label>
+                    <input id="intellegence" class="form-control" type="number" name="intellegence" step="1" min="0" value="{{ form.intellegence }}"><br>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="wisdom">Мудрость: </label>
+                    <input id="wisdom" class="form-control" type="number" name="wisdom" step="1" min="0" value="{{ form.wisdom }}"><br>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="chrarisma">Харизма: </label>
+                    <input id="chrarisma" class="form-control" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}"><br><br>
+                </div>
+            </div>
+
+                <div id="checkboxes">
+                    <label for="checkboxes">Доступные заклинания: </label>
+                  <ul>
+                      {% for spell in form.spells.all %}
+                        <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                      {% endfor %}
+                  </ul>
+                </div>
+
+                <label for="spells">Используемые заклинания: </label>
+                <select id="spells" name="spells" size="5">
+                {% for spellname in spells %}
+                    <option value="{{ spellname }}">{{ spellname }}</option>
+                {% endfor %}
+                </select>
+
+
+
+                <input type="submit" value="Добавить заклинание" name="do_addspell">
+                <input type="submit" value="Удалить заклинание" name="do_delspell">
+                <input type="submit" value="Сохранить" name="do_change">
+        </form>
+        <br><br>
+
+        Аватар:
+        {% if form.avatar %}
+            <img src="{{ form.avatar.url }}" width="120" height="120">
+        {% else %}
+            <b>No avatar</b>
+        {% endif %}
+
+        <br><br>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="name" value="{{ form.name }}">
+            <label for="avatar">Загрузите аватар персонажа:</label>
+            <input id="avatar" type="file" name="avatar">
+            <button type="submit">Загрузить аватар</button><br>
+        </form>
+
+
+    </div>
+    <div class="card-footer">
+            <p>Изменено:  {{ form.modified }}</p>
+    </div>
 </div>
 
 {% endblock %}
