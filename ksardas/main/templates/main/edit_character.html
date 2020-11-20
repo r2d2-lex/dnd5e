@@ -1,5 +1,8 @@
 {% extends "layout/basic.html" %}
-
+{% load static %}
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/edit_char.css' %}">
+{% endblock %}
 {% block title %}Редактор персонажа{% endblock %}
 
 {% block content %}
@@ -57,7 +60,6 @@
                     <label for="expirence">Опыт: </label>
                     <input id="expirence" type="number" name="expirence" step="1" min="0" value="{{ form.expirence }}"><br>
                 </div>
-
             </div>
 
 
@@ -93,39 +95,45 @@
                 </div>
             </div>
 
-            <div class="form-row">
-<!--                <div class="card-group">-->
-                <div class="card-columns">
+            <div class="form-row row-cols-2 row-cols-md-2 text-center">
+                <div class="col mb-6">
                     <div class="card border-dark">
                         <div class="card-header">Доступные заклинания:</div>
                         <div class="card-body text-dark">
-                            <select id="spells" name="spells" size="5">
+                            <select id="spells" class="custom-select" name="spells" size="5" multiple>
                             {% for spellname in spells %}
                                 <option value="{{ spellname }}">{{ spellname }}</option>
                             {% endfor %}
                             </select>
-                            <input type="submit" value="Добавить заклинание" name="do_addspell">
-                            <input type="submit" value="Удалить заклинание" name="do_delspell">
+                        </div>
+                        <div class="card-footer">
+                                <input type="button" class="btn btn-primary" value="Добавить заклинание" name="do_addspell">
+                                <input type="button" class="btn btn-primary" value="Удалить заклинание" name="do_delspell">
                         </div>
                     </div>
+                </div>
 
+                <div class="col mb-6">
                     <div class="card border-dark">
                         <div class="card-header">Аватар:</div>
                         <div class="card-body text-dark">
                             {% if form.avatar %}
-                                <img src="{{ form.avatar.url }}" width="120" height="120">
+                                <img src="{{ form.avatar.url }}" class="img-thumbnail" width="170" height="170">
                             {% else %}
-                                <b>No avatar</b>
+                                <b>Без аватара</b>
                             {% endif %}
-
+                        </div>
+                        <div class="card-footer">
                             <input type="hidden" name="name" value="{{ form.name }}">
-                            <label for="avatar">Загрузите аватар персонажа:</label>
-                            <input id="avatar" type="file" name="avatar">
-                            <button type="submit">Загрузить аватар</button><br>
+                            <span class="btn btn-primary btn-file">
+                                Выберите файл<input id="avatar" type="file" name="avatar">
+                            </span>
+                            <button type="button" class="btn btn-primary">Сохранить аватар</button>
                         </div>
                     </div>
                 </div>
             </div>
+            <br>
 
             <div class="form-row">
                 <div class="card border-dark col-md-12">
