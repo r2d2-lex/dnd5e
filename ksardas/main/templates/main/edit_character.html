@@ -35,7 +35,7 @@
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="race">Расса персонажа:</label>
-                    <select id="race" class="form-control form-control-sm" name="race" size="1">
+                    <select id="race" class="form-control form-control-sm" name="char_races" size="1">
                     {% for race1,race2 in char_races %}
                         <option value="{{ race1 }}"
                                 {% if race1 == cur_race %}selected="selected"{% endif %}
@@ -47,7 +47,7 @@
 
                 <div class="form-group col-md-4">
                     <label for="char_class">Клас персонажа: </label>
-                    <select id="char_class" class="form-control form-control-sm" name="char_class" size="1">
+                    <select id="char_class" class="form-control form-control-sm" name="char_classes" size="1">
                     {% for charclass1, charclass2 in char_classes %}
                         <option value="{{ charclass1 }}"
                                 {% if charclass1 == cur_class %}selected="selected"{% endif %}
@@ -107,8 +107,7 @@
                             </select>
                         </div>
                         <div class="card-footer">
-                                <input type="button" class="btn btn-primary" value="Добавить заклинание" name="do_addspell">
-                                <input type="button" class="btn btn-primary" value="Удалить заклинание" name="do_delspell">
+                                <input type="submit" class="btn btn-primary" value="Добавить заклинание" name="do_addspell">
                         </div>
                     </div>
                 </div>
@@ -118,7 +117,7 @@
                         <div class="card-header">Аватар:</div>
                         <div class="card-body text-dark">
                             {% if form.avatar %}
-                                <img src="{{ form.avatar.url }}" class="img-thumbnail" width="170" height="170">
+                                <img src="{{ form.avatar.url }}" class="img-thumbnail" width="150" height="150">
                             {% else %}
                                 <b>Без аватара</b>
                             {% endif %}
@@ -128,7 +127,7 @@
                             <span class="btn btn-primary btn-file">
                                 Выберите файл<input id="avatar" type="file" name="avatar">
                             </span>
-                            <button type="button" class="btn btn-primary">Сохранить аватар</button>
+                            <button type="submit" class="btn btn-primary">Сохранить аватар</button>
                         </div>
                     </div>
                 </div>
@@ -146,6 +145,9 @@
                                 {% endfor %}
                             </ul>
                         </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-primary" value="Удалить заклинание" name="do_delspell">
                     </div>
                 </div>
             </div>

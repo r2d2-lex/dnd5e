@@ -1,11 +1,11 @@
 from django import forms
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm
 
 from .models import AdvUser
 from .models import CharBase, CharClasses, CharRaces
 # from .models import user_registrated
+from django.utils import timezone
 import datetime
 
 
@@ -37,7 +37,6 @@ class SpellForm(forms.Form):
     is_concentrate = forms.BooleanField(label='Концентрация')
     is_ritual = forms.BooleanField(label='Ритуал')
     description = forms.CharField(label='Описание заклинания')
-    #gold =  = forms.IntegerField(label='Золото')
     spell_classes = forms.CharField(required=False, label='Класс персонажа')
 
 
@@ -63,9 +62,9 @@ class CreateCharForm(forms.Form):
 
 class CharForm(forms.Form):
     name = forms.CharField(label='Имя персонажа')
-    race = forms.ChoiceField(choices=CharRaces.RACE_CHOICES, label='Расса персонажа')
+    char_races = forms.ChoiceField(choices=CharRaces.RACE_CHOICES, label='Расса персонажа')
     playername = forms.CharField(label='Реальное имя персонажа')
-    char_class = forms.ChoiceField(choices=CharClasses.CLASS_CHOICES, label='Класс персонажа')
+    char_classes = forms.ChoiceField(choices=CharClasses.CLASS_CHOICES, label='Класс персонажа')
     level = forms.IntegerField(label='Уровень персонажа')
     expirence = forms.IntegerField(label='Опыт персонажа')
     strength = forms.IntegerField(label='Сила персонажа')
@@ -83,57 +82,24 @@ class CharForm(forms.Form):
     def edit_character(self, char_qs, request):
         for form_field in self.cleaned_data.keys():
             try:
-                if form_field == 'char_class':
+                if form_field == 'char_classes':
                     char_qs.char_classes_set(self.cleaned_data[form_field])
-                elif form_field == 'race':
+                elif form_field == 'char_races':
                     char_qs.races_set(self.cleaned_data[form_field])
+                elif form_field == 'spells':
+                    char_qs.add_spell(request, self.cleaned_data['spells'])
+                elif form_field == 'char_spells':
+                    char_qs.remove_spell(request)
                 else:
                     set_attr = getattr(char_qs, form_field)
                     print('Current: ', set_attr, 'New: ', self.cleaned_data[form_field])
                     setattr(char_qs, form_field, self.cleaned_data[form_field])
 
             except (AttributeError, TypeError) as err:
-                print('Form_field: ', form_field)
-                print('Error: ', err, '\r\n')
+                print('Form_field: {} Error: {}'.format(form_field, err))
                 continue
-            finally:
-                char_qs.modified = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        char_qs.modified = datetime.datetime.now(tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
         char_qs.save()
-
-        # char_qs.name = self.cleaned_data['name']
-        # char_qs.playername = self.cleaned_data['playername']
-        # char_qs.level = self.cleaned_data['level']
-        # char_qs.expirence = self.cleaned_data['expirence']
-        # char_qs.strength = self.cleaned_data['strength']
-        # char_qs.dexterity = self.cleaned_data['dexterity']
-        # char_qs.constitution = self.cleaned_data['constitution']
-        # char_qs.intellegence = self.cleaned_data['intellegence']
-        # char_qs.wisdom = self.cleaned_data['wisdom']
-        # char_qs.chrarisma = self.cleaned_data['chrarisma']
-        # char_qs.modified = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        # char_qs.races_set(self.cleaned_data['race'])
-        # char_qs.char_classes_set(self.cleaned_data['char_class'])
-        # char_qs.add_spell(request, self)
-        # char_qs.remove_spell(request)
-        # char_qs.save()
-
-
-class CreateCharViewForm(ModelForm):
-    class Meta:
-        model = CharBase
-        fields = ('name',
-                 'races',
-                 'playername',
-                 'level',
-                 'expirence',
-                 'strength',
-                 'dexterity',
-                 'constitution',
-                 'intellegence',
-                 'wisdom',
-                 'chrarisma',
-                 'char_classes',
-                  )
 
 
 class ChangeUserInfoForm(forms.ModelForm):

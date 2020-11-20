@@ -307,9 +307,8 @@ class CharBase(models.Model):
         # Удаление аватара
         super().delete(*args, **kwargs)
 
-    def add_spell(self, request, form):
+    def add_spell(self, request, spell):
         if 'do_addspell' in request.POST:
-            spell = form.cleaned_data['spells']
             if spell != '':
                 add_spell = get_object_or_404(Spell, name=spell)
                 self.spells.add(add_spell)
