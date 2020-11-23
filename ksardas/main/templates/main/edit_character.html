@@ -156,7 +156,7 @@
     </div>
     <div class="card-footer">
         <input type="submit" class="btn btn-success" form="charform" value="Сохранить" name="do_change">
-        &nbsp&nbsp<span class="text-right text-muted">Изменено:  {{ form.modified }}</span>
+        &nbsp&nbsp<span class="text-right text-muted">Изменено:  {{ form.modified|date:"d.m.Y H:i:s" }}</span>
     </div>
 </div>
 

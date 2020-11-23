@@ -33,7 +33,7 @@
     <div class="card-footer">
         <a class="badge badge-info" href="{% url 'main:edit_character' ch.name %}">Редактировать персонажа</a>
         <a class="badge badge-info" href="{% url 'main:delete_character' ch.name %}">Удалить персонажа</a>
-        &nbsp&nbsp<span class="text-right text-muted">Изменено:  {{ ch.modified }}</span>
+        &nbsp&nbsp<span class="text-right text-muted">Изменено:  {{ ch.modified|date:"d.m.Y H:i:s" }}</span>
     </div>
 </div>
 {% endfor %}

@@ -61,6 +61,7 @@ class CreateCharForm(forms.Form):
 
 
 class CharForm(forms.Form):
+    SPELL_CHOICES = Spell.spells.get_spell_names_choices()
     name = forms.CharField(label='Имя персонажа')
     char_races = forms.ChoiceField(choices=CharRaces.RACE_CHOICES, label='Расса персонажа')
     playername = forms.CharField(label='Реальное имя персонажа')
@@ -75,9 +76,9 @@ class CharForm(forms.Form):
     chrarisma = forms.IntegerField(label='Харизма персонажа')
     modified = forms.DateTimeField(required=False, initial=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                                    input_formats=['%Y-%m-%d %H:%M:%S'], label='Время модификации')
-    spells = forms.MultipleChoiceField(required=False, choices=Spell.spells.get_spell_names_choices(),
+    spells = forms.MultipleChoiceField(required=False, choices=SPELL_CHOICES,
                                        label='Доступные заклинания персонажа')
-    char_spells = forms.MultipleChoiceField(required=False, choices=Spell.spells.get_spell_names_choices(),
+    char_spells = forms.MultipleChoiceField(required=False, choices=SPELL_CHOICES,
                                             label='Заклинания персонажа')
 
     def edit_character(self, char_qs, request):
