@@ -3,7 +3,7 @@ from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 
 from .models import AdvUser
-from .models import CharBase, CharClasses, CharRaces
+from .models import CharBase, CharClasses, CharRaces, Spell
 # from .models import user_registrated
 from django.utils import timezone
 import datetime
@@ -75,9 +75,10 @@ class CharForm(forms.Form):
     chrarisma = forms.IntegerField(label='Харизма персонажа')
     modified = forms.DateTimeField(required=False, initial=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                                    input_formats=['%Y-%m-%d %H:%M:%S'], label='Время модификации')
-    #spells = forms.ModelMultipleChoiceField(queryset=Spell.objects.all())
-    spells = forms.CharField(required=False, label='Доступные заклинания персонажа')
-    char_spells = forms.CharField(required=False, label='Заклинания персонажа')
+    spells = forms.MultipleChoiceField(required=False, choices=Spell.spells.get_spell_names_choices(),
+                                       label='Доступные заклинания персонажа')
+    char_spells = forms.MultipleChoiceField(required=False, choices=Spell.spells.get_spell_names_choices(),
+                                            label='Заклинания персонажа')
 
     def edit_character(self, char_qs, request):
         for form_field in self.cleaned_data.keys():
@@ -87,9 +88,9 @@ class CharForm(forms.Form):
                 elif form_field == 'char_races':
                     char_qs.races_set(self.cleaned_data[form_field])
                 elif form_field == 'spells':
-                    char_qs.add_spell(request, self.cleaned_data['spells'])
+                    char_qs.add_spell(request, self.cleaned_data.get('spells'))
                 elif form_field == 'char_spells':
-                    char_qs.remove_spell(request)
+                    char_qs.remove_spell(request, self.cleaned_data.get('char_spells'))
                 else:
                     set_attr = getattr(char_qs, form_field)
                     print('Current: ', set_attr, 'New: ', self.cleaned_data[form_field])

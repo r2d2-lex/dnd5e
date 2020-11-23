@@ -127,6 +127,10 @@ class SpellManager(models.Manager):
     def get_spell_names(self):
         return self.values_list('name', flat=True).order_by('name')
 
+    def get_spell_names_choices(self):
+        return tuple((choice, choice) for choice in self.get_spell_names())
+
+
     @staticmethod
     def spell_list(qs):
         spells = []
@@ -307,21 +311,15 @@ class CharBase(models.Model):
         # Удаление аватара
         super().delete(*args, **kwargs)
 
-    def add_spell(self, request, spell):
+    def add_spell(self, request, spells):
         if 'do_addspell' in request.POST:
-            if spell != '':
-                add_spell = get_object_or_404(Spell, name=spell)
-                self.spells.add(add_spell)
-                return True
-        return False
+            for spell in spells:
+                self.spells.add(get_object_or_404(Spell, name=spell))
 
-    def remove_spell(self, request):
+    def remove_spell(self, request, spells):
         if 'do_delspell' in request.POST:
-            # Требуется проверка?
-            char_spells = request.POST.getlist('char_spells')
-            for spell in char_spells:
-                remove_spell = get_object_or_404(Spell, name=spell)
-                self.spells.remove(remove_spell)
+            for spell in spells:
+                self.spells.remove(get_object_or_404(Spell, name=spell))
 
     def races_set(self, races):
         self.races.set([get_object_or_404(CharRaces, name=races)])
