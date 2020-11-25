@@ -13,3 +13,4 @@ ksardas/main/migrations/__pycache__/
 ksardas/ksardas/config.py
 ksardas/ksardas/errors.txt
 ksardas/media/
+ksardas/static/
