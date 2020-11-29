@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 from .models import AdvUser
 from .models import CharBase, CharClasses, CharRaces, Spell
-# from .models import user_registrated
+from .models import user_registrated
 from django.utils import timezone
 import datetime
 
@@ -137,12 +137,19 @@ class RegisterUserForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password1'])
-        # default is false
-        user.is_active = True
-        user.is_activated = True
+        # user.is_active = True
+        # user.is_activated = True
+        user.is_active = False
+        user.is_activated = False
+
+        try:
+            user_registrated.send(RegisterUserForm, instance=user)
+        except Exception as err:
+            # raise Exception('{} 500'.format(err))
+            raise Exception('Ошибка отправки почты: 500')
+
         if commit:
             user.save()
-        # user_registrated.send(RegisterUserForm, instance=user)
         return user
 
     class Meta:

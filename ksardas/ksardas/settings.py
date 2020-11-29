@@ -25,7 +25,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', default=get_random_secret_key())
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', os.environ.get('DJ_ALLOWED_HOSTS'), ]
 
 # Application definition
 
@@ -101,11 +101,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+DEFAULT_FROM_EMAIL = os.environ.get('DJ_DEFAULT_FROM_EMAIL')
+EMAIL_HOST_USER = os.environ.get('DJ_EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('DJ_EMAIL_HOST_PASSWORD')
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
-
-# LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'ru'
 
 # TIME_ZONE = 'UTC'
@@ -117,9 +119,6 @@ USE_L10N = False
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')

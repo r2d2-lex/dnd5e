@@ -15,6 +15,10 @@ services:
     environment:
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
+      - DJ_ALLOWED_HOSTS=hostname
+      - DJ_DEFAULT_FROM_EMAIL=webmaster@hostname
+      - DJ_EMAIL_HOST_USER=User
+      - DJ_EMAIL_HOST_PASSWORD=Password
     expose:
       - 8000
     ports:
