@@ -25,7 +25,9 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', default=get_random_secret_key())
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', os.environ.get('DJ_ALLOWED_HOSTS'), ]
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost', os.environ.get('DJ_ALLOWED_HOSTS'), ]
+ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -107,6 +109,13 @@ EMAIL_HOST_PASSWORD = os.environ.get('DJ_EMAIL_HOST_PASSWORD')
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+# REDIS related settings
+REDIS_HOST = 'localhost'
+REDIS_PORT = '6379'
+BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 
 LANGUAGE_CODE = 'ru'
 

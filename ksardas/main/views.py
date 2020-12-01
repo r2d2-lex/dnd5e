@@ -22,7 +22,7 @@ from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
 from .forms import UploadAvatarForm
 from .models import AdvUser, CharBase, CharClasses, CharRaces, Spell
-from .utilites import signer
+from .tasks import signer
 
 from django.urls import reverse
 from django.shortcuts import redirect

@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 from .models import AdvUser
 from .models import CharBase, CharClasses, CharRaces, Spell
-from .models import user_registrated
+from .tasks import send_verification_email
 from django.utils import timezone
 import datetime
 
@@ -137,16 +137,11 @@ class RegisterUserForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password1'])
-        # user.is_active = True
-        # user.is_activated = True
         user.is_active = False
         user.is_activated = False
 
-        try:
-            user_registrated.send(RegisterUserForm, instance=user)
-        except Exception as err:
-            # raise Exception('{} 500'.format(err))
-            raise Exception('Ошибка отправки почты: 500')
+        # Celery task
+        send_verification_email.delay(self.cleaned_data['email'], user.username)
 
         if commit:
             user.save()

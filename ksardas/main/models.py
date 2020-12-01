@@ -1,17 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.dispatch import Signal
 from django.shortcuts import get_object_or_404
-from .utilites import send_activation_notification, str2bool
-
-user_registrated = Signal(providing_args=['instance'])
-
-
-def user_registrated_dispatcher(sender, **kwargs):
-    send_activation_notification(kwargs['instance'])
-
-
-user_registrated.connect(user_registrated_dispatcher)
+from .utilites import str2bool
 
 
 class AdvUser(AbstractUser):
