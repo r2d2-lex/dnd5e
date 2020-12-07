@@ -12,6 +12,12 @@ ______
 
 
     pip install -r requirements.txt
+    
+3. Установите Redis (Необходим для Celery)
+
+
+
+    #apt install redis
 
 ### Список файлов:
 ______
@@ -44,3 +50,17 @@ ______
 
     shell:./ksardas/ksardas$ ./classes_for_spells.py ../data/char_spells.html
     
+### Запуск приложения в контейнере Docker
+
+    1. Установите Docker и Docker-compose
+    2. Установите переменные окружения в файле docker-compose.yml:
+      - DJ_DEFAULT_FROM_EMAIL=webmaster@hostname
+      - DJ_EMAIL_HOST_USER=User
+      - DJ_EMAIL_HOST_PASSWORD=Password
+      - DJANGO_SECRET_KEY=ENTER_YOUR_KEY
+      - REDIS_HOST=REDIS_HOST
+    3. Войдите в директорию проекта и выполните:
+        $ sudo docker-compose build
+        $ sudo docker-compose up
+    4. Подключитесть через браузер на:
+        http://localhost:8080 или http://localhost:8080/admin

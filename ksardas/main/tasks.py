@@ -3,7 +3,6 @@ from django.template.loader import render_to_string
 from django.core.signing import Signer
 from ksardas.celery import celery_app
 from ksardas.settings import ALLOWED_HOSTS
-
 import os
 
 signer = Signer()

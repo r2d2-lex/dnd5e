@@ -1,5 +1,8 @@
 version: '3'
 
+volumes:
+  app-volume:
+
 services:
   logs_template: &logs_template
     image: alpine
@@ -8,6 +11,25 @@ services:
         max-size: "200k"
         max-file: "7"
 
+  redis:
+    image: "redis:alpine"
+    ports:
+    - 6379:6379
+
+  celery:
+    build: .
+    environment:
+      - DJ_DEFAULT_FROM_EMAIL=${DJ_DEFAULT_FROM_EMAIL}
+      - DJ_EMAIL_HOST_USER=${DJ_EMAIL_HOST_USER}
+      - DJ_EMAIL_HOST_PASSWORD=${DJ_EMAIL_HOST_PASSWORD}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - REDIS_HOST=${REDIS_HOST}
+    command: celery -A ksardas worker --loglevel=debug --concurrency=4
+    depends_on:
+    - redis
+    volumes:
+    - app-volume:/ksardas
+
   web:
     <<: *logs_template
     container_name: web_django
@@ -15,12 +37,17 @@ services:
     environment:
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
-      - DJ_ALLOWED_HOSTS=hostname
-      - DJ_DEFAULT_FROM_EMAIL=webmaster@hostname
-      - DJ_EMAIL_HOST_USER=User
-      - DJ_EMAIL_HOST_PASSWORD=Password
+      - DJ_DEFAULT_FROM_EMAIL=${DJ_DEFAULT_FROM_EMAIL}
+      - DJ_EMAIL_HOST_USER=${DJ_EMAIL_HOST_USER}
+      - DJ_EMAIL_HOST_PASSWORD=${DJ_EMAIL_HOST_PASSWORD}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - REDIS_HOST=${REDIS_HOST}
     expose:
       - 8000
     ports:
-      - 80:8000
+      - 8000:8000
+    depends_on:
+      - redis
+    volumes:
+      - app-volume:/ksardas
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
