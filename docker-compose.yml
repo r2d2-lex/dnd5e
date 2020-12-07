@@ -11,6 +11,17 @@ services:
         max-size: "200k"
         max-file: "7"
 
+  envs: &envs_template
+    image: alpine
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+      - DJ_DEFAULT_FROM_EMAIL=${DJ_DEFAULT_FROM_EMAIL}
+      - DJ_EMAIL_HOST_USER=${DJ_EMAIL_HOST_USER}
+      - DJ_EMAIL_HOST_PASSWORD=${DJ_EMAIL_HOST_PASSWORD}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - REDIS_HOST=${REDIS_HOST}
+
   redis:
     image: "redis:alpine"
     ports:
@@ -18,12 +29,7 @@ services:
 
   celery:
     build: .
-    environment:
-      - DJ_DEFAULT_FROM_EMAIL=${DJ_DEFAULT_FROM_EMAIL}
-      - DJ_EMAIL_HOST_USER=${DJ_EMAIL_HOST_USER}
-      - DJ_EMAIL_HOST_PASSWORD=${DJ_EMAIL_HOST_PASSWORD}
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
-      - REDIS_HOST=${REDIS_HOST}
+    <<: *envs_template
     command: celery -A ksardas worker --loglevel=debug --concurrency=4
     depends_on:
     - redis
@@ -33,15 +39,8 @@ services:
   web:
     <<: *logs_template
     container_name: web_django
+    <<: *envs_template
     build: .
-    environment:
-      - PYTHONDONTWRITEBYTECODE=1
-      - PYTHONUNBUFFERED=1
-      - DJ_DEFAULT_FROM_EMAIL=${DJ_DEFAULT_FROM_EMAIL}
-      - DJ_EMAIL_HOST_USER=${DJ_EMAIL_HOST_USER}
-      - DJ_EMAIL_HOST_PASSWORD=${DJ_EMAIL_HOST_PASSWORD}
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
-      - REDIS_HOST=${REDIS_HOST}
     expose:
       - 8000
     ports:
