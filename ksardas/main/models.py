@@ -244,37 +244,61 @@ class CharacterManager(models.Manager):
     pass
 
 
-# Основная таблица персонажа
-class CharBase(models.Model):
-    owner = models.ForeignKey('AdvUser', null=False, on_delete=models.PROTECT, verbose_name='Владелец персонажа')
-    name = models.CharField(db_index=True, unique=True, null=False, max_length=20, verbose_name='Имя персонажа')
-
-    races = models.ManyToManyField(CharRaces, choices=CharRaces.RACE_CHOICES, max_length=20,
-                                   verbose_name='Расса персонажа')
-    playername = models.CharField(null=True, max_length=20, verbose_name='Реальное имя персонажа')
-    level = models.IntegerField(null=False, default=1, verbose_name='Уровень персонажа')
-    expirence = models.IntegerField(null=False, default=0, verbose_name='Опыт персонажа')
+class BaseInfo(models.Model):
     strength = models.IntegerField(null=False, default=8, verbose_name='Сила персонажа')
     dexterity = models.IntegerField(null=False, default=8, verbose_name='Ловкость персонажа')
     constitution = models.IntegerField(null=False, default=8, verbose_name='Телосложение персонажа')
     intellegence = models.IntegerField(null=False, default=8, verbose_name='Интеллект персонажа')
     wisdom = models.IntegerField(null=False, default=8, verbose_name='Мудрость персонажа')
     chrarisma = models.IntegerField(null=False, default=8, verbose_name='Харизма персонажа')
+
+    expirence_modifier = models.IntegerField(null=False, default=0, verbose_name='модификатор')
+    strength_modifier = models.IntegerField(null=False, default=0, verbose_name='модификатор')
+    dexterity_modifier = models.IntegerField(null=False, default=0, verbose_name='модификатор')
+    constitution_modifier = models.IntegerField(null=False, default=0, verbose_name='модификатор')
+    intellegence_modifier = models.IntegerField(null=False, default=0, verbose_name='модификатор')
+    wisdom_modifier = models.IntegerField(null=False, default=0, verbose_name='модификатор')
+    chrarisma_modifier = models.IntegerField(null=False, default=0, verbose_name='модификатор')
+
+    armor_class = models.IntegerField(null=True, default=0, verbose_name='Класс доспеха')
+    speed = models.CharField(null=True, max_length=255, verbose_name='Скорость персонажа')
+    hitpoints_max = models.IntegerField(null=True, default=0, verbose_name='Максимальое здоровье')
+    hitpoints_str = models.CharField(null=True, max_length=255, verbose_name='Кости здоровья')
+    world_view = models.CharField(null=True, max_length=255, verbose_name='Мировозрение')
+
+    skills = models.TextField(null=True, verbose_name='навыки')
+    saving_throws = models.TextField(null=True, verbose_name='спасброски')
+    description = models.TextField(null=True, verbose_name='Описание')
+    feelings = models.TextField(null=True, verbose_name='чувства')
+    abilities = models.TextField(null=True, verbose_name='способности')
+    actions = models.TextField(null=True, verbose_name='действия')
+
     modified = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Время модификации')
+
+    class Meta:
+        abstract = True
+
+
+# Основная таблица персонажа
+class CharBase(BaseInfo):
+    owner = models.ForeignKey('AdvUser', null=False, on_delete=models.PROTECT, verbose_name='Владелец персонажа')
+    playername = models.CharField(null=True, max_length=20, verbose_name='Реальное имя персонажа')
+    name = models.CharField(db_index=True, null=False, max_length=20, verbose_name='Имя персонажа')
+    races = models.ManyToManyField(CharRaces, choices=CharRaces.RACE_CHOICES, max_length=20,
+                                   verbose_name='Расса персонажа')
+
+    expirence = models.IntegerField(null=False, default=0, verbose_name='Опыт персонажа')
+    level = models.IntegerField(null=False, default=1, verbose_name='Уровень персонажа')
     spells = models.ManyToManyField(Spell)
 
     prof_bonus = models.IntegerField(null=True, default=0, verbose_name='Бонус мастерства')
-    armor_class = models.IntegerField(null=True, default=0, verbose_name='Броня персонажа')
-    speed = models.IntegerField(null=True, default=0, verbose_name='Скорость персонажа')
     initiative = models.IntegerField(null=True, default=0, verbose_name='Инициатива')
     inspiration = models.IntegerField(null=True, default=0, verbose_name='Вдохновение')
-    hitpoints_max = models.IntegerField(null=True, default=0, verbose_name='Максимальое здоровье')
     hitpoints_curr = models.IntegerField(null=True, default=0, verbose_name='Текущее здоровье')
     hitpoints_temp = models.IntegerField(null=True, default=0, verbose_name='Временные очки здоровья')
-
     char_classes = models.ManyToManyField(CharClasses, choices=CharClasses.CLASS_CHOICES,
                                           verbose_name='Класс персонажа')
-    world_view = models.IntegerField(null=True, default=0, verbose_name='Мировозрение')
+
     gender = models.BooleanField(default=True, verbose_name='Пол')
     age = models.IntegerField(null=True, default=21, verbose_name='Возраст персонажа')
     height = models.IntegerField(null=True, default=175, verbose_name='Рост персонажа')
@@ -336,3 +360,12 @@ class CharBase(models.Model):
 
     class Meta:
         ordering = ['-modified']
+
+
+class MobBase(BaseInfo):
+    name = models.CharField(db_index=True, null=False, max_length=255, verbose_name='Имя моба')
+    size = models.CharField(null=False, max_length=255, verbose_name='Размер')
+    mob_type = models.CharField(null=False, max_length=255, verbose_name='тип')
+    danger = models.CharField(null=True, max_length=20, verbose_name='опасность')
+    material_source = models.CharField(null=True, max_length=255, verbose_name='источник материала')
+    armor_class_str = models.CharField(null=True, max_length=255, verbose_name='описание доспеха')
