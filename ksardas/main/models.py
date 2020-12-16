@@ -363,7 +363,7 @@ class CharBase(BaseInfo):
 
 
 class MobBase(BaseInfo):
-    name = models.CharField(db_index=True, null=False, max_length=255, verbose_name='Имя моба')
+    name = models.CharField(db_index=True,unique=True , null=False, max_length=255, verbose_name='Имя моба')
     size = models.CharField(null=False, max_length=255, verbose_name='Размер')
     mob_type = models.CharField(null=False, max_length=255, verbose_name='тип')
     danger = models.CharField(null=True, max_length=20, verbose_name='опасность')

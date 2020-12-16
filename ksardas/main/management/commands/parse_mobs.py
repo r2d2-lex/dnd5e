@@ -91,8 +91,12 @@ def search_title(text, db):
             if key == 'SKIP':
                 return
 
+            if key == 'hitpoints_max' or key == 'armor_class':
+                hp_ac_get(db, key, val)
+                return
+
             for field_add in FIELDS_ADD:
-                if field[0] == field_add:
+                if key == field_add:
                     new_val = check_existing_val(db, key, val)
                     if new_val:
                         val = new_val
@@ -107,11 +111,31 @@ def search_title(text, db):
     return
 
 
+def hp_ac_get(db, key, val):
+    print('==Key {} Val: {} \r\n'.format(key, val))
+    if key == 'hitpoints_max':
+        str_key = 'hitpoints_str'
+    else:
+        str_key = 'armor_class_str'
+    try:
+        vals = re.findall(r'(\d+)(?:\s)?(\(.*\))?', val)[0]
+        vals_str = vals[0] + ' ' + vals[1]
+        new_val = int(vals[0])
+    except (IndexError, TypeError) as err:
+        print('Error get parms... {}'.format(err))
+        input()
+        return
+    print('***new_val: ', new_val)
+    print('***vals_str: ', vals_str, '\r\n')
+    save_db(db, key, new_val)
+    save_db(db, str_key, vals_str)
+    return
+
+
 def check_existing_val(db, key, val):
     existing_val = getattr(db, key)
     if existing_val:
-        new_key = existing_val + '\r\n' + val
-        return new_key
+        return existing_val + '\r\n\r\n' + val
 
 
 def parse_stats(params, db):
