@@ -4,10 +4,14 @@ from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
 from main.models import MobBase
 from main.utilites import get_html
-
-
 import re
 from bs4 import BeautifulSoup
+
+STRING_FIELD = 0
+DB_FIELD = 1
+DESCRIPTION_ADD_FIELD = 2
+FIELD_SKIP = 'SKIP_FIELD'
+FIELD_DESCRIPTION = 'description'
 
 dnd_source = 'https://dungeon.su'
 mob_html_group = dnd_source + '/bestiary/'
@@ -40,7 +44,7 @@ def get_mobs():
             print('------' * 10)
             print('Name: {}, Href: {}'.format(mob_name, mob_href))
             parse_mob(mob_name, mob_href)
-            input()
+            # input()
 
 
 def print_lis(params, db):
@@ -52,67 +56,65 @@ def print_lis(params, db):
             search_title(param.text, db)
 
 
+FIELDS = (
+    ('Действия', 'actions', 0),
+    ('Действия логова', FIELD_DESCRIPTION, 1),
+    ('Игровой персонаж', FIELD_DESCRIPTION, 0),
+    ('Источник:', 'material_source', 0),
+    ('Класс доспеха:', 'armor_class', 0),
+    ('Материал взят ', FIELD_SKIP, 0),
+    ('Монстра добавил:', FIELD_SKIP, 0),
+    ('Навыки:', 'skills', 0),
+    ('Опасность:', 'danger', 0),
+    ('Описание', FIELD_DESCRIPTION, 0),
+    ('Реакции', 'actions', 0),
+    ('Спасброски:', 'saving_throws', 0),
+    ('Способности', 'abilities', 0),
+    ('Скорость:', 'speed', 0),
+    ('Легендарные действия', 'actions', 1),
+    ('Логово', FIELD_DESCRIPTION, 1),
+    ('Хиты:', 'hitpoints_max', 0),
+    ('Чувства:', 'feelings', 0),
+    ('Эффекты логова', FIELD_DESCRIPTION, 1),
+)
+
+
 def search_title(text, db):
-    FIELDS = (
-        ('Действия', 'actions'),
-        ('Действия логова', 'description'),
-        ('Игровой персонаж', 'description'),
-        ('Источник:', 'material_source'),
-        ('Класс доспеха:', 'armor_class'),
-        ('Материал взят ', 'SKIP'),
-        ('Монстра добавил:', 'SKIP'),
-        ('Навыки:', 'skills'),
-        ('Опасность:', 'danger'),
-        ('Описание', 'description'),
-        ('Реакции', 'actions'),
-        ('Спасброски:', 'saving_throws'),
-        ('Способности', 'abilities'),
-        ('Скорость:', 'speed'),
-        ('Легендарные действия', 'actions'),
-        ('Логово', 'description'),
-        ('Хиты:', 'hitpoints_max'),
-        ('Чувства:', 'feelings'),
-        ('Эффекты логова', 'description'),
-    )
-
-    FIELDS_ADD = (
-        'actions',
-        'description'
-    )
-
+    search_text = text.strip()
     for field in FIELDS:
-        key = ''
-        val = ''
-        result = re.findall(field[0]+'(.*)', text)
+        result = re.findall(field[STRING_FIELD] + '(.*)', search_text)
         if result:
-            key = field[1]
-            val = result[0]
+            try:
+                key = field[DB_FIELD]
+                val = result[0].strip()
+                val_pref = field[STRING_FIELD]
+                descr_field = field[DESCRIPTION_ADD_FIELD]
+            except IndexError as err:
+                print('Error get value: {}'.format(err))
+                input()
+                continue
 
-            if key == 'SKIP':
+            if key == FIELD_SKIP:
                 return
 
             if key == 'hitpoints_max' or key == 'armor_class':
                 hp_ac_get(db, key, val)
                 return
 
-            for field_add in FIELDS_ADD:
-                if key == field_add:
-                    new_val = check_existing_val(db, key, val)
-                    if new_val:
-                        val = new_val
-                        break
+            if descr_field == 1:
+                val = val_pref + ':\r\n' + val
 
             save_db(db, key, val)
-            print('Key {key}, Value: {val_pref} {val}\r\n'.format(key=key, val=val,val_pref=field[0]))
+            print('DB_KEY {key}, Search_KEY: {val_pref} VALUE: {val}\r\n'.format(key=key, val=val, val_pref=val_pref))
             return
 
     # Undifined пишем в description
-    print('Undifined....' + text + '\r\n')
+    print('Undifined:::' + search_text + '\r\n')
+    save_db(db, FIELD_DESCRIPTION, search_text)
     return
 
 
 def hp_ac_get(db, key, val):
-    print('==Key {} Val: {} \r\n'.format(key, val))
     if key == 'hitpoints_max':
         str_key = 'hitpoints_str'
     else:
@@ -122,20 +124,26 @@ def hp_ac_get(db, key, val):
         vals_str = vals[0] + ' ' + vals[1]
         new_val = int(vals[0])
     except (IndexError, TypeError) as err:
-        print('Error get parms... {}'.format(err))
+        print('Error get parms: {}'.format(err))
         input()
         return
-    print('***new_val: ', new_val)
-    print('***vals_str: ', vals_str, '\r\n')
     save_db(db, key, new_val)
     save_db(db, str_key, vals_str)
     return
 
 
-def check_existing_val(db, key, val):
-    existing_val = getattr(db, key)
-    if existing_val:
-        return existing_val + '\r\n\r\n' + val
+def check_existing_record(db, key, val):
+    FIELDS_ADD = (
+        'actions',
+        'description'
+    )
+
+    for field_add in FIELDS_ADD:
+        if key == field_add:
+            existing_val = getattr(db, key)
+            if existing_val:
+                return existing_val + '\r\n\r\n' + val
+    return
 
 
 def parse_stats(params, db):
@@ -178,10 +186,14 @@ def parse_size_type_alignment(soup, db):
     size_type_aligment = soup.find('ul', class_='params').find('li', class_='size-type-alignment', recursive=False)
     if size_type_aligment:
         sta = size_type_aligment.text.split(', ')
-        print('Size: {}, Type: {}, Alignment: {}'.format(sta[0],sta[1],sta[2]))
-        save_db(db, 'size', sta[0])
-        save_db(db, 'mob_type', sta[1])
-        save_db(db, 'world_view', sta[2])
+        try:
+            print('Size: {}, Type: {}, Alignment: {}'.format(sta[0],sta[1],sta[2]))
+            save_db(db, 'size', sta[0])
+            save_db(db, 'mob_type', sta[1])
+            save_db(db, 'world_view', sta[2])
+        except IndexError as err:
+            print('Error get size_type_alignment: {}'.format(err))
+            input()
     else:
         input('Size_Type_Alignment NOT FOUND')
     return
@@ -211,16 +223,14 @@ def parse_mob(name, link):
 
 
 def save_db(db, key, val):
+    save_val = val
+    new_val = check_existing_record(db, key, save_val)
+    if new_val:
+        save_val = new_val
+
     try:
-        setattr(db, key, val)
+        setattr(db, key, save_val)
     except (AttributeError, TypeError) as err:
-        print('Поле: {}, Значение: {}, Ошибка: {}'.format(key, val, err))
+        print('Поле: {}, Значение: {}, Ошибка: {}'.format(key, save_val, err))
         input('')
     return
-
-# def main():
-#     get_mobs()
-#
-#
-# if __name__ == '__main__':
-#     main()
