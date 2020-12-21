@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
 from main.models import MobBase
@@ -12,6 +10,12 @@ DB_FIELD = 1
 DESCRIPTION_ADD_FIELD = 2
 FIELD_SKIP = 'SKIP_FIELD'
 FIELD_DESCRIPTION = 'description'
+STAT_WORD = 0
+STAT_DB = 1
+FIRST_DIV = 0
+SECOND_DIV = 1
+FIRST_PARM = 0
+SECOND_PARM = 1
 
 dnd_source = 'https://dungeon.su'
 mob_html_group = dnd_source + '/bestiary/'
@@ -32,6 +36,9 @@ class Command(BaseCommand):
 
 
 def get_mobs():
+    parsing = True
+    # start_link = '/bestiary/127-ancient_gold_dragon/'
+
     html = get_html(mob_html_group)
     soup = BeautifulSoup(html, 'html.parser')
     if html:
@@ -41,10 +48,14 @@ def get_mobs():
         for mob in all_mobs:
             mob_name = mob.find('a').text
             mob_href = mob.find('a')['href']
-            print('------' * 10)
-            print('Name: {}, Href: {}'.format(mob_name, mob_href))
-            parse_mob(mob_name, mob_href)
-            # input()
+            # if mob_href == start_link:
+            #     parsing = True
+
+            if parsing:
+                print('------' * 10)
+                print('Имя: {}, Ссылка: {}'.format(mob_name, mob_href))
+                parse_mob(mob_name, mob_href)
+    return
 
 
 def print_lis(params, db):
@@ -54,6 +65,7 @@ def print_lis(params, db):
             print_lis(li, db)
         else:
             search_title(param.text, db)
+    return
 
 
 FIELDS = (
@@ -90,7 +102,7 @@ def search_title(text, db):
                 val_pref = field[STRING_FIELD]
                 descr_field = field[DESCRIPTION_ADD_FIELD]
             except IndexError as err:
-                print('Error get value: {}'.format(err))
+                print('Ошибка получения значения: {}'.format(err))
                 input()
                 continue
 
@@ -105,7 +117,6 @@ def search_title(text, db):
                 val = val_pref + ':\r\n' + val
 
             save_db(db, key, val)
-            print('DB_KEY {key}, Search_KEY: {val_pref} VALUE: {val}\r\n'.format(key=key, val=val, val_pref=val_pref))
             return
 
     # Undifined пишем в description
@@ -124,7 +135,7 @@ def hp_ac_get(db, key, val):
         vals_str = vals[0] + ' ' + vals[1]
         new_val = int(vals[0])
     except (IndexError, TypeError) as err:
-        print('Error get parms: {}'.format(err))
+        print('Ошибка получения параметров - hp_ac_get: {}'.format(err))
         input()
         return
     save_db(db, key, new_val)
@@ -137,7 +148,6 @@ def check_existing_record(db, key, val):
         'actions',
         'description'
     )
-
     for field_add in FIELDS_ADD:
         if key == field_add:
             existing_val = getattr(db, key)
@@ -155,31 +165,28 @@ def parse_stats(params, db):
         ('МДР', 'wisdom'),
         ('ХАР', 'chrarisma'),
     )
-
     for param in params:
-        stats = param.findAll('div', class_='stat')
-        for stat in stats:
-            key = ''
-            val = ''
+        div_stats = param.findAll('div', class_='stat')
+        for stat in div_stats:
             two_divs = stat.findAll('div')
-
             for stat_element in STATS:
                 try:
-                    if stat_element[0] == two_divs[0].text:
-                        key = stat_element[1]
+                    if stat_element[STAT_WORD] == two_divs[FIRST_DIV].text:
+                        key = stat_element[STAT_DB]
                         print('Ключ: '+key)
 
                         # Поиск Характеристики и модификатора
-                        val = re.findall(r'(\d{1,2})\s\(([+-]?\d)\)', two_divs[1].text)
-                        print('Значение: ', val[0])
+                        val = re.findall(r'(\d+)\s\(([+-]?\d+)\)', two_divs[SECOND_DIV].text)[0]
+                        print('Значение: ', val)
+
+                        save_db(db, key, int(val[FIRST_PARM]))
+                        save_db(db, key + '_modifier', int(val[SECOND_PARM]))
+
                         break
                 except IndexError as err:
                     print('Ошибка получения характеристики: {}'.format(err))
                     input()
-
-            save_db(db, key, int(val[0][0]))
-            save_db(db, key+'_modifier', int(val[0][1]))
-            print(two_divs[1].text+'\r\n')
+    return
 
 
 def parse_size_type_alignment(soup, db):
@@ -187,12 +194,12 @@ def parse_size_type_alignment(soup, db):
     if size_type_aligment:
         sta = size_type_aligment.text.split(', ')
         try:
-            print('Size: {}, Type: {}, Alignment: {}'.format(sta[0],sta[1],sta[2]))
+            print('Размер: {}, Тип: {}, Мировозрение: {}'.format(sta[0],sta[1],sta[2]))
             save_db(db, 'size', sta[0])
             save_db(db, 'mob_type', sta[1])
             save_db(db, 'world_view', sta[2])
         except IndexError as err:
-            print('Error get size_type_alignment: {}'.format(err))
+            print('Ошибка получения параметров size_type_alignment: {}'.format(err))
             input()
     else:
         input('Size_Type_Alignment NOT FOUND')
@@ -207,18 +214,23 @@ def parse_mob(name, link):
     save_db(mob, 'name', name)
     parse_size_type_alignment(soup, mob)
 
-    all_parms = soup.find('ul', class_='params').findAll('li', class_='', recursive=False)
-    print_lis(all_parms, mob)
-    all_parms = soup.find('ul', class_='params').findAll('li', class_='stats', recursive=False)
-    parse_stats(all_parms, mob)
-    all_parms = soup.find('ul', class_='params').findAll('li', class_='subsection', recursive=False)
-    print_lis(all_parms, mob)
+    parse_section(soup, '', mob)
+    parse_section(soup, 'stats', mob)
+    parse_section(soup, 'subsection', mob)
 
     try:
         mob.save()
     except IntegrityError:
         print('Запись {} уже в БД'.format(mob.name))
+    return
 
+
+def parse_section(src, class_, db):
+    all_parms = src.find('ul', class_='params').findAll('li', class_=class_, recursive=False)
+    if class_ == 'stats':
+        parse_stats(all_parms, db)
+        return
+    print_lis(all_parms, db)
     return
 
 
