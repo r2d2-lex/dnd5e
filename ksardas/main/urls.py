@@ -6,6 +6,7 @@ from .views import BBLoginView, BBLogoutView
 from .views import BBPasswordChangeView
 from .views import ChangeUserInfoView
 from .views import create_character
+from .views import export_character
 from .views import edit_character
 from .views import view_spell
 from .views import delete_character
@@ -27,6 +28,7 @@ urlpatterns = [
     path('accounts/profile/delete/', DeleteUserView.as_view(), name='profile_delete'),
     path('accounts/profile/char/create/', create_character, name='create_character'),
     path('accounts/profile/char/<str:name>/edit/', edit_character, name='edit_character'),
+    path('accounts/profile/char/<str:name>/export/', export_character, name='export_character'),
     path('accounts/profile/char/<str:name>/delete/', delete_character, name='delete_character'),
     path('accounts/profile/char/<str:name>/', view_character, name='view_character'),
     path('accounts/profile/spells/', find_spells, name='find_spells'),

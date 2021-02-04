@@ -22,6 +22,7 @@ from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
 from .forms import UploadAvatarForm
 from .models import AdvUser, CharBase, CharClasses, CharRaces, Spell
+from .pdfstuff import generate_pdf
 from .tasks import signer
 
 from django.urls import reverse
@@ -209,6 +210,16 @@ def delete_character(request, name):
         return redirect(reverse('main:profile'))
     context = {'name': name}
     return render(request, 'main/delete_character.html', context)
+
+
+@login_required
+def export_character(request, name):
+    char_base = get_object_or_404(CharBase, owner=request.user, name=name)
+    filename = generate_pdf(char_base)
+    context = {'filename': filename}
+    # return render(request, 'main/export_character.html', context)
+    chars = CharBase.objects.filter(owner=request.user)
+    return render(request, 'main/profile.html', {'chars': chars})
 
 
 @login_required
