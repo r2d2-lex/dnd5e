@@ -1,4 +1,7 @@
+from django.utils import timezone
+import datetime
 import requests
+
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0'
 
@@ -18,3 +21,7 @@ def str2bool(v):
     if isinstance(v, bool):
         return v
     return v.lower() in ("yes", "true", "t", "1", "on")
+
+
+def get_date_time(template):
+    return datetime.datetime.now(tz=timezone.utc).strftime(template)

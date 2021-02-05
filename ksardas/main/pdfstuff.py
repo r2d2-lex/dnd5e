@@ -1,15 +1,55 @@
 from collections import namedtuple
+from .pdf_processing import ProcessPdf
+from .utilites import get_date_time
+import os
 
 
-def generate_pdf(char):
-    PDF_FORM = namedtuple('PDF_RECORDS', 'pdf_field db_field type description')
-    for field in PDF_FORM_RECORDS:
-        record = PDF_FORM(*field)
-        if record.db_field:
-            print(r'pdf_field: "{}", db_field: "{}"'.format(record.pdf_field, record.db_field))
-            value = getattr(char, record.db_field)
-            value = str(value)
+class BaseKeyNotFound(KeyError):
+    pass
+
+
+class ExportPDF:
+    def __init__(self, char):
+        self.char = char
+        self.pdf_name = self.get_pdf_name()
+
+    def generate_pdf(self):
+        data = self.make_form_data()
+        pdf = ProcessPdf()
+        data_pdf = pdf.add_data_to_pdf('main/templates/pdf/form2.pdf', data)
+        print('Pdf ok...')
+        return self.pdf_name, data_pdf
+
+    def make_form_data(self):
+        data = {}
+        PDF_FORM = namedtuple('PDF_RECORDS', 'pdf_field db_field type description')
+        for _record in PDF_FORM_RECORDS:
+            record = PDF_FORM(*_record)
+            if record.db_field:
+                print(r'PDF_field: "{}", DB_field: "{}"'.format(record.pdf_field, record.db_field))
+                value = self.get_db_value(record.db_field)
+                if value:
+                    data[record.pdf_field] = [value, record.type]
+        print(data)
+        return data
+
+    def get_pdf_name(self):
+        charname = self.get_db_value('name')
+        if not charname:
+            raise BaseKeyNotFound
+        part_name = get_date_time('%Y%m%d')
+        return charname+part_name+'.pdf'
+
+    def get_db_value(self, db_field):
+        value = getattr(self.char, db_field)
+        if value:
+            try:
+                value = str(value)
+            except TypeError as err:
+                print('Bad value: {}'.format(err))
+                return False
             print('Value: {}'.format(value))
+            return value
 
 
 PDF_FORM_RECORDS = (
