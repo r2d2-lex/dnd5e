@@ -308,10 +308,10 @@ class CharBase(BaseInfo):
     skin = models.CharField(null=True, max_length=20, verbose_name='Цвет кожы')
     avatar = models.ImageField(null=True, blank=True, upload_to='avatars/', verbose_name='Аватар')
 
-    pers_traits = models.CharField(null=True, max_length=20, verbose_name='Персональные черты')
-    ideals = models.CharField(null=True, max_length=20, verbose_name='Идеалы')
-    bonds = models.CharField(null=True, max_length=20, verbose_name='Привязанности')
-    flaws = models.CharField(null=True, max_length=20, verbose_name='Пороки')
+    pers_traits = models.CharField(null=True, max_length=32, verbose_name='Персональные черты')
+    ideals = models.CharField(null=True, max_length=32, verbose_name='Идеалы')
+    bonds = models.CharField(null=True, max_length=32, verbose_name='Привязанности')
+    flaws = models.CharField(null=True, max_length=32, verbose_name='Пороки')
     char_history = models.TextField(default='', verbose_name='История персонажа')
 
     gold_count = models.IntegerField(null=True, default=0, verbose_name='Золото персонажа')

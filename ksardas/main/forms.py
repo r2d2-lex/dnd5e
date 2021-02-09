@@ -6,6 +6,7 @@ from .models import AdvUser
 from .models import CharBase, CharClasses, CharRaces, Spell
 from .tasks import send_verification_email
 from django.utils import timezone
+from .utilites import get_date_time
 import datetime
 
 
@@ -74,7 +75,11 @@ class CharForm(forms.Form):
     intellegence = forms.IntegerField(label='Интеллект персонажа')
     wisdom = forms.IntegerField(label='Мудрость персонажа')
     chrarisma = forms.IntegerField(label='Харизма персонажа')
-    modified = forms.DateTimeField(required=False, initial=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+    pers_traits = forms.CharField(max_length=32, label='Персональные черты')
+    ideals = forms.CharField(max_length=32, label='Идеалы')
+    bonds = forms.CharField(max_length=32, label='Привязанности')
+    flaws = forms.CharField(max_length=32, label='Пороки')
+    modified = forms.DateTimeField(required=False, initial=get_date_time('%Y-%m-%d %H:%M:%S'),
                                    input_formats=['%Y-%m-%d %H:%M:%S'], label='Время модификации')
     spells = forms.MultipleChoiceField(required=False, choices=SPELL_CHOICES,
                                        label='Доступные заклинания персонажа')
@@ -100,7 +105,7 @@ class CharForm(forms.Form):
             except (AttributeError, TypeError) as err:
                 print('Form_field: {} Error: {}'.format(form_field, err))
                 continue
-        char_qs.modified = datetime.datetime.now(tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+        char_qs.modified = get_date_time('%Y-%m-%d %H:%M:%S')
         char_qs.save()
 
 

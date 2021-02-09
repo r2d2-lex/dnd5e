@@ -1,7 +1,7 @@
 from collections import namedtuple
+from django.conf import settings
 from .pdf_processing import ProcessPdf
 from .utilites import get_date_time
-import os
 
 
 class BaseKeyNotFound(KeyError):
@@ -16,7 +16,7 @@ class ExportPDF:
     def generate_pdf(self):
         data = self.make_form_data()
         pdf = ProcessPdf()
-        data_pdf = pdf.add_data_to_pdf('main/templates/pdf/form2.pdf', data)
+        data_pdf = pdf.add_data_to_pdf(settings.PDF_TEMPLATE_PATH, data)
         print('Pdf ok...')
         return self.pdf_name, data_pdf
 
