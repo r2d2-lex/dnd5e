@@ -55,7 +55,7 @@ class ExportPDF:
 PDF_FORM_RECORDS = (
     # 1'st page
     ('ClassLevel', 'level', 'string', 'класс и уровень'),
-    ('Background', '', 'string', 'предыстория'),
+    ('Background', 'char_history', 'string', 'предыстория'),
     ('PlayerName', 'playername', 'string', ''),
     ('CharacterName', 'name', 'string', ''),
     ('Race', 'races', 'string', 'раса'),
@@ -81,7 +81,7 @@ PDF_FORM_RECORDS = (
     ('Initiative', 'initiative', 'string', 'инициатива'),
     ('Speed', 'speed', 'string', 'Скорость персонажа'),
 
-    ('PersonalityTraits', 'pers_traits', 'string', 'Персональные черты'),
+    ('PersonalityTraits ', 'pers_traits', 'string', 'Персональные черты'),
     ('Ideals', 'ideals', 'string', 'идеалы'),
     ('Bonds', 'bonds', '', 'Привязанности'),
     ('Flaws', 'flaws', 'string', 'Пороки'),

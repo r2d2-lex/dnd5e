@@ -15,161 +15,252 @@
         <form method="post" id="charform" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="name">Имя персонажа: </label>
-                    <input id="name" class="form-control" type="text" name="name" value="{{ form.name }}">
+            <div class="form-row row-cols-2 row-cols-md-2 text-center align-items-center">
+                <div class="col col-md-4">
+
+                    <div class="form-row">
+                        <div class="form-group ">
+                            <label for="name">Имя персонажа: </label>
+                            <input id="name" class="form-control" type="text" name="name" value="{{ form.name }}">
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group col-md-4">
-                    <label for="playername">Имя игрока: </label>
-                    <input id="playername" class="form-control" type="text" name="playername" value="{{ form.playername }}">
-                </div>
+                <div class="col col-md-8">
 
-                <div class="form-group col-md-4">
-                    <label for="level">Уровень: </label>
-                    <input id="level"  class="form-control" type="number" name="level" step="1" min="0" value="{{ form.level }}">
-                </div>
-            </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="playername">Имя игрока: </label>
+                            <input id="playername" class="form-control" type="text" name="playername" value="{{ form.playername }}">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="level">Уровень: </label>
+                            <input id="level"  class="form-control" type="number" name="level" step="1" min="0" value="{{ form.level }}">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="char_history">Предыстория: </label>
+                            <input id="char_history" class="form-control" type="text" name="char_history" value="{{ form.char_history }}">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="world_view">Мировозрение: </label>
+                            <input id="world_view" class="form-control" type="text" name="world_view" value="{{ form.world_view }}">
+                        </div>
+                    </div>
 
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="race">Расса персонажа:</label>
-                    <select id="race" class="form-control form-control-sm" name="char_races" size="1">
-                    {% for race1,race2 in char_races %}
-                        <option value="{{ race1 }}"
-                                {% if race1 == cur_race %}selected="selected"{% endif %}
-                        >{{ race2 }}
-                        </option>
-                    {% endfor %}
-                    </select>
-                </div>
-
-                <div class="form-group col-md-4">
-                    <label for="char_class">Клас персонажа: </label>
-                    <select id="char_class" class="form-control form-control-sm" name="char_classes" size="1">
-                    {% for charclass1, charclass2 in char_classes %}
-                        <option value="{{ charclass1 }}"
-                                {% if charclass1 == cur_class %}selected="selected"{% endif %}
-                        >{{ charclass2 }}</option>
-                    {% endfor %}
-                    </select>
-                </div>
-
-                <div class="form-group col-md-1">
-                    <label for="expirence">Опыт: </label>
-                    <input id="expirence" type="number" name="expirence" step="1" min="0" value="{{ form.expirence }}"><br>
-                </div>
-            </div>
-
-
-            <div class="form-row">
-                <div class="form-group col-md-2">
-                    <label for="strength">Сила: </label>
-                    <input id="strength" class="form-control" type="number" name="strength" step="1" min="0" value="{{ form.strength }}"><br>
-                </div>
-
-                <div class="form-group col-md-2">
-                    <label for="dexterity">Ловкость: </label>
-                    <input id="dexterity" class="form-control" type="number" name="dexterity" step="1" min="0" value="{{ form.dexterity }}"><br>
-                </div>
-
-                <div class="form-group col-md-2">
-                    <label for="constitution">Телосложение: </label>
-                    <input id="constitution" class="form-control" type="number" name="constitution" step="1" min="0" value="{{ form.constitution }}"><br>
-                </div>
-
-                <div class="form-group col-md-2">
-                    <label for="intellegence">Интеллект: </label>
-                    <input id="intellegence" class="form-control" type="number" name="intellegence" step="1" min="0" value="{{ form.intellegence }}"><br>
-                </div>
-
-                <div class="form-group col-md-2">
-                    <label for="wisdom">Мудрость: </label>
-                    <input id="wisdom" class="form-control" type="number" name="wisdom" step="1" min="0" value="{{ form.wisdom }}"><br>
-                </div>
-
-                <div class="form-group col-md-2">
-                    <label for="chrarisma">Харизма: </label>
-                    <input id="chrarisma" class="form-control" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}"><br><br>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-3">
-                    <label for="pers_traits">Персональные черты:</label>
-                    <textarea id="pers_traits" class="form-control" maxlength="32" rows="2"></textarea>
-                </div>
-                <div class="form-group col-md-3">
-                    <label for="ideals">Идеалы:</label>
-                    <textarea id="ideals" class="form-control" maxlength="32" rows="2"></textarea>
-                </div>
-                <div class="form-group col-md-3">
-                    <label for="bonds">Привязанности:</label>
-                    <textarea id="bonds" class="form-control" maxlength="32" rows="2"></textarea>
-                </div>
-                <div class="form-group col-md-3">
-                    <label for="flaws">Пороки:</label>
-                    <textarea id="flaws" class="form-control" maxlength="32" rows="2"></textarea>
-                </div>
-            </div>
-
-            <div class="form-row row-cols-2 row-cols-md-2 text-center">
-                <div class="col mb-6">
-                    <div class="card border-dark">
-                        <div class="card-header">Доступные заклинания:</div>
-                        <div class="card-body text-dark">
-                            <select id="spells" class="custom-select" name="spells" size="5" multiple>
-                            {% for spellname in spells %}
-                                <option value="{{ spellname }}">{{ spellname }}</option>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="race">Расса персонажа:</label>
+                            <select id="race" class="form-control form-control-sm" name="char_races" size="1">
+                            {% for race1,race2 in char_races %}
+                                <option value="{{ race1 }}"
+                                        {% if race1 == cur_race %}selected="selected"{% endif %}
+                                >{{ race2 }}
+                                </option>
                             {% endfor %}
                             </select>
                         </div>
-                        <div class="card-footer">
-                                <input type="submit" class="btn btn-primary" value="Добавить заклинание" name="do_addspell">
+
+                        <div class="form-group col-md-4">
+                            <label for="char_class">Клас персонажа: </label>
+                            <select id="char_class" class="form-control form-control-sm" name="char_classes" size="1">
+                            {% for charclass1, charclass2 in char_classes %}
+                                <option value="{{ charclass1 }}"
+                                        {% if charclass1 == cur_class %}selected="selected"{% endif %}
+                                >{{ charclass2 }}</option>
+                            {% endfor %}
+                            </select>
                         </div>
+
+                        <div class="form-group col-md-1">
+                            <label for="expirence">Опыт: </label>
+                            <input id="expirence" type="number" name="expirence" step="1" min="0" value="{{ form.expirence }}">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="form-row text-center container">
+                <div class="col col-md-4">
+                    <div class="col col-md-4">
+                            <div class="form-row">
+                                <label for="strength">Сила: </label>
+                                <input id="strength" class="form-control" type="number" name="strength" step="1" min="0" value="{{ form.strength }}">
+                            </div>
+
+                            <div class="form-row">
+                                    <label for="dexterity">Ловкость: </label>
+                                    <input id="dexterity" class="form-control" type="number" name="dexterity" step="1" min="0" value="{{ form.dexterity }}">
+                            </div>
+
+                            <div class="form-row">
+                                    <label for="constitution">Телосложение: </label>
+                                    <input id="constitution" class="form-control" type="number" name="constitution" step="1" min="0" value="{{ form.constitution }}">
+                            </div>
+
+                            <div class="form-row">
+                                    <label for="intellegence">Интеллект: </label>
+                                    <input id="intellegence" class="form-control" type="number" name="intellegence" step="1" min="0" value="{{ form.intellegence }}">
+                            </div>
+
+                            <div class="form-row">
+                                    <label for="wisdom">Мудрость: </label>
+                                    <input id="wisdom" class="form-control" type="number" name="wisdom" step="1" min="0" value="{{ form.wisdom }}">
+                            </div>
+
+                            <div class="form-row">
+                                    <label for="chrarisma">Харизма: </label>
+                                    <input id="chrarisma" class="form-control" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}">
+                            </div>
                     </div>
                 </div>
 
-                <div class="col mb-6">
-                    <div class="card border-dark">
-                        <div class="card-header">Аватар:</div>
-                        <div class="card-body text-dark">
-                            {% if form.avatar %}
-                                <img src="{{ form.avatar.url }}" class="img-thumbnail" width="150" height="150">
-                            {% else %}
-                                <b>Без аватара</b>
-                            {% endif %}
+                <div class="col col-md-4">
+                    <!-- AC,speed,init,hp -->
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="armor_class">КД: </label>
+                            <input id="armor_class" class="form-control" type="number" name="armor_class" step="1" min="0" value="{{ form.armor_class }}">
                         </div>
-                        <div class="card-footer">
-                            <input type="hidden" name="name" value="{{ form.name }}">
-                            <span class="btn btn-primary btn-file">
-                                Выберите файл<input id="avatar" type="file" name="avatar">
-                            </span>
-                            <button type="submit" class="btn btn-primary">Сохранить аватар</button>
+                        <div class="form-group col-md-4">
+                            <label for="initiative">Инициатива: </label>
+                            <input id="initiative" class="form-control" type="number" name="initiative" step="1" min="0" value="{{ form.initiative }}">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="speed">Скорость: </label>
+                            <input id="speed" class="form-control" type="number" name="speed" step="1" min="0" value="{{ form.speed }}">
                         </div>
                     </div>
-                </div>
-            </div>
-            <br>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="hitpoints_max">Максимум хитов: </label>
+                            <input id="hitpoints_max" class="form-control" type="number" name="hitpoints_max" step="1" min="0" value="{{ form.hitpoints_max }}">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="hitpoints_curr">Текущие хиты: </label>
+                            <input id="hitpoints_curr" class="form-control" type="number" name="hitpoints_curr" step="1" min="0" value="{{ form.hitpoints_curr }}">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="hitpoints_temp">Временные хиты: </label>
+                            <input id="hitpoints_temp" class="form-control" type="number" name="hitpoints_temp" step="1" min="0" value="{{ form.hitpoints_temp }}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="hitpoints_str">Кости хитов: </label>
+                            <input id="hitpoints_str" class="form-control" type="text" name="hitpoints_str" value="{{ form.hitpoints_str }}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <div class="control-group">
+                                <div class="controls span2">
+                                    <input type="checkbox" value="">*</input>
+                                    <input type="checkbox" value="">*</input>
+                                    <input type="checkbox" value="">*</input>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls span2">
+                                    <input type="checkbox" value="">*</input>
+                                    <input type="checkbox" value="">*</input>
+                                    <input type="checkbox" value="">*</input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="form-row">
-                <div class="card border-dark col-md-12">
-                    <div class="card-header">Используемые заклинания:</div>
-                    <div class="card-body text-dark">
-                        <div id="checkboxes">
-                            <ul>
-                                {% for spell in form.spells.all %}
-                                    <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                    <!-- атаки и закл -->
+                    <div class="form-row">
+
                     </div>
-                    <div class="card-footer">
-                        <input type="submit" class="btn btn-primary" value="Удалить заклинание" name="do_delspell">
+
+                    <!-- снаряж -->
+                    <div class="form-row">
+
+                    </div>
+                </div>
+
+                <div class="col col-md-4">
+                        <div class="form-row">
+                                <label for="pers_traits">Персональные черты:</label>
+                                <textarea id="pers_traits" name="pers_traits" class="form-control" maxlength="32" rows="2">{{ form.pers_traits }}</textarea>
+                        </div>
+
+                        <div class="form-row">
+                                <label for="ideals">Идеалы:</label>
+                                <textarea id="ideals" name="ideals" class="form-control" maxlength="32" rows="2">{{ form.ideals }}</textarea>
+                        </div>
+                        <div class="form-row">
+                                <label for="bonds">Привязанности:</label>
+                                <textarea id="bonds" name="bonds" class="form-control" maxlength="32" rows="2">{{ form.bonds }}</textarea>
+                        </div>
+                        <div class="form-row">
+                                <label for="flaws">Пороки:</label>
+                                <textarea id="flaws" name="flaws" class="form-control" maxlength="32" rows="2">{{ form.flaws }}</textarea>
+                        </div>
+                    <div class="form-row">
+                        <!-- умения и особенности -->
                     </div>
                 </div>
             </div>
+
+                    <div class="form-row row-cols-2 row-cols-md-2 text-center">
+                        <div class="col mb-6">
+                            <div class="card border-dark">
+                                <div class="card-header">Доступные заклинания:</div>
+                                <div class="card-body text-dark">
+                                    <select id="spells" class="custom-select" name="spells" size="5" multiple>
+                                    {% for spellname in spells %}
+                                        <option value="{{ spellname }}">{{ spellname }}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="card-footer">
+                                        <input type="submit" class="btn btn-primary" value="Добавить заклинание" name="do_addspell">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col mb-6">
+                            <div class="card border-dark">
+                                <div class="card-header">Аватар:</div>
+                                <div class="card-body text-dark">
+                                    {% if form.avatar %}
+                                        <img src="{{ form.avatar.url }}" class="img-thumbnail" width="150" height="150">
+                                    {% else %}
+                                        <b>Без аватара</b>
+                                    {% endif %}
+                                </div>
+                                <div class="card-footer">
+                                    <input type="hidden" name="name" value="{{ form.name }}">
+                                    <span class="btn btn-primary btn-file">
+                                        Выберите файл<input id="avatar" type="file" name="avatar">
+                                    </span>
+                                    <button type="submit" class="btn btn-primary">Сохранить аватар</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <!-- Spell page -->
+                    <div class="form-row">
+                        <div class="card border-dark col-md-12">
+                            <div class="card-header">Используемые заклинания:</div>
+                            <div class="card-body text-dark">
+                                <div id="checkboxes">
+                                    <ul>
+                                        {% for spell in form.spells.all %}
+                                            <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <input type="submit" class="btn btn-primary" value="Удалить заклинание" name="do_delspell">
+                            </div>
+                        </div>
+                    </div>
         </form>
 
     </div>

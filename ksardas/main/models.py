@@ -262,9 +262,9 @@ class BaseInfo(models.Model):
 
     armor_class = models.IntegerField(null=True, default=0, verbose_name='Класс доспеха')
     speed = models.CharField(null=True, max_length=255, verbose_name='Скорость персонажа')
-    hitpoints_max = models.IntegerField(null=True, default=0, verbose_name='Максимальое здоровье')
-    hitpoints_str = models.CharField(null=True, max_length=255, verbose_name='Кости здоровья')
-    world_view = models.CharField(null=True, max_length=255, verbose_name='Мировозрение')
+    hitpoints_max = models.IntegerField(null=True, default=0, verbose_name='Максимум хитов')
+    hitpoints_str = models.CharField(null=True, max_length=255, verbose_name='Кости хитов')
+    world_view = models.CharField(null=False, max_length=255, verbose_name='Мировозрение')
 
     skills = models.TextField(null=True, verbose_name='навыки')
     saving_throws = models.TextField(null=True, verbose_name='спасброски')
@@ -294,8 +294,8 @@ class CharBase(BaseInfo):
     prof_bonus = models.IntegerField(null=True, default=0, verbose_name='Бонус мастерства')
     initiative = models.IntegerField(null=True, default=0, verbose_name='Инициатива')
     inspiration = models.IntegerField(null=True, default=0, verbose_name='Вдохновение')
-    hitpoints_curr = models.IntegerField(null=True, default=0, verbose_name='Текущее здоровье')
-    hitpoints_temp = models.IntegerField(null=True, default=0, verbose_name='Временные очки здоровья')
+    hitpoints_curr = models.IntegerField(null=True, default=0, verbose_name='Текущие хиты')
+    hitpoints_temp = models.IntegerField(null=True, default=0, verbose_name='Временные хиты')
     char_classes = models.ManyToManyField(CharClasses, choices=CharClasses.CLASS_CHOICES,
                                           verbose_name='Класс персонажа')
 
@@ -312,7 +312,7 @@ class CharBase(BaseInfo):
     ideals = models.CharField(null=True, max_length=32, verbose_name='Идеалы')
     bonds = models.CharField(null=True, max_length=32, verbose_name='Привязанности')
     flaws = models.CharField(null=True, max_length=32, verbose_name='Пороки')
-    char_history = models.TextField(default='', verbose_name='История персонажа')
+    char_history = models.TextField(default='', verbose_name='Предыстория')
 
     gold_count = models.IntegerField(null=True, default=0, verbose_name='Золото персонажа')
     silver_count = models.IntegerField(null=True, default=0, verbose_name='Серебро персонажа')

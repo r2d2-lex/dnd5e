@@ -5,9 +5,7 @@ from django.core.exceptions import ValidationError
 from .models import AdvUser
 from .models import CharBase, CharClasses, CharRaces, Spell
 from .tasks import send_verification_email
-from django.utils import timezone
 from .utilites import get_date_time
-import datetime
 
 
 class FindSpellForm(forms.Form):
@@ -69,12 +67,24 @@ class CharForm(forms.Form):
     char_classes = forms.ChoiceField(choices=CharClasses.CLASS_CHOICES, label='Класс персонажа')
     level = forms.IntegerField(label='Уровень персонажа')
     expirence = forms.IntegerField(label='Опыт персонажа')
+    world_view = forms.CharField(label='Мировозрение')
+    char_history = forms.CharField(label='Предыстория')
     strength = forms.IntegerField(label='Сила персонажа')
     dexterity = forms.IntegerField(label='Ловкость персонажа')
     constitution = forms.IntegerField(label='Телосложение персонажа')
     intellegence = forms.IntegerField(label='Интеллект персонажа')
     wisdom = forms.IntegerField(label='Мудрость персонажа')
     chrarisma = forms.IntegerField(label='Харизма персонажа')
+
+    armor_class = forms.IntegerField(label='Класс доспеха')
+    initiative = forms.IntegerField(label='Инициатива')
+    speed = forms.IntegerField(label='Скорость персонажа')
+
+    hitpoints_curr = forms.IntegerField(label='Текущие хиты')
+    hitpoints_temp = forms.IntegerField(label='Временные хиты')
+    hitpoints_max = forms.IntegerField(label='Максимум хитов')
+    hitpoints_str = forms.CharField(label='Кости хитов')
+
     pers_traits = forms.CharField(max_length=32, label='Персональные черты')
     ideals = forms.CharField(max_length=32, label='Идеалы')
     bonds = forms.CharField(max_length=32, label='Привязанности')
