@@ -75,6 +75,12 @@ class CharForm(forms.Form):
     intellegence = forms.IntegerField(label='Интеллект персонажа')
     wisdom = forms.IntegerField(label='Мудрость персонажа')
     chrarisma = forms.IntegerField(label='Харизма персонажа')
+    strength_modifier = forms.IntegerField()
+    dexterity_modifier = forms.IntegerField()
+    constitution_modifier = forms.IntegerField()
+    intellegence_modifier = forms.IntegerField()
+    wisdom_modifier = forms.IntegerField()
+    chrarisma_modifier = forms.IntegerField()
 
     armor_class = forms.IntegerField(label='Класс доспеха')
     initiative = forms.IntegerField(label='Инициатива')

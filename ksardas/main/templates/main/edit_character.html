@@ -81,41 +81,120 @@
             </div>
 
 
-            <div class="form-row text-center container">
-                <div class="col col-md-4">
-                    <div class="col col-md-4">
-                            <div class="form-row">
-                                <label for="strength">Сила: </label>
-                                <input id="strength" class="form-control" type="number" name="strength" step="1" min="0" value="{{ form.strength }}">
-                            </div>
+            <div class="form-row text-center">
+                <!-- ---------------- Начало первой колонки ---------------------- -->
+                <div class="col col-md-5">
+                    <div class="container"><div class="form-row">
+                        <div class="col col-md-5">
+                                <div class="form-row">
+                                    <div class="form-group col-md-7">
+                                        <label for="strength">Сила: </label>
+                                        <input id="strength" class="form-control" type="number" name="strength" step="1" min="0" value="{{ form.strength }}">
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="strength_modifier">мдф.: </label>
+                                        <input id="strength_modifier" class="form-control" type="number" name="strength_modifier" step="1" min="0" value="{{ form.strength_modifier }}">
+                                    </div>
+                                </div>
 
-                            <div class="form-row">
-                                    <label for="dexterity">Ловкость: </label>
-                                    <input id="dexterity" class="form-control" type="number" name="dexterity" step="1" min="0" value="{{ form.dexterity }}">
-                            </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-7">
+                                        <label for="dexterity">Ловкость: </label>
+                                        <input id="dexterity" class="form-control" type="number" name="dexterity" step="1" min="0" value="{{ form.dexterity }}">
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="dexterity_modifier">мдф.: </label>
+                                        <input id="dexterity_modifier" class="form-control" type="number" name="dexterity_modifier" step="1" min="0" value="{{ form.dexterity_modifier }}">
+                                    </div>
+                                </div>
 
-                            <div class="form-row">
-                                    <label for="constitution">Телосложение: </label>
-                                    <input id="constitution" class="form-control" type="number" name="constitution" step="1" min="0" value="{{ form.constitution }}">
-                            </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-7">
+                                        <label for="constitution">Телосложение: </label>
+                                        <input id="constitution" class="form-control" type="number" name="constitution" step="1" min="0" value="{{ form.constitution }}">
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="constitution_modifier">мдф.: </label>
+                                        <input id="constitution_modifier" class="form-control" type="number" name="constitution_modifier" step="1" min="0" value="{{ form.constitution_modifier }}">
+                                    </div>
+                                </div>
 
-                            <div class="form-row">
-                                    <label for="intellegence">Интеллект: </label>
-                                    <input id="intellegence" class="form-control" type="number" name="intellegence" step="1" min="0" value="{{ form.intellegence }}">
-                            </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-7">
+                                        <label for="intellegence">Интеллект: </label>
+                                        <input id="intellegence" class="form-control" type="number" name="intellegence" step="1" min="0" value="{{ form.intellegence }}">
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="intellegence_modifier">мдф.: </label>
+                                        <input id="intellegence_modifier" class="form-control" type="number" name="intellegence_modifier" step="1" min="0" value="{{ form.intellegence_modifier }}">
+                                    </div>
+                                </div>
 
-                            <div class="form-row">
-                                    <label for="wisdom">Мудрость: </label>
-                                    <input id="wisdom" class="form-control" type="number" name="wisdom" step="1" min="0" value="{{ form.wisdom }}">
-                            </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-7">
+                                        <label for="wisdom">Мудрость: </label>
+                                        <input id="wisdom" class="form-control" type="number" name="wisdom" step="1" min="0" value="{{ form.wisdom }}">
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="wisdom_modifier">мдф.: </label>
+                                        <input id="wisdom_modifier" class="form-control" type="number" name="wisdom_modifier" step="1" min="0" value="{{ form.wisdom_modifier }}">
+                                    </div>
+                                </div>
 
+                                <div class="form-row">
+                                    <div class="form-group col-md-7">
+                                        <label for="chrarisma">Харизма: </label>
+                                        <input id="chrarisma" class="form-control" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}">
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="chrarisma_modifier">мдф.: </label>
+                                        <input id="chrarisma_modifier" class="form-control" type="number" name="chrarisma_modifier" step="1" min="0" value="{{ form.chrarisma_modifier }}">
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="col col-md-7">
+                            <!-- Вторая половина первой колонки -->
                             <div class="form-row">
-                                    <label for="chrarisma">Харизма: </label>
-                                    <input id="chrarisma" class="form-control" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}">
+                                <label for="inspiration">Вдохновение: </label>
+                                <input id="inspiration" class="form-control" type="number" name="inspiration" step="1" min="0" value="{{ form.inspiration }}">
                             </div>
-                    </div>
+                            <div class="form-row">
+                                <label for="prof_bonus">Бонус мастерства: </label>
+                                <input id="prof_bonus" class="form-control" type="number" name="prof_bonus" step="1" min="0" value="{{ form.prof_bonus }}">
+                            </div>
+                            <div class="form-row no-gutters">
+                                <div class="form-group">
+                                        <div class="custom-control form-control-xs custom-checkbox">
+                                            <ul class="nobull">
+                                                <div class="form-row"><li><input type="checkbox" value="">Акробатика(лов)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Уход за животными(мдр)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Магия(инт)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Атлетика(сил)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Обман(хар)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">История(инт)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Проницательность(мдр)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Запугивание(хар)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">'Изучение'</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Природа(инт)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Выступление(хар)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Медицина(мдр)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Внимательность(мдр.)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Убеждение(хар)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Религия(инт)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Ловкость рук(лов)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Скрытность(лов)</li></div>
+                                                <div class="form-row"><li><input type="checkbox" value="">Выживание(мдр)</li></div>
+                                            </ul>
+                                        </div>
+                                </div>
+                            </div>
+                            <!-- Конец второй половины первой колонки -->
+                            </div>
+                    </div></div>
                 </div>
+                <!-- ---------------- Конец первой колонки ---------------------- -->
 
+                <!-- ---------------- Начало второй колонки ---------------------- -->
                 <div class="col col-md-4">
                     <!-- AC,speed,init,hp -->
                     <div class="form-row">
@@ -154,16 +233,16 @@
                         <div class="form-group col-md-6">
                             <div class="control-group">
                                 <div class="controls span2">
-                                    <input type="checkbox" value="">*</input>
-                                    <input type="checkbox" value="">*</input>
-                                    <input type="checkbox" value="">*</input>
+                                    <input type="checkbox" value="">*
+                                    <input type="checkbox" value="">*
+                                    <input type="checkbox" value="">*
                                 </div>
                             </div>
                             <div class="control-group">
                                 <div class="controls span2">
-                                    <input type="checkbox" value="">*</input>
-                                    <input type="checkbox" value="">*</input>
-                                    <input type="checkbox" value="">*</input>
+                                    <input type="checkbox" value="">*
+                                    <input type="checkbox" value="">*
+                                    <input type="checkbox" value="">*
                                 </div>
                             </div>
                         </div>
@@ -179,8 +258,10 @@
 
                     </div>
                 </div>
+                <!-- ---------------- Конец второй колонки ---------------------- -->
 
-                <div class="col col-md-4">
+                <!-- ---------------- Начало третьей колонки ---------------------- -->
+                <div class="col col-md-3">
                         <div class="form-row">
                                 <label for="pers_traits">Персональные черты:</label>
                                 <textarea id="pers_traits" name="pers_traits" class="form-control" maxlength="32" rows="2">{{ form.pers_traits }}</textarea>
@@ -202,7 +283,9 @@
                         <!-- умения и особенности -->
                     </div>
                 </div>
+                <!-- ---------------- Конец третьей колонки ---------------------- -->
             </div>
+
 
                     <div class="form-row row-cols-2 row-cols-md-2 text-center">
                         <div class="col mb-6">
@@ -249,7 +332,7 @@
                             <div class="card-header">Используемые заклинания:</div>
                             <div class="card-body text-dark">
                                 <div id="checkboxes">
-                                    <ul>
+                                    <ul class="nobull">
                                         {% for spell in form.spells.all %}
                                             <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
                                         {% endfor %}
