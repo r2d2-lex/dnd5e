@@ -85,6 +85,8 @@ class CharForm(forms.Form):
     armor_class = forms.IntegerField(label='Класс доспеха')
     initiative = forms.IntegerField(label='Инициатива')
     speed = forms.IntegerField(label='Скорость персонажа')
+    inspiration = forms.IntegerField(label='Вдохновение')
+    prof_bonus = forms.IntegerField(label='Бонус мастерства')
 
     hitpoints_curr = forms.IntegerField(label='Текущие хиты')
     hitpoints_temp = forms.IntegerField(label='Временные хиты')

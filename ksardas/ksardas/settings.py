@@ -133,7 +133,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-TEMPLATE_PDF_NAME = 'form2.pdf'
+TEMPLATE_PDF_NAME = 'form3.pdf'
 PROJECT_ROOT = os.path.join(BASE_DIR, 'main')
 TEMPLATES_PDF_DIR = os.path.join(PROJECT_ROOT, 'templates/pdf/')
 PDF_TEMPLATE_PATH = TEMPLATES_PDF_DIR + TEMPLATE_PDF_NAME
