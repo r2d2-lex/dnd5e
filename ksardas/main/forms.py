@@ -92,6 +92,11 @@ class CharForm(forms.Form):
     hitpoints_temp = forms.IntegerField(label='Временные хиты')
     hitpoints_max = forms.IntegerField(label='Максимум хитов')
     hitpoints_str = forms.CharField(label='Кости хитов')
+    psv_perception = forms.CharField(label='пассивная мудрость (внимательность)')
+    attacks_spellc = forms.CharField(label='Атаки и заклинания')
+    features_traits = forms.CharField(label='Умения и особенности')
+    equipment = forms.CharField(label='Снаряжение')
+    profi_languages = forms.CharField(label='Прочие владения и языки')
 
     pers_traits = forms.CharField(max_length=32, label='Персональные черты')
     ideals = forms.CharField(max_length=32, label='Идеалы')

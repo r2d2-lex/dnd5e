@@ -15,7 +15,7 @@
         <form method="post" id="charform" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <div class="form-row row-cols-2 row-cols-md-2 text-center align-items-center">
+            <div class="form-row text-center align-items-center">
                 <div class="col col-md-4">
 
                     <div class="form-row">
@@ -162,6 +162,14 @@
                                 <label for="prof_bonus">Бонус мастерства: </label>
                                 <input id="prof_bonus" class="form-control" type="number" name="prof_bonus" step="1" min="0" value="{{ form.prof_bonus }}">
                             </div>
+                            <div class="form-row">
+                                <label for="psv_perception">Пассивная мудрость (внимательность):</label>
+                                <input id="psv_perception" class="form-control" type="text" name="psv_perception" value="{{ form.psv_perception }}">
+                            </div>
+                            <div class="form-row">
+                                <label for="profi_languages">Прочие владения и языки:</label>
+                                <textarea id="profi_languages" name="profi_languages" class="form-control" rows="4">{{ form.profi_languages }}</textarea>
+                            </div>
                             <!-- Конец второй половины первой колонки -->
                         </div>
                     </div></div>
@@ -258,6 +266,25 @@
                     </div>
                 </div>
                 <!-- ---------------- Конец третьей колонки ---------------------- -->
+            </div>
+
+            <div class="card border-dark">
+                <div class="card-body text-dark">
+                    <div class="container"><div class="form-row">
+                        <div class="col col-md-4">
+                            <label for="attacks_spellc">Атаки и заклинания:</label>
+                            <textarea id="attacks_spellc" name="attacks_spellc" class="form-control" rows="4">{{ form.attacks_spellc }}</textarea>
+                        </div>
+                        <div class="col col-md-4">
+                            <label for="equipment">Снаряжение:</label>
+                            <textarea id="equipment" name="equipment" class="form-control" rows="4">{{ form.equipment }}</textarea>
+                        </div>
+                        <div class="col col-md-4">
+                            <label for="features_traits">Умения и особенности:</label>
+                            <textarea id="features_traits" name="features_traits" class="form-control" rows="4">{{ form.features_traits }}</textarea>
+                        </div>
+                    </div></div>
+                </div>
             </div>
 
             <div class="form-row text-center">

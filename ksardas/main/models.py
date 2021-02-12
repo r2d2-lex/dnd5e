@@ -317,6 +317,7 @@ class CharBase(BaseInfo):
     level = models.IntegerField(default=1, verbose_name='Уровень персонажа')
     spells = models.ManyToManyField(Spell)
 
+    psv_perception = models.CharField(default='', max_length=32, verbose_name='пассивная мудрость (внимательность)')
     prof_bonus = models.IntegerField(default=0, verbose_name='Бонус мастерства')
     initiative = models.IntegerField(default=0, verbose_name='Инициатива')
     inspiration = models.IntegerField(default=0, verbose_name='Вдохновение')
@@ -338,7 +339,12 @@ class CharBase(BaseInfo):
     ideals = models.CharField(default='', max_length=32, verbose_name='Идеалы')
     bonds = models.CharField(default='', max_length=32, verbose_name='Привязанности')
     flaws = models.CharField(default='', max_length=32, verbose_name='Пороки')
-    char_history = models.TextField(default='', verbose_name='Предыстория')
+    char_history = models.CharField(default='', max_length=32, verbose_name='Предыстория')
+
+    attacks_spellc = models.TextField(default='', verbose_name='Атаки и заклинания')
+    features_traits = models.TextField(default='', verbose_name='Умения и особенности')
+    equipment = models.TextField(default='', verbose_name='Снаряжение')
+    profi_languages = models.TextField(default='', verbose_name='Прочие владения и языки')
 
     gold_count = models.IntegerField(default=0, verbose_name='Золото персонажа')
     silver_count = models.IntegerField(default=0, verbose_name='Серебро персонажа')
