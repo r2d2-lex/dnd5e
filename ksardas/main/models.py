@@ -299,11 +299,6 @@ class BaseInfo(models.Model):
     st_wisdom_box = models.BooleanField(default=False)
     st_chrarisma_box = models.BooleanField(default=False)
 
-    description = models.TextField(default='', verbose_name='Описание')
-    feelings = models.TextField(default='', verbose_name='чувства')
-    abilities = models.TextField(default='', verbose_name='способности')
-    actions = models.TextField(default='', verbose_name='действия')
-
     modified = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Время модификации')
 
     class Meta:
@@ -400,3 +395,7 @@ class MobBase(BaseInfo):
     danger = models.CharField(default='', max_length=32, verbose_name='опасность')
     material_source = models.CharField(default='', max_length=255, verbose_name='источник материала')
     armor_class_str = models.CharField(default='', max_length=255, verbose_name='описание доспеха')
+    description = models.TextField(default='', verbose_name='Описание')
+    feelings = models.TextField(default='', verbose_name='чувства')
+    abilities = models.TextField(default='', verbose_name='способности')
+    actions = models.TextField(default='', verbose_name='действия')
