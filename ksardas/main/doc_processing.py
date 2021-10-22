@@ -22,10 +22,8 @@ class ExportDOC:
         context = self.make_form_data()
         doc = DocxTemplate(settings.DOC_TEMPLATE_PATH)
         doc.render(context)
-        docx_file = io.StringIO()
-        # doc.save(self.doc_name)
+        docx_file = io.BytesIO()
         doc.save(docx_file)
-        docx_file.flush()
         docx_file.seek(0)
         return self.doc_name, docx_file
 

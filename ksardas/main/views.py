@@ -15,6 +15,7 @@ from django.template.loader import get_template
 from django.template import TemplateDoesNotExist
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
+from wsgiref.util import FileWrapper
 
 from .forms import CharForm, CreateCharForm
 from .forms import FindSpellForm
@@ -217,7 +218,7 @@ def export_character(request, name):
     char_base = get_object_or_404(CharBase, owner=request.user, name=name)
     export_doc = ExportDOC(char_base)
     doc_name, output_stream = export_doc.generate_doc()
-    response = HttpResponse(output_stream.getvalue(), content_type=ExportDOC.CONTENT_TYPE)
+    response = HttpResponse(FileWrapper(output_stream), content_type=ExportDOC.CONTENT_TYPE)
     response['Content-Disposition'] = 'inline; filename="{}"'.format(doc_name)
     output_stream.close()
     return response
