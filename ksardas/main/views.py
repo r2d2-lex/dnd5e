@@ -216,12 +216,11 @@ def delete_character(request, name):
 @login_required
 def export_character(request, name):
     char_base = get_object_or_404(CharBase, owner=request.user, name=name)
-    export_doc = ExportDOC(char_base)
-    doc_name, output_stream = export_doc.generate_doc()
-    response = HttpResponse(FileWrapper(output_stream), content_type=ExportDOC.CONTENT_TYPE)
-    response['Content-Disposition'] = 'inline; filename="{}"'.format(doc_name)
-    output_stream.close()
-    return response
+    with ExportDOC(char_base) as export_doc:
+        doc_name, output_stream = export_doc.generate_doc()
+        response = HttpResponse(FileWrapper(output_stream), content_type=ExportDOC.CONTENT_TYPE)
+        response['Content-Disposition'] = 'inline; filename="{}"'.format(doc_name)
+        return response
 
 
 @login_required

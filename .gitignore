@@ -14,3 +14,5 @@ ksardas/ksardas/config.py
 ksardas/ksardas/errors.txt
 ksardas/media/
 ksardas/static/
+ksardas/main/templates/doc/orig.docx
+ksardas/db.sqlite3

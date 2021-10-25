@@ -17,15 +17,23 @@ class ExportDOC:
     def __init__(self, char):
         self.char = char
         self.doc_name = self.get_doc_name()
+        self.docx_file = None
+
+    def __enter__(self):
+        self.docx_file = io.BytesIO()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.docx_file:
+            self.docx_file.close()
 
     def generate_doc(self):
         context = self.make_form_data()
         doc = DocxTemplate(settings.DOC_TEMPLATE_PATH)
         doc.render(context)
-        docx_file = io.BytesIO()
-        doc.save(docx_file)
-        docx_file.seek(0)
-        return self.doc_name, docx_file
+        doc.save(self.docx_file)
+        self.docx_file.seek(0)
+        return self.doc_name, self.docx_file
 
     def make_form_data(self):
         data = {}
