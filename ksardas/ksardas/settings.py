@@ -133,7 +133,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-TEMPLATE_DOC_NAME = 'ch-main-blank.docx'
+TEMPLATE_XLS_NAME = 'chx-blank.xlsx'
 PROJECT_ROOT = os.path.join(BASE_DIR, 'main')
 TEMPLATES_DOC_DIR = os.path.join(PROJECT_ROOT, 'templates/doc/')
-DOC_TEMPLATE_PATH = TEMPLATES_DOC_DIR + TEMPLATE_DOC_NAME
+XLS_TEMPLATE_PATH = TEMPLATES_DOC_DIR + TEMPLATE_XLS_NAME
