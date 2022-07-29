@@ -1,7 +1,7 @@
 # Format (DB_name_field, Type, Description_field, XLS_cell)
 
 CHARACTER_FORM_RECORDS = (
-    # 1'st page
+    # 1'st page top
     ('playername', 'string', 'Имя игрока', 'AR4'),
     ('level', 'string', 'класс и уровень', 'R4'),
     ('char_history', 'string', 'предыстория', 'AE4'),
@@ -10,6 +10,7 @@ CHARACTER_FORM_RECORDS = (
     ('world_view', 'string', 'мировозрение', 'AE7'),
     ('expirence', 'string', 'опыт', 'AR7'),
 
+    # 1'st page 1 column
     ('strength', 'string', 'Сила', 'h12'),
     ('strength_modifier', 'string', 'Сил. мдф.', 'l12'),
     ('dexterity', 'string', 'Ловкость', 'h13'),
@@ -23,23 +24,33 @@ CHARACTER_FORM_RECORDS = (
     ('chrarisma', 'string', 'Харизма', 'h17'),
     ('chrarisma_modifier', 'string', 'Хар. мдф.', 'l17'),
 
-    ('inspiration', 'string', 'вдохновение', ''),
+    ('acrobatics', 'string', 'Акробатика(лов)', ''),
+    ('animal', 'string', 'Уход за животными(мдр)', ''),
+    ('arcana', 'string', 'Магия(инт)', ''),
+    ('athletics', 'string', 'Атлетика(сил)', ''),
+    ('deception', 'string', 'Обман(хар)', ''),
+    ('history', 'string', 'История(инт)', ''),
+    ('insight', 'string', 'Проницательность(мдр)', ''),
+    ('intimidation', 'string', 'Запугивание(хар)', ''),
+    ('investigation', 'string', 'Расследование(инт)', ''),
+    ('nature', 'string', 'Природа(инт)', ''),
+    ('performance', 'string', 'Выступление(хар)', ''),
+    ('medicine', 'string', 'Медицина(мдр)', ''),
+    ('perception', 'string', 'Внимательность(мдр.)', ''),
+    ('persuasion', 'string', 'Убеждение(хар)', ''),
+    ('religion', 'string', 'Религия(инт)', ''),
+    ('sleightofHand', 'string', 'Ловкость рук(лов)', ''),
+    ('stealth', 'string', 'Скрытность(лов)', ''),
+    ('survival', 'string', 'Выживание(мдр)', ''),
+
+    ('psv_perception', 'string', 'пассивная мудрость (внимательность)', ''),
+
+    # 1 st page 2 column
     ('prof_bonus', 'string', 'Бонус мастерства', ''),
-    ('armor_class', 'string', 'Класс доспеха', ''),
     ('initiative', 'string', 'инициатива', ''),
+    ('inspiration', 'string', 'вдохновение', ''),
+    ('armor_class', 'string', 'Класс доспеха', ''),
     ('speed', 'string', 'Скорость персонажа', ''),
-
-    ( 'pers_traits', 'string', 'Персональные черты', ''),
-    ('ideals', 'string', 'идеалы', ''),
-    ('bonds', 'string', 'Привязанности', ''),
-    ('flaws', 'string', 'Пороки', ''),
-
-    ('', 'checkbox', 'спас броски от смерти', ''),
-    ('', 'checkbox', 'спас броски от смерти', ''),
-    ('', 'checkbox', 'спас броски от смерти', ''),
-    ('', 'checkbox', 'спас броски от смерти', ''),
-    ('', 'checkbox', 'спас броски от смерти', ''),
-    ('', 'checkbox', 'спас броски от смерти', ''),
 
     ('hitpoints_str', 'string', 'кость хитов Current', ''),
     ('', 'string', 'кость хитов MAX', ''),
@@ -47,33 +58,43 @@ CHARACTER_FORM_RECORDS = (
     ('hitpoints_curr', 'string', 'текущие хиты', ''),
     ('hitpoints_temp', 'string', 'временные хиты', ''),
 
+
+    ('', 'checkbox', 'спас броски от смерти', ''),
+    ('', 'checkbox', 'спас броски от смерти', ''),
+    ('', 'checkbox', 'спас броски от смерти', ''),
+    ('', 'checkbox', 'спас броски от смерти', ''),
+    ('', 'checkbox', 'спас броски от смерти', ''),
+    ('', 'checkbox', 'спас броски от смерти', ''),
+
     ('st_strength', 'string', 'спасбросок силы', ''),
-    ('st_dexterity', 'string', 'спасбросок знч', ''),
-    ('st_constitution', 'string', 'спасбросок знч', ''),
-    ('st_intellegence', 'string', 'спасбросок знч', ''),
-    ('st_wisdom', 'string', 'спасбросок знч', ''),
-    ('st_chrarisma', 'string', 'спасбросок знч', ''),
-    ('st_strength_box', 'checkbox', 'спасбросок чекбокс', ''),
-    ('st_dexterity_box', 'checkbox', 'спасбросок чекбокс', ''),
-    ('st_constitution_box', 'checkbox', 'спасбросок чекбокс', ''),
-    ('st_intellegence_box', 'checkbox', 'спасбросок чекбокс', ''),
-    ('st_wisdom_box', 'checkbox', 'спасбросок чекбокс', ''),
-    ('st_chrarisma_box', 'checkbox', 'спасбросок чекбокс', ''),
+    ('st_dexterity', 'string', 'спасбросок ловкость', ''),
+    ('st_constitution', 'string', 'спасбросок вынсоливость', ''),
+    ('st_intellegence', 'string', 'спасбросок интеллект', ''),
+    ('st_wisdom', 'string', 'спасбросок мудрость', ''),
+    ('st_chrarisma', 'string', 'спасбросок харизма', ''),
+    ('st_strength_box', 'checkbox', 'спасбросок силы', ''),
+    ('st_dexterity_box', 'checkbox', 'спасбросок ловкость', ''),
+    ('st_constitution_box', 'checkbox', 'спасбросок вынсоливость', ''),
+    ('st_intellegence_box', 'checkbox', 'спасбросок интеллект', ''),
+    ('st_wisdom_box', 'checkbox', 'спасбросок мудрость', ''),
+    ('st_chrarisma_box', 'checkbox', 'спасбросок харизма', ''),
 
-    ('', '', 'Акробатика(лов)', ''),
-    ('', '', 'Анализ(инт)', ''),
 
-    ('attacks_spellc', 'string', 'атаки и заклинания', ''),
-    ('psv_perception', 'string', 'пассивная мудрость (внимательность)', ''),
-
+    ('attacks_spellc', 'string', 'Атаки и заклинания', ''),
     ('profi_languages', 'string', 'прочие владения и языки', ''),
     ('equipment', 'string', 'снаряжение', ''),
     ('copper_count', 'string', 'медные монеты', ''),
     ('silver_count', 'string', 'серебряные монеты', ''),
-    ('', 'string', 'монеты?', ''),
     ('gold_count', 'string', 'золотые монеты', ''),
-    ('', 'string', 'платиновые монеты?', ''),
-    ('features_traits', 'string', 'умения и особенности', ''),
+    ('', 'string', 'other монеты?', ''),
+    ('', 'string', 'other монеты?', ''),
+
+    # 1st page 3 column
+    ('pers_traits', 'string', 'Персональные черты', ''),
+    ('ideals', 'string', 'Идеалы', ''),
+    ('bonds', 'string', 'Привязанности', ''),
+    ('flaws', 'string', 'Пороки', ''),
+    ('features_traits', 'string', 'Умения и особенности', ''),
 
     # 2 list
     ( 'name', 'string', 'имя на втором листе', ''),

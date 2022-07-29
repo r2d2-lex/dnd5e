@@ -245,6 +245,10 @@ class CharacterManager(models.Manager):
 
 
 class BaseInfo(models.Model):
+    # 1'st page top
+    world_view = models.CharField(default='', max_length=32, verbose_name='Мировозрение')
+
+    # 1'st page 1 column
     strength = models.IntegerField(default=8, verbose_name='Сила персонажа')
     dexterity = models.IntegerField(default=8, verbose_name='Ловкость персонажа')
     constitution = models.IntegerField(default=8, verbose_name='Телосложение персонажа')
@@ -258,12 +262,6 @@ class BaseInfo(models.Model):
     intellegence_modifier = models.IntegerField(default=0, verbose_name='модификатор')
     wisdom_modifier = models.IntegerField(default=0, verbose_name='модификатор')
     chrarisma_modifier = models.IntegerField(default=0, verbose_name='модификатор')
-
-    armor_class = models.IntegerField(default=0, verbose_name='Класс доспеха')
-    speed = models.CharField(default='', max_length=32, verbose_name='Скорость персонажа')
-    hitpoints_max = models.IntegerField(default=0, verbose_name='Максимум хитов')
-    hitpoints_str = models.CharField(default='', max_length=32, verbose_name='Кости хитов')
-    world_view = models.CharField(default='', max_length=32, verbose_name='Мировозрение')
 
     skills = models.TextField(default='', verbose_name='навыки')
     acrobatics = models.CharField(default='', max_length=8, verbose_name='Акробатика(лов)')
@@ -284,6 +282,12 @@ class BaseInfo(models.Model):
     sleightofHand = models.CharField(default='', max_length=8, verbose_name='Ловкость рук(лов)')
     stealth = models.CharField(default='', max_length=8, verbose_name='Скрытность(лов)')
     survival = models.CharField(default='', max_length=8, verbose_name='Выживание(мдр)')
+
+    # 1'st page 2 column
+    armor_class = models.IntegerField(default=0, verbose_name='Класс доспеха')
+    speed = models.CharField(default='', max_length=32, verbose_name='Скорость персонажа')
+    hitpoints_max = models.IntegerField(default=0, verbose_name='Максимум хитов')
+    hitpoints_str = models.CharField(default='', max_length=32, verbose_name='Кости хитов')
 
     saving_throws = models.TextField(default='', verbose_name='спасброски')
     st_strength = models.CharField(default='', max_length=12)
@@ -308,15 +312,20 @@ class BaseInfo(models.Model):
 # Основная таблица персонажа
 class CharBase(BaseInfo):
     owner = models.ForeignKey('AdvUser', null=False, on_delete=models.PROTECT, verbose_name='Владелец персонажа')
+
+    # 1'st page top
     playername = models.CharField(null=True, max_length=20, verbose_name='Реальное имя персонажа')
+    level = models.IntegerField(default=1, verbose_name='Уровень персонажа')
+    char_history = models.CharField(default='', max_length=32, verbose_name='Предыстория')
     name = models.CharField(db_index=True, null=False, max_length=20, verbose_name='Имя персонажа')
     races = models.ManyToManyField(CharRaces, choices=CharRaces.RACE_CHOICES, max_length=20,
                                    verbose_name='Расса персонажа')
-
     expirence = models.IntegerField(default=0, verbose_name='Опыт персонажа')
-    level = models.IntegerField(default=1, verbose_name='Уровень персонажа')
-    spells = models.ManyToManyField(Spell)
 
+    # 1st page 1 column
+    profi_languages = models.TextField(default='', verbose_name='Прочие владения и языки')
+
+    # 1'st page 2 column
     psv_perception = models.CharField(default='', max_length=32, verbose_name='пассивная мудрость (внимательность)')
     prof_bonus = models.IntegerField(default=0, verbose_name='Бонус мастерства')
     initiative = models.IntegerField(default=0, verbose_name='Инициатива')
@@ -326,6 +335,20 @@ class CharBase(BaseInfo):
     char_classes = models.ManyToManyField(CharClasses, choices=CharClasses.CLASS_CHOICES,
                                           verbose_name='Класс персонажа')
 
+    attacks_spellc = models.TextField(default='', verbose_name='Атаки и заклинания')
+    equipment = models.TextField(default='', verbose_name='Снаряжение')
+    gold_count = models.IntegerField(default=0, verbose_name='Золото персонажа')
+    silver_count = models.IntegerField(default=0, verbose_name='Серебро персонажа')
+    copper_count = models.IntegerField(default=0, verbose_name='Медь персонажа')
+
+    # 1'st page 3 column
+    pers_traits = models.TextField(default='', verbose_name='Персональные черты')
+    ideals = models.TextField(default='', verbose_name='Идеалы')
+    bonds = models.TextField(default='', verbose_name='Привязанности')
+    flaws = models.TextField(default='', verbose_name='Пороки')
+    features_traits = models.TextField(default='', verbose_name='Умения и особенности')
+
+    # 2 page
     gender = models.BooleanField(default=True, verbose_name='Пол')
     age = models.IntegerField(default=21, verbose_name='Возраст персонажа')
     height = models.IntegerField(default=175, verbose_name='Рост персонажа')
@@ -335,20 +358,8 @@ class CharBase(BaseInfo):
     skin = models.CharField(default='', max_length=20, verbose_name='Цвет кожы')
     avatar = models.ImageField(null=True, blank=True, upload_to='avatars/', verbose_name='Аватар')
 
-    pers_traits = models.CharField(default='', max_length=32, verbose_name='Персональные черты')
-    ideals = models.CharField(default='', max_length=32, verbose_name='Идеалы')
-    bonds = models.CharField(default='', max_length=32, verbose_name='Привязанности')
-    flaws = models.CharField(default='', max_length=32, verbose_name='Пороки')
-    char_history = models.CharField(default='', max_length=32, verbose_name='Предыстория')
-
-    attacks_spellc = models.TextField(default='', verbose_name='Атаки и заклинания')
-    features_traits = models.TextField(default='', verbose_name='Умения и особенности')
-    equipment = models.TextField(default='', verbose_name='Снаряжение')
-    profi_languages = models.TextField(default='', verbose_name='Прочие владения и языки')
-
-    gold_count = models.IntegerField(default=0, verbose_name='Золото персонажа')
-    silver_count = models.IntegerField(default=0, verbose_name='Серебро персонажа')
-    copper_count = models.IntegerField(default=0, verbose_name='Медь персонажа')
+    # 3 page
+    spells = models.ManyToManyField(Spell)
 
     char = CharacterManager()
     objects = models.Manager()
