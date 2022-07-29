@@ -23,7 +23,6 @@ from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
 from .forms import UploadAvatarForm
 from .models import AdvUser, CharBase, CharClasses, CharRaces, Spell
-# from .doc_processing import ExportDOC
 from .table_processing import ExportXLS
 from .tasks import signer
 
@@ -217,11 +216,6 @@ def delete_character(request, name):
 @login_required
 def export_character(request, name):
     char_base = get_object_or_404(CharBase, owner=request.user, name=name)
-    # with ExportDOC(char_base) as export_doc:
-    #     doc_name, output_stream = export_doc.generate_doc()
-    #     response = HttpResponse(FileWrapper(output_stream), content_type=ExportDOC.CONTENT_TYPE)
-    #     response['Content-Disposition'] = 'inline; filename="{}"'.format(doc_name)
-    #     return response
     with ExportXLS(char_base) as export_xls:
         doc_name, output_stream = export_xls.generate_xls()
         response = HttpResponse(FileWrapper(output_stream), content_type=ExportXLS.CONTENT_TYPE)
