@@ -1,7 +1,7 @@
 import io
 from collections import namedtuple
 from django.conf import settings
-from .character import CHARACTER_FORM_RECORDS
+from .xls_map_character import CHARACTER_FORM_RECORDS
 import openpyxl
 from .utilites import get_date_time
 
@@ -12,7 +12,11 @@ class BaseKeyNotFound(KeyError):
 
 def xls_insert_data(ws, context):
     for key, value in context.items():
-        ws[key] = value
+        try:
+            ws[key] = value
+        except AttributeError:
+            print(f'TEMPLATE ERROR: Key: {key} Value: {value}')
+
 
 
 class ExportXLS:
@@ -44,12 +48,14 @@ class ExportXLS:
 
     def make_form_data(self) -> dict:
         data = {}
-        DOC_FORM = namedtuple('DOC_RECORDS', 'pdf_field db_field type description xls_cell')
+        DOC_FORM = namedtuple('DOC_RECORDS', 'db_field xls_cell')
         for _record in CHARACTER_FORM_RECORDS:
             record = DOC_FORM(*_record)
             if record.xls_cell:
                 value = self.get_db_value(record.db_field)
-                print(f'XLS_field: "{record.xls_cell}", Value "{value}" Description: "{record.description}"')
+                field_type = self.get_type_field(record.db_field)
+                field_verbose = self.get_verbose_field(record.db_field)
+                print(f'XLS_field: "{record.xls_cell}", Value "{value}" Description: "{field_verbose}" Type: "{field_type}"')
                 if value:
                     data[record.xls_cell] = value
         return data
@@ -71,3 +77,12 @@ class ExportXLS:
                 return False
             print('Value: {}'.format(value))
             return value
+
+    def get_type_field(self, db_field) -> str:
+        result = self.char._meta.get_field(db_field).get_internal_type()
+        return result
+
+    def get_verbose_field(self, db_field) -> str:
+        result = self.char._meta.get_field(db_field).verbose_name.title()
+        return result
+
