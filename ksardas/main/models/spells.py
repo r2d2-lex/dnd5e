@@ -1,5 +1,5 @@
 from django.db import models
-# from ksardas.main.utilites import str2bool
+from main.utilites import str2bool
 
 from .common import CharClasses
 
@@ -57,7 +57,7 @@ class SpellManager(models.Manager):
 
         concentrate = form.cleaned_data['concentrate']
         if concentrate:
-            # spells_list = spells_list.filter(is_concentrate=str2bool(concentrate))
+            spells_list = spells_list.filter(is_concentrate=str2bool(concentrate))
             find_parms += "&concentrate={}".format("on")
         return find_parms, spells_list
 
