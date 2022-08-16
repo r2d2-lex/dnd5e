@@ -18,7 +18,6 @@ def xls_insert_data(ws, context):
             print(f'TEMPLATE ERROR: Key: {key} Value: {value}')
 
 
-
 class ExportXLS:
     DOCUMENT_EXTENSION = '.xlsx'
     CONTENT_TYPE = 'application/doc'

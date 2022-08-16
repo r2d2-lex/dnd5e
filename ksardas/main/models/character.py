@@ -155,6 +155,10 @@ class CharBase(models.Model):
     # ------------------------------------------------------------------------------------------------ #
     # ---------------------------------- ( 3 page ) -------------------------------------------------- #
     # ------------------------------------------------------------------------------------------------ #
+    # name + char_classes
+    spell_casting_ability = models.CharField(default='', max_length=12, verbose_name='Характеристика заклинателя')
+    spell_save_dc = models.CharField(default='', max_length=12, verbose_name='DC спасброска от заклинания')
+    spell_attack_bonus = models.CharField(default='', max_length=12, verbose_name='Бонус к атаке заклинанием')
     spells = models.ManyToManyField(Spell)
 
     # Special
