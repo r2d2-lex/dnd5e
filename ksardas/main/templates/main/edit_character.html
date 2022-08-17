@@ -15,145 +15,144 @@
         <form method="post" id="charform" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <div class="form-row text-center align-items-center">
-                <div class="col col-md-4">
+            <!-- ------------------------------------------------------------------------------- -->
+            <!-- ------------------------------ ( 1st page TOP ) ------------------------------- -->
+            <!-- ------------------------------------------------------------------------------- -->
+            <div class="container text-center">
+                <div class="row">
 
-                    <div class="form-row">
-                        <div class="form-group ">
-                            <label for="name">Имя персонажа: </label>
-                            <input id="name" class="form-control" type="text" name="name" value="{{ form.name }}">
-                        </div>
+                    <div class="col-3">
+                        <label for="name">Имя персонажа: </label>
+                        <input id="name" class="form-control form-control-sm" type="text" name="name" value="{{ form.name }}">
+                    </div>
+                    <div class="col-3">
+                        <label for="level">Уровень: </label>
+                        <input id="level"  class="form-control form-control-sm" type="number" name="level" step="1" min="0" value="{{ form.level }}">
+                    </div>
+                    <div class="col-3">
+                        <label for="char_history">Предыстория: </label>
+                        <input id="char_history" class="form-control form-control-sm" type="text" name="char_history" value="{{ form.char_history }}">
+                    </div>
+                    <div class="col-3">
+                        <label for="world_view">Мировозрение: </label>
+                        <input id="world_view" class="form-control form-control-sm" type="text" name="world_view" value="{{ form.world_view }}">
                     </div>
                 </div>
 
-                <div class="col col-md-8">
-
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="playername">Имя игрока: </label>
-                            <input id="playername" class="form-control form-control-sm" type="text" name="playername" value="{{ form.playername }}">
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="level">Уровень: </label>
-                            <input id="level"  class="form-control form-control-sm" type="number" name="level" step="1" min="0" value="{{ form.level }}">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="char_history">Предыстория: </label>
-                            <input id="char_history" class="form-control form-control-sm" type="text" name="char_history" value="{{ form.char_history }}">
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="world_view">Мировозрение: </label>
-                            <input id="world_view" class="form-control form-control-sm" type="text" name="world_view" value="{{ form.world_view }}">
-                        </div>
+                <div class="row">
+                    <div class="col-3">
+                        <label for="playername">Имя игрока: </label>
+                        <input id="playername" class="form-control form-control-sm" type="text" name="playername" value="{{ form.playername }}">
+                    </div>
+                    <div class="col-3">
+                        <label for="race">Расса персонажа:</label>
+                        <select id="race" class="form-control form-control-sm" name="char_races" size="1">
+                        {% for race1,race2 in char_races %}
+                            <option value="{{ race1 }}"
+                                    {% if race1 == cur_race %}selected="selected"{% endif %}
+                            >{{ race2 }}
+                            </option>
+                        {% endfor %}
+                        </select>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label for="race">Расса персонажа:</label>
-                            <select id="race" class="form-control form-control-sm" name="char_races" size="1">
-                            {% for race1,race2 in char_races %}
-                                <option value="{{ race1 }}"
-                                        {% if race1 == cur_race %}selected="selected"{% endif %}
-                                >{{ race2 }}
-                                </option>
-                            {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="form-group col-md-4">
-                            <label for="char_class">Клас персонажа: </label>
-                            <select id="char_class" class="form-control form-control-sm" name="char_classes" size="1">
-                            {% for charclass1, charclass2 in char_classes %}
-                                <option value="{{ charclass1 }}"
-                                        {% if charclass1 == cur_class %}selected="selected"{% endif %}
-                                >{{ charclass2 }}</option>
-                            {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="form-group col-md-4">
-                            <label for="expirence">Опыт: </label>
-                            <input id="expirence" class="form-control form-control-sm" type="number" name="expirence" step="1" min="0" value="{{ form.expirence }}">
-                        </div>
+                    <div class="col-3">
+                        <label for="char_class">Клас персонажа: </label>
+                        <select id="char_class" class="form-control form-control-sm" name="char_classes" size="1">
+                        {% for charclass1, charclass2 in char_classes %}
+                            <option value="{{ charclass1 }}"
+                                    {% if charclass1 == cur_class %}selected="selected"{% endif %}
+                            >{{ charclass2 }}</option>
+                        {% endfor %}
+                        </select>
                     </div>
 
+                    <div class="col-3">
+                        <label for="expirence">Опыт: </label>
+                        <input id="expirence" class="form-control form-control-sm" type="number" name="expirence" step="1" min="0" value="{{ form.expirence }}">
+                    </div>
                 </div>
             </div>
 
-
-            <div class="form-row text-center">
+            <!-- ------------------------------------------------------------------------------- -->
+            <!-- ------------------------------ ( 1st page 1 column ) ------------------------------- -->
+            <!-- ------------------------------------------------------------------------------- -->
+            <div class="container">
+            <div class="row">
+                <div class="col-6">
                 <!-- ---------------- Начало первой колонки ---------------------- -->
-                <div class="col col-md-5">
-                    <div class="container"><div class="form-row">
-                        <div class="col col-md-5">
+                    <div class="container">
+                        <div class="row">
+                        <div class="col-5 col-sm">
                                 <div class="form-row">
-                                    <div class="form-group col-md-7">
+                                    <div class="form-group col-sm-6">
                                         <label for="strength">Сила: </label>
                                         <input id="strength" class="form-control" type="number" name="strength" step="1" min="0" value="{{ form.strength }}">
                                     </div>
-                                    <div class="form-group col-md-5">
+                                    <div class="form-group col-sm-6">
                                         <label for="strength_modifier">мдф.: </label>
                                         <input id="strength_modifier" class="form-control" type="number" name="strength_modifier" step="1" min="0" value="{{ form.strength_modifier }}">
                                     </div>
                                 </div>
 
                                 <div class="form-row">
-                                    <div class="form-group col-md-7">
+                                    <div class="form-group col-sm-6">
                                         <label for="dexterity">Ловкость: </label>
                                         <input id="dexterity" class="form-control" type="number" name="dexterity" step="1" min="0" value="{{ form.dexterity }}">
                                     </div>
-                                    <div class="form-group col-md-5">
+                                    <div class="form-group col-sm-6">
                                         <label for="dexterity_modifier">мдф.: </label>
                                         <input id="dexterity_modifier" class="form-control" type="number" name="dexterity_modifier" step="1" min="0" value="{{ form.dexterity_modifier }}">
                                     </div>
                                 </div>
 
                                 <div class="form-row">
-                                    <div class="form-group col-md-7">
+                                    <div class="form-group col-sm-6">
                                         <label for="constitution">Телосложение: </label>
                                         <input id="constitution" class="form-control" type="number" name="constitution" step="1" min="0" value="{{ form.constitution }}">
                                     </div>
-                                    <div class="form-group col-md-5">
+                                    <div class="form-group col-sm-6">
                                         <label for="constitution_modifier">мдф.: </label>
                                         <input id="constitution_modifier" class="form-control" type="number" name="constitution_modifier" step="1" min="0" value="{{ form.constitution_modifier }}">
                                     </div>
                                 </div>
 
                                 <div class="form-row">
-                                    <div class="form-group col-md-7">
+                                    <div class="form-group col-sm-6">
                                         <label for="intellegence">Интеллект: </label>
                                         <input id="intellegence" class="form-control" type="number" name="intellegence" step="1" min="0" value="{{ form.intellegence }}">
                                     </div>
-                                    <div class="form-group col-md-5">
+                                    <div class="form-group col-sm-6">
                                         <label for="intellegence_modifier">мдф.: </label>
                                         <input id="intellegence_modifier" class="form-control" type="number" name="intellegence_modifier" step="1" min="0" value="{{ form.intellegence_modifier }}">
                                     </div>
                                 </div>
 
                                 <div class="form-row">
-                                    <div class="form-group col-md-7">
+                                    <div class="form-group col-sm-6">
                                         <label for="wisdom">Мудрость: </label>
                                         <input id="wisdom" class="form-control" type="number" name="wisdom" step="1" min="0" value="{{ form.wisdom }}">
                                     </div>
-                                    <div class="form-group col-md-5">
+                                    <div class="form-group col-sm-6">
                                         <label for="wisdom_modifier">мдф.: </label>
                                         <input id="wisdom_modifier" class="form-control" type="number" name="wisdom_modifier" step="1" min="0" value="{{ form.wisdom_modifier }}">
                                     </div>
                                 </div>
 
                                 <div class="form-row">
-                                    <div class="form-group col-md-7">
+                                    <div class="form-group col-sm-6">
                                         <label for="chrarisma">Харизма: </label>
                                         <input id="chrarisma" class="form-control" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}">
                                     </div>
-                                    <div class="form-group col-md-5">
+                                    <div class="form-group col-sm-6">
                                         <label for="chrarisma_modifier">мдф.: </label>
                                         <input id="chrarisma_modifier" class="form-control" type="number" name="chrarisma_modifier" step="1" min="0" value="{{ form.chrarisma_modifier }}">
                                     </div>
                                 </div>
                         </div>
-                        <div class="col col-md-7">
-                            <!-- Вторая половина первой колонки -->
+
+                        <div class="col-7">
+                        <!-- Вторая половина первой колонки -->
                             <div class="form-row">
                                 <label for="inspiration">Вдохновение: </label>
                                 <input id="inspiration" class="form-control" type="number" name="inspiration" step="1" min="0" value="{{ form.inspiration }}">
@@ -162,22 +161,66 @@
                                 <label for="prof_bonus">Бонус мастерства: </label>
                                 <input id="prof_bonus" class="form-control" type="number" name="prof_bonus" step="1" min="0" value="{{ form.prof_bonus }}">
                             </div>
-                            <div class="form-row">
-                                <label for="psv_perception">Пассивная мудрость (внимательность):</label>
-                                <input id="psv_perception" class="form-control" type="text" name="psv_perception" value="{{ form.psv_perception }}">
+
+                            <div class="card">
+                                <div class="card-body text-dark">
+                                    <div class="form-row"><input type="checkbox" value="">Сила</div>
+                                    <div class="form-row"><input type="checkbox" value="">Ловкость</div>
+                                    <div class="form-row"><input type="checkbox" value="">Телосложение</div>
+                                    <div class="form-row"><input type="checkbox" value="">Интеллект</div>
+                                    <div class="form-row"><input type="checkbox" value="">Мудрость</div>
+                                    <div class="form-row"><input type="checkbox" value="">Харизма</div>
+                                </div>
                             </div>
-                            <div class="form-row">
-                                <label for="profi_languages">Прочие владения и языки:</label>
-                                <textarea id="profi_languages" name="prof_and_languages" class="form-control" rows="4">{{ form.prof_and_languages }}</textarea>
+
+                            <div class="card">
+                                <div class="card-body text-dark">
+                                    <div class="form-row"><input type="checkbox" value="">Акробатика(лов)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Уход за животными(мдр)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Магия(инт)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Атлетика(сил)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Обман(хар)</div>
+                                    <div class="form-row"><input type="checkbox" value="">История(инт)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Проницательность(мдр)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Запугивание(хар)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Расследование(инт)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Природа(инт)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Выступление(хар)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Медицина(мдр)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Внимательность(мдр.)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Убеждение(хар)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Религия(инт)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Ловкость рук(лов)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Скрытность(лов)</div>
+                                    <div class="form-row"><input type="checkbox" value="">Выживание(мдр)</div>
+                                </div>
                             </div>
-                            <!-- Конец второй половины первой колонки -->
+
                         </div>
-                    </div></div>
+                        <!-- Конец второй половины первой колонки -->
+
+                    </div>
                 </div>
+
+
+                <div class="row">
+                    <div class="form-row">
+                        <label for="psv_perception">Пассивная мудрость (внимательность):</label>
+                        <input id="psv_perception" class="form-control" type="text" name="psv_perception" value="{{ form.psv_perception }}">
+                    </div>
+                    <div class="form-row">
+                        <label for="profi_languages">Прочие владения и языки:</label>
+                        <textarea id="profi_languages" name="prof_and_languages" class="form-control" rows="4">{{ form.prof_and_languages }}</textarea>
+                    </div>
+                </div>
+
+
+                </div>
+
                 <!-- ---------------- Конец первой колонки ---------------------- -->
 
                 <!-- ---------------- Начало второй колонки ---------------------- -->
-                <div class="col col-md-4">
+                <div class="col-4">
                     <!-- AC,speed,init,hp -->
                     <div class="form-row">
                         <div class="form-group col-md-3">
@@ -243,30 +286,33 @@
                 <!-- ---------------- Конец второй колонки ---------------------- -->
 
                 <!-- ---------------- Начало третьей колонки ---------------------- -->
-                <div class="col col-md-3">
-                        <div class="form-row">
-                                <label for="pers_traits">Персональные черты:</label>
-                                <textarea id="pers_traits" name="pers_traits" class="form-control" maxlength="32" rows="2">{{ form.pers_traits }}</textarea>
-                        </div>
+                <div class="col-2">
+                    <div class="form-row">
+                            <label for="pers_traits">Персональные черты:</label>
+                            <textarea id="pers_traits" name="pers_traits" class="form-control" maxlength="32" rows="2">{{ form.pers_traits }}</textarea>
+                    </div>
 
-                        <div class="form-row">
-                                <label for="ideals">Идеалы:</label>
-                                <textarea id="ideals" name="ideals" class="form-control" maxlength="32" rows="2">{{ form.ideals }}</textarea>
-                        </div>
-                        <div class="form-row">
-                                <label for="bonds">Привязанности:</label>
-                                <textarea id="bonds" name="bonds" class="form-control" maxlength="32" rows="2">{{ form.bonds }}</textarea>
-                        </div>
-                        <div class="form-row">
-                                <label for="flaws">Пороки:</label>
-                                <textarea id="flaws" name="flaws" class="form-control" maxlength="32" rows="2">{{ form.flaws }}</textarea>
-                        </div>
+                    <div class="form-row">
+                            <label for="ideals">Идеалы:</label>
+                            <textarea id="ideals" name="ideals" class="form-control" maxlength="32" rows="2">{{ form.ideals }}</textarea>
+                    </div>
+
+                    <div class="form-row">
+                            <label for="bonds">Привязанности:</label>
+                            <textarea id="bonds" name="bonds" class="form-control" maxlength="32" rows="2">{{ form.bonds }}</textarea>
+                    </div>
+
+                    <div class="form-row">
+                            <label for="flaws">Пороки:</label>
+                            <textarea id="flaws" name="flaws" class="form-control" maxlength="32" rows="2">{{ form.flaws }}</textarea>
+                    </div>
+
                     <div class="form-row">
                         <!-- умения и особенности -->
                     </div>
                 </div>
-                <!-- ---------------- Конец третьей колонки ---------------------- -->
             </div>
+            <!-- ---------------- Конец третьей колонки ---------------------- -->
 
             <div class="card border-dark">
                 <div class="card-body text-dark">
@@ -286,6 +332,9 @@
                     </div></div>
                 </div>
             </div>
+
+            </div></div>
+
 
             <div class="form-row text-center">
                 <div class="col mb-12">
