@@ -60,26 +60,34 @@ class CreateCharForm(forms.Form):
 
 
 class CharForm(forms.Form):
-    SPELL_CHOICES = Spell.spells.get_spell_names_choices()
-    name = forms.CharField(label='Имя персонажа')
-    char_races = forms.ChoiceField(choices=CharRaces.RACE_CHOICES, label='Расса персонажа')
-    playername = forms.CharField(label='Реальное имя персонажа')
+    # ------------------------------------------------------------------------------------------------ #
+    # ---------------------------------- ( 1st page TOP ) -------------------------------------------- #
+    # ------------------------------------------------------------------------------------------------ #
     char_classes = forms.ChoiceField(choices=CharClasses.CLASS_CHOICES, label='Класс персонажа')
     level = forms.IntegerField(label='Уровень персонажа')
-    expirence = forms.IntegerField(label='Опыт персонажа')
-    world_view = forms.CharField(label='Мировозрение')
     char_history = forms.CharField(label='Предыстория')
+    playername = forms.CharField(label='Реальное имя персонажа')
+    name = forms.CharField(label='Имя персонажа')
+    char_races = forms.ChoiceField(choices=CharRaces.RACE_CHOICES, label='Расса персонажа')
+    world_view = forms.CharField(label='Мировозрение')
+    expirence = forms.IntegerField(label='Опыт персонажа')
+
+    # ------------------------------------------------------------------------------------------------ #
+    # ---------------------------------- ( 1st page 1 column ) --------------------------------------- #
+    # ------------------------------------------------------------------------------------------------ #
+
+    # -------------------- (( ХАРАКТЕРИСТИКИ )) ------------------------------------------------------
     strength = forms.IntegerField(label='Сила персонажа')
-    dexterity = forms.IntegerField(label='Ловкость персонажа')
-    constitution = forms.IntegerField(label='Телосложение персонажа')
-    intellegence = forms.IntegerField(label='Интеллект персонажа')
-    wisdom = forms.IntegerField(label='Мудрость персонажа')
-    chrarisma = forms.IntegerField(label='Харизма персонажа')
     strength_modifier = forms.IntegerField()
+    dexterity = forms.IntegerField(label='Ловкость персонажа')
     dexterity_modifier = forms.IntegerField()
+    constitution = forms.IntegerField(label='Телосложение персонажа')
     constitution_modifier = forms.IntegerField()
+    intellegence = forms.IntegerField(label='Интеллект персонажа')
     intellegence_modifier = forms.IntegerField()
+    wisdom = forms.IntegerField(label='Мудрость персонажа')
     wisdom_modifier = forms.IntegerField()
+    chrarisma = forms.IntegerField(label='Харизма персонажа')
     chrarisma_modifier = forms.IntegerField()
 
     armor_class = forms.IntegerField(label='Класс доспеха')
@@ -91,17 +99,19 @@ class CharForm(forms.Form):
     hitpoints_curr = forms.IntegerField(label='Текущие хиты')
     hitpoints_temp = forms.IntegerField(label='Временные хиты')
     hitpoints_max = forms.IntegerField(label='Максимум хитов')
-    hitpoints_str = forms.CharField(label='Кости хитов')
+    hit_dice = forms.CharField(label='Кости хитов')
     psv_perception = forms.CharField(label='пассивная мудрость (внимательность)')
-    attacks_spellc = forms.CharField(label='Атаки и заклинания')
+    attacks_and_spell_casting = forms.CharField(label='Атаки и заклинания')
     features_traits = forms.CharField(label='Умения и особенности')
     equipment = forms.CharField(label='Снаряжение')
-    profi_languages = forms.CharField(label='Прочие владения и языки')
+    prof_and_languages = forms.CharField(label='Прочие владения и языки')
 
     pers_traits = forms.CharField(max_length=32, label='Персональные черты')
     ideals = forms.CharField(max_length=32, label='Идеалы')
     bonds = forms.CharField(max_length=32, label='Привязанности')
     flaws = forms.CharField(max_length=32, label='Пороки')
+
+    SPELL_CHOICES = Spell.spells.get_spell_names_choices()
     modified = forms.DateTimeField(required=False, initial=get_date_time('%Y-%m-%d %H:%M:%S'),
                                    input_formats=['%Y-%m-%d %H:%M:%S'], label='Время модификации')
     spells = forms.MultipleChoiceField(required=False, choices=SPELL_CHOICES,
