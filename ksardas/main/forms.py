@@ -90,11 +90,41 @@ class CharForm(forms.Form):
     chrarisma = forms.IntegerField(label='Харизма персонажа')
     chrarisma_modifier = forms.IntegerField()
 
-    armor_class = forms.IntegerField(label='Класс доспеха')
     initiative = forms.IntegerField(label='Инициатива')
+    prof_bonus = forms.IntegerField(label='Бонус мастерства')
+
+    # -------------------- (( СПАСБРОСКИ )) ----------------------------------------------------------
+
+    st_strength_box = forms.BooleanField(required=False)
+    st_dexterity_box = forms.BooleanField(required=False)
+    st_constitution_box = forms.BooleanField(required=False)
+    st_intellegence_box = forms.BooleanField(required=False)
+    st_wisdom_box = forms.BooleanField(required=False)
+    st_chrarisma_box = forms.BooleanField(required=False)
+
+    # -------------------- (( НАВЫКИ )) ---------------------------------------------------------------
+    acrobatics_box = forms.BooleanField(required=False)
+    animal_box = forms.BooleanField(required=False)
+    arcana_box = forms.BooleanField(required=False)
+    athletics_box = forms.BooleanField(required=False)
+    deception_box = forms.BooleanField(required=False)
+    history_box = forms.BooleanField(required=False)
+    insight_box = forms.BooleanField(required=False)
+    intimidation_box = forms.BooleanField(required=False)
+    investigation_box = forms.BooleanField(required=False)
+    nature_box = forms.BooleanField(required=False)
+    performance_box = forms.BooleanField(required=False)
+    medicine_box = forms.BooleanField(required=False)
+    perception_box = forms.BooleanField(required=False)
+    persuasion_box = forms.BooleanField(required=False)
+    religion_box = forms.BooleanField(required=False)
+    sleight_of_hand_box = forms.BooleanField(required=False)
+    stealth_box = forms.BooleanField(required=False)
+    survival_box = forms.BooleanField(required=False)
+
+    armor_class = forms.IntegerField(label='Класс доспеха')
     speed = forms.IntegerField(label='Скорость персонажа')
     inspiration = forms.IntegerField(label='Вдохновение')
-    prof_bonus = forms.IntegerField(label='Бонус мастерства')
 
     hitpoints_curr = forms.IntegerField(label='Текущие хиты')
     hitpoints_temp = forms.IntegerField(label='Временные хиты')
@@ -132,7 +162,7 @@ class CharForm(forms.Form):
                     char_qs.remove_spell(request, self.cleaned_data.get('char_spells'))
                 else:
                     set_attr = getattr(char_qs, form_field)
-                    print('Current: ', set_attr, 'New: ', self.cleaned_data[form_field])
+                    print(f'form_field: {form_field} Current: {set_attr} New: {self.cleaned_data[form_field]}')
                     setattr(char_qs, form_field, self.cleaned_data[form_field])
 
             except (AttributeError, TypeError) as err:
