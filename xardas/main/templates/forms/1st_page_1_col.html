@@ -1,7 +1,10 @@
-<div class="col-6">
-        <div class="container">
+<div class="container">
+
+    <div class="row">
+
+    <div class="container">
             <div class="row">
-            <div class="col-5 col-sm">
+            <div class="col-5">
                     <div class="form-row">
                         <div class="form-group col-sm-6">
                             <label for="strength">Сила: </label>
@@ -94,39 +97,47 @@
                     </div>
                     <div class="card-footer text-muted">Спасброски</div>
                 </div>
-
-                <div class="card mt-3 mb-1">
-                    <div class="card-body text-dark">
-                        <div class="form-row"><input id="acrobatics_box" name="acrobatics_box" type="checkbox" value="True" {% if form.acrobatics_box %}checked{% endif %}>Акробатика(лов)</div>
-                        <div class="form-row"><input id="animal_box" name="animal_box" type="checkbox" value="True" {% if form.animal_box %}checked{% endif %}>Уход за животными(мдр)</div>
-                        <div class="form-row"><input id="arcana_box" name="arcana_box" type="checkbox" value="True" {% if form.arcana_box %}checked{% endif %}>Магия(инт)</div>
-                        <div class="form-row"><input id="athletics_box" name="athletics_box" type="checkbox" value="True" {% if form.athletics_box %}checked{% endif %}>Атлетика(сил)</div>
-                        <div class="form-row"><input id="deception_box" name="deception_box" type="checkbox" value="True" {% if form.deception_box %}checked{% endif %}>Обман(хар)</div>
-                        <div class="form-row"><input id="history_box" name="history_box" type="checkbox" value="True" {% if form.history_box %}checked{% endif %}>История(инт)</div>
-                        <div class="form-row"><input id="insight_box" name="insight_box" type="checkbox" value="True" {% if form.insight_box %}checked{% endif %}>Проницательность(мдр)</div>
-                        <div class="form-row"><input id="intimidation_box" name="intimidation_box" type="checkbox" value="True" {% if form.intimidation_box %}checked{% endif %}>Запугивание(хар)</div>
-                        <div class="form-row"><input id="investigation_box" name="investigation_box" type="checkbox" value="True" {% if form.investigation_box %}checked{% endif %}>Расследование(инт)</div>
-                        <div class="form-row"><input id="nature_box" name="nature_box" type="checkbox" value="True" {% if form.nature_box %}checked{% endif %}>Природа(инт)</div>
-                        <div class="form-row"><input id="performance_box" name="performance_box" type="checkbox" value="True" {% if form.performance_box %}checked{% endif %}>Выступление(хар)</div>
-                        <div class="form-row"><input id="medicine_box" name="medicine_box" type="checkbox" value="True" {% if form.medicine_box %}checked{% endif %}>Медицина(мдр)</div>
-                        <div class="form-row"><input id="perception_box" name="perception_box" type="checkbox" value="True" {% if form.perception_box %}checked{% endif %}>Внимательность(мдр.)</div>
-                        <div class="form-row"><input id="persuasion_box" name="persuasion_box" type="checkbox" value="True" {% if form.persuasion_box %}checked{% endif %}>Убеждение(хар)</div>
-                        <div class="form-row"><input id="religion_box" name="religion_box" type="checkbox" value="True" {% if form.religion_box %}checked{% endif %}>Религия(инт)</div>
-                        <div class="form-row"><input id="sleight_of_hand_box" name="sleight_of_hand_box" type="checkbox" value="True" {% if form.sleight_of_hand_box %}checked{% endif %}>Ловкость рук(лов)</div>
-                        <div class="form-row"><input id="stealth_box" name="stealth_box" type="checkbox" value="True" {% if form.stealth_box %}checked{% endif %}>Скрытность(лов)</div>
-                        <div class="form-row"><input id="survival_box" name="survival_box" type="checkbox" value="True" {% if form.survival_box %}checked{% endif %}>Выживание(мдр)</div>
-                    </div>
-                    <div class="card-footer text-muted">Навыки</div>
-                </div>
-
             </div>
             <!-- Конец второй половины первой колонки -->
 
         </div>
     </div>
 
+    </div>
+
     <div class="row">
-        <div class="col-md-12 offset-md-1">
+            <div class="card mt-3 mb-1">
+                <div class="card-body text-dark">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-row"><input id="acrobatics_box" name="acrobatics_box" type="checkbox" value="True" {% if form.acrobatics_box %}checked{% endif %}>Акробатика(лов)</div>
+                                <div class="form-row"><input id="animal_box" name="animal_box" type="checkbox" value="True" {% if form.animal_box %}checked{% endif %}>Уход за животными(мдр)</div>
+                                <div class="form-row"><input id="arcana_box" name="arcana_box" type="checkbox" value="True" {% if form.arcana_box %}checked{% endif %}>Магия(инт)</div>
+                                <div class="form-row"><input id="athletics_box" name="athletics_box" type="checkbox" value="True" {% if form.athletics_box %}checked{% endif %}>Атлетика(сил)</div>
+                                <div class="form-row"><input id="deception_box" name="deception_box" type="checkbox" value="True" {% if form.deception_box %}checked{% endif %}>Обман(хар)</div>
+                                <div class="form-row"><input id="history_box" name="history_box" type="checkbox" value="True" {% if form.history_box %}checked{% endif %}>История(инт)</div>
+                                <div class="form-row"><input id="insight_box" name="insight_box" type="checkbox" value="True" {% if form.insight_box %}checked{% endif %}>Проницательность(мдр)</div>
+                                <div class="form-row"><input id="intimidation_box" name="intimidation_box" type="checkbox" value="True" {% if form.intimidation_box %}checked{% endif %}>Запугивание(хар)</div>
+                                <div class="form-row"><input id="investigation_box" name="investigation_box" type="checkbox" value="True" {% if form.investigation_box %}checked{% endif %}>Расследование(инт)</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-row"><input id="nature_box" name="nature_box" type="checkbox" value="True" {% if form.nature_box %}checked{% endif %}>Природа(инт)</div>
+                                <div class="form-row"><input id="performance_box" name="performance_box" type="checkbox" value="True" {% if form.performance_box %}checked{% endif %}>Выступление(хар)</div>
+                                <div class="form-row"><input id="medicine_box" name="medicine_box" type="checkbox" value="True" {% if form.medicine_box %}checked{% endif %}>Медицина(мдр)</div>
+                                <div class="form-row"><input id="perception_box" name="perception_box" type="checkbox" value="True" {% if form.perception_box %}checked{% endif %}>Внимательность(мдр.)</div>
+                                <div class="form-row"><input id="persuasion_box" name="persuasion_box" type="checkbox" value="True" {% if form.persuasion_box %}checked{% endif %}>Убеждение(хар)</div>
+                                <div class="form-row"><input id="religion_box" name="religion_box" type="checkbox" value="True" {% if form.religion_box %}checked{% endif %}>Религия(инт)</div>
+                                <div class="form-row"><input id="sleight_of_hand_box" name="sleight_of_hand_box" type="checkbox" value="True" {% if form.sleight_of_hand_box %}checked{% endif %}>Ловкость рук(лов)</div>
+                                <div class="form-row"><input id="stealth_box" name="stealth_box" type="checkbox" value="True" {% if form.stealth_box %}checked{% endif %}>Скрытность(лов)</div>
+                                <div class="form-row"><input id="survival_box" name="survival_box" type="checkbox" value="True" {% if form.survival_box %}checked{% endif %}>Выживание(мдр)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">Навыки</div>
+            </div>
+
             <div class="form-row">
                 <label for="psv_perception">Пассивная мудрость (внимательность):</label>
                 <input id="psv_perception" class="form-control" type="text" name="psv_perception" value="{{ form.psv_perception }}">
@@ -135,7 +146,6 @@
                 <label for="profi_languages">Прочие владения и языки:</label>
                 <textarea id="profi_languages" name="prof_and_languages" class="form-control" rows="4">{{ form.prof_and_languages }}</textarea>
             </div>
-        </div>
     </div>
 
 </div>
