@@ -22,9 +22,9 @@ ______
 ### Список файлов:
 ______
 * **requirements.txt** - список требуемых библиотек для работы со скриптом pdf_to_html
-* **ksardas/classes_for_spells.py** - Программа парсит файл '**data/char_spells.html**' полученный скриптом pdf_to_html.py
+* **xardas/classes_for_spells.py** - Программа парсит файл '**data/char_spells.html**' полученный скриптом pdf_to_html.py
 и заносит соответствие классов к заклинаниям в БД SQLite
-* **ksardas/settings.py** - Программа с настройками проекта
+* **xardas/settings.py** - Программа с настройками проекта
 
 * **data/spells.html** - Страницы заклинаний из книги игрока
 * **data/char_spells.html** - Список доступных заклинаний для каждого класса персонажа
@@ -37,18 +37,18 @@ ______
 ### Занесение заклинаний в БД:
 ______
 
-    shell:./ksardas/$ ./mange.py import_html_spells data/spells.html
+    shell:./xardas/$ ./mange.py import_html_spells data/spells.html
     
 ### Добавление соответствий классов персонажа к заклинаниям:
 ______
 Укажите путь до директории с приложением:
 ```python
-    KSA_PATH = '/%Full_Path_To_Project_Dir%/ksardas/'
+    KSA_PATH = '/%Full_Path_To_Project_Dir%/xardas/'
 ```
 
 Выполните:
 
-    shell:./ksardas/ksardas$ ./classes_for_spells.py ../data/char_spells.html
+    shell:./xardas/xardas$ ./classes_for_spells.py ../data/char_spells.html
     
 ### Запуск приложения в контейнере Docker
 

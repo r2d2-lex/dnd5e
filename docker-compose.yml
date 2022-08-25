@@ -30,11 +30,11 @@ services:
   celery:
     build: .
     <<: *envs_template
-    command: celery -A ksardas worker --loglevel=debug --concurrency=4
+    command: celery -A xardas worker --loglevel=debug --concurrency=4
     depends_on:
     - redis
     volumes:
-    - app-volume:/ksardas
+    - app-volume:/xardas
 
   web:
     <<: *logs_template
@@ -48,5 +48,5 @@ services:
     depends_on:
       - redis
     volumes:
-      - app-volume:/ksardas
+      - app-volume:/xardas
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]

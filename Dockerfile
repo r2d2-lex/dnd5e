@@ -1,6 +1,6 @@
 FROM python:3.7-alpine
 
-WORKDIR /ksardas
+WORKDIR /xardas
 
 COPY ./requirements.txt .
 
@@ -9,7 +9,7 @@ RUN apk add --no-cache jpeg-dev zlib-dev
 RUN apk add --no-cache --virtual .build-deps build-base linux-headers
 RUN pip install -r requirements.txt
 
-COPY ./ksardas .
+COPY ./xardas .
 
 RUN python manage.py makemigrations
 RUN python manage.py migrate

@@ -1,0 +1,92 @@
+{% extends "layout/basic.html" %}
+
+{% block title %}Список заклинаний{% endblock %}
+
+{% load static %}
+{% block js %}
+<script src="{% static 'js/jfind.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<form method="get" id="main-form">
+
+    <div class="form-row align-items-center">
+        <div class="col-7">
+            <div class="input-group mt-3 mb-3">
+                <input id="id_name" type="text" name="name" class="form-control form-control-sm" placeholder="Введите название заклинания" aria-label="Введите название заклинания" aria-describedby="button-search">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary btn-sm" type="submit" id="button-search">Поиск</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-2"></div>
+
+        <div class="col">
+            <div class="form-check form-check-inline">
+                    <input class="form-check-input mt-3 mb-3" type="checkbox" id="id_ritual" name="ritual"{% if spell.is_ritual %}checked{% endif %}>
+                    <label class="form-check-label" for="id_ritual">С имспользованием ритуала</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Уровень, школа, класс, концентрация, ритуал -->
+    <div class="form-row">
+
+        <div class="form-group col-md-3">
+            <label for="id_spell_levels">Уровень заклинания:</label>
+            <select class="form-control form-control-sm" id="id_spell_levels">
+                <option value="">Все уровни</option>
+                {% for level in spell_levels %}
+                    <option>{{ level }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label for="id_spell_classes">Класс заклинания:</label>
+            <select class="form-control form-control-sm" id="id_spell_classes">
+                <option value="">Все классы</option>
+                {% for cl_name, cl_caption in spell_classes %}
+                    <option>{{ cl_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label for="id_spell_schools">Школа заклинания:</label>
+            <select class="form-control form-control-sm" id="id_spell_schools">
+                <option value="">Все школы</option>
+                {% for school_id, school_name in spell_schools %}
+                    <option value="{{ school_id }}">{{ school_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label for="id_concentrate">Концентрация:</label>
+            <select class="form-control form-control-sm" id="id_concentrate">
+                <option value=""></option>
+                <option value="True">Концентрация</option>
+                <option value="False">Без концентрации</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div id="id_status">
+    </div>
+</form>
+
+<nav aria-label="Page navigation spells">
+    <ul class="pagination justify-content-center" id="pagination"></ul>
+</nav>
+    <div id="id_spells"></div>
+
+<br><br>
+<nav aria-label="Page navigation spells footer">
+    <div id="id_footer"></div>
+</nav>
+
+{% endblock %}

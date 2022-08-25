@@ -1,0 +1,63 @@
+<div class="col-4">
+    <!-- AC,speed,init,hp -->
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="armor_class">КД: </label>
+            <input id="armor_class" class="form-control form-control-sm" type="number" name="armor_class" step="1" min="0" value="{{ form.armor_class }}">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="initiative">Инициатива: </label>
+            <input id="initiative" class="form-control form-control-sm" type="number" name="initiative" step="1" min="0" value="{{ form.initiative }}">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="speed">Скорость: </label>
+            <input id="speed" class="form-control form-control-sm" type="number" name="speed" step="1" min="0" value="{{ form.speed }}">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-sm-3">
+            <label for="hitpoints_max">Максимум хитов: </label>
+            <input id="hitpoints_max" class="form-control form-control-xs" type="number" name="hitpoints_max" step="1" min="0" value="{{ form.hitpoints_max }}">
+        </div>
+        <div class="form-group col-sm-4">
+            <label for="hitpoints_curr">Текущие хиты: </label>
+            <input id="hitpoints_curr" class="form-control form-control-xs" type="number" name="hitpoints_curr" step="1" min="0" value="{{ form.hitpoints_curr }}">
+        </div>
+        <div class="form-group col-sm-3">
+            <label for="hitpoints_temp">Временные хиты: </label>
+            <input id="hitpoints_temp" class="form-control form-control-xs" type="number" name="hitpoints_temp" step="1" min="0" value="{{ form.hitpoints_temp }}">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-sm-6">
+            <label for="hitpoints_str">Кости хитов: </label>
+            <input id="hitpoints_str" class="form-control form-control-sm" type="text" name="hit_dice" value="{{ form.hit_dice }}">
+        </div>
+        <div class="form-group col-sm-6">
+            <div class="control-group">
+                <div class="controls span2">
+                    <input type="checkbox" value="">*
+                    <input type="checkbox" value="">*
+                    <input type="checkbox" value="">*
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls span2">
+                    <input type="checkbox" value="">*
+                    <input type="checkbox" value="">*
+                    <input type="checkbox" value="">*
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- атаки и закл -->
+    <div class="form-row">
+
+    </div>
+
+    <!-- снаряж -->
+    <div class="form-row">
+
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="card border-success mt-5">
+            <div class="card-header bg-light">
+                <h4 class="card-title"><a href="{% url 'main:view_spell' spell.id %}">Заклинание {{ spell.name }}</a></h4>
+            </div>
+            <div class="card-body">
+                <!-- Начало текстового контента -->
+                <b>Уровень:</b> {{ spell.level }} <br>
+
+                {% if spell.is_ritual %}Можно использовать как ритуал<br>{% endif %}
+                <!--  https://docs.djangoproject.com/en/dev/ref/models/instances/#django.db.models.Model.get_FOO_display -->
+                <b>Школа:</b>  {{ spell.get_school_display }} <br>
+                {% if spell.is_concentrate %}Требуется концентрация<br>{% endif %}
+                <b>Компоненты:</b><br>
+                {% if spell.comp_is_verbal %}Вербальные<br>{% endif %}
+                {% if spell.comp_is_somatic %}Соматичесские<br>{% endif %}
+                {% if spell.comp_is_material %}Материальные:&nbsp
+                {{ spell.components }}<br>
+                {% endif %}
+
+                <b>Дистанция:</b> {{ spell.distance }} <br>
+                <b>Длительность:</b> {{ spell.duration }} <br>
+                <b>Время чтения:</b> {{ spell.cast_time }} <br>
+                <b>Описание:</b> {{ spell.description }} <br>
+                <br><b>Доступно для классов:</b><br>
+                {% for spc in spell.spell_classes.all %}
+                    {{ spc.name }}<br>
+                {% endfor %}
+            </div>
+</div>
