@@ -1,0 +1,60 @@
+<div class="form-row row-cols-2 row-cols-md-2 text-center">
+
+    <div class="col mb-6">
+        <div class="card border-dark">
+            <div class="card-header">Доступные заклинания:</div>
+            <div class="card-body text-dark">
+                <select id="spells" class="custom-select" name="spells" size="5" multiple>
+                {% for spellname in spells %}
+                    <option value="{{ spellname }}">{{ spellname }}</option>
+                {% endfor %}
+                </select>
+            </div>
+            <div class="card-footer">
+                    <input type="submit" class="btn btn-primary" value="Добавить заклинание" name="do_addspell">
+            </div>
+        </div>
+    </div>
+
+    <div class="col mb-6">
+        <div class="card border-dark">
+            <div class="card-header">Аватар:</div>
+            <div class="card-body text-dark">
+                {% if form.avatar %}
+                    <img src="{{ form.avatar.url }}" class="img-thumbnail" width="150" height="150">
+                {% else %}
+                    <b>Без аватара</b>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <input type="hidden" name="name" value="{{ form.name }}">
+                <span class="btn btn-primary btn-file">
+                    Выберите файл<input id="avatar" type="file" name="avatar">
+                </span>
+                <button type="submit" class="btn btn-primary">Сохранить аватар</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Spell page -->
+<div class="form-row">
+
+    <div class="card border-dark col-md-12">
+        <div class="card-header">Используемые заклинания:</div>
+        <div class="card-body text-dark">
+            <div id="checkboxes">
+                <ul class="nobull">
+                    {% for spell in form.spells.all %}
+                        <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="card-footer">
+            <input type="submit" class="btn btn-primary" value="Удалить заклинание" name="do_delspell">
+        </div>
+    </div>
+
+</div>

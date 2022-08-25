@@ -15,108 +15,60 @@
         <form method="post" id="charform" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <!-- ------------------------------------------------------------------------------- -->
-            <!-- ------------------------------ ( 1st page TOP ) ------------------------------- -->
-            <!-- ------------------------------------------------------------------------------- -->
-            <div class="container text-center mb-3">
-                {% include 'forms/1st_page_top.html' %}
-            </div>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#front_page">Основные характеристики</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#back_page">Дполнительные характеристики</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#spell_page">Заклинания</a>
+                </li>
+            </ul>
 
-            <!-- ------------------------------------------------------------------------------- -->
-            <!-- ------------------------------ ( 1st page 1 column ) ------------------------------- -->
-            <!-- ------------------------------------------------------------------------------- -->
-            <div class="container text-center">
-            <div class="row">
-                <div class="col-6">
-                    {% include 'forms/1st_page_1_col.html' %}
-                </div>
+            <div class="tab-content">
+            <!-- -------------------------------------------------------------------------------->
+                <div class="tab-pane fade show active" id="front_page">
 
-                <div class="col-4">
-                    {% include 'forms/1st_page_2_col.html' %}
-                </div>
-
-                <div class="col-2">
-                    {% include 'forms/1st_page_3_col.html' %}
-                </div>
-
-            </div>
-
-            <div class="card border-dark">
-                <div class="card-body text-dark">
-                    <div class="container"><div class="form-row">
-                        <div class="col col-md-4">
-                            <label for="attacks_spellc">Атаки и заклинания:</label>
-                            <textarea id="attacks_spellc" name="attacks_and_spell_casting" class="form-control" rows="4">{{ form.attacks_and_spell_casting }}</textarea>
-                        </div>
-                        <div class="col col-md-4">
-                            <label for="equipment">Снаряжение:</label>
-                            <textarea id="equipment" name="equipment" class="form-control" rows="4">{{ form.equipment }}</textarea>
-                        </div>
-                        <div class="col col-md-4">
-                            <label for="features_traits">Умения и особенности:</label>
-                            <textarea id="features_traits" name="features_traits" class="form-control" rows="4">{{ form.features_traits }}</textarea>
-                        </div>
-                    </div></div>
-                </div>
-            </div>
-            </div>
-
-                    <div class="form-row row-cols-2 row-cols-md-2 text-center">
-                        <div class="col mb-6">
-                            <div class="card border-dark">
-                                <div class="card-header">Доступные заклинания:</div>
-                                <div class="card-body text-dark">
-                                    <select id="spells" class="custom-select" name="spells" size="5" multiple>
-                                    {% for spellname in spells %}
-                                        <option value="{{ spellname }}">{{ spellname }}</option>
-                                    {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="card-footer">
-                                        <input type="submit" class="btn btn-primary" value="Добавить заклинание" name="do_addspell">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col mb-6">
-                            <div class="card border-dark">
-                                <div class="card-header">Аватар:</div>
-                                <div class="card-body text-dark">
-                                    {% if form.avatar %}
-                                        <img src="{{ form.avatar.url }}" class="img-thumbnail" width="150" height="150">
-                                    {% else %}
-                                        <b>Без аватара</b>
-                                    {% endif %}
-                                </div>
-                                <div class="card-footer">
-                                    <input type="hidden" name="name" value="{{ form.name }}">
-                                    <span class="btn btn-primary btn-file">
-                                        Выберите файл<input id="avatar" type="file" name="avatar">
-                                    </span>
-                                    <button type="submit" class="btn btn-primary">Сохранить аватар</button>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- ------------------------------------------------------------------------------- -->
+                    <!-- ------------------------------ ( 1st page TOP ) ------------------------------- -->
+                    <!-- ------------------------------------------------------------------------------- -->
+                    <div class="container text-center mb-3">
+                        {% include 'forms/1st_page_top.html' %}
                     </div>
 
-                    <!-- Spell page -->
-                    <div class="form-row">
-                        <div class="card border-dark col-md-12">
-                            <div class="card-header">Используемые заклинания:</div>
-                            <div class="card-body text-dark">
-                                <div id="checkboxes">
-                                    <ul class="nobull">
-                                        {% for spell in form.spells.all %}
-                                            <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
+                    <!-- ------------------------------------------------------------------------------- -->
+                    <!-- ------------------------------ ( 1st page 1 column ) ------------------------------- -->
+                    <!-- ------------------------------------------------------------------------------- -->
+                    <div class="container text-center">
+                        <div class="row">
+
+                            <div class="col-5">
+                                {% include 'forms/1st_page_1_col.html' %}
                             </div>
-                            <div class="card-footer">
-                                <input type="submit" class="btn btn-primary" value="Удалить заклинание" name="do_delspell">
+
+                            <div class="col-4">
+                                {% include 'forms/1st_page_2_col.html' %}
                             </div>
+
+                            <div class="col-3">
+                                {% include 'forms/1st_page_3_col.html' %}
+                            </div>
+
                         </div>
                     </div>
+                </div>
+            <!-- -------------------------------------------------------------------------------->
+                <div class="tab-pane fade" id="back_page">
+                    {% include 'forms/2_page_top.html' %}
+                </div>
+            <!-- -------------------------------------------------------------------------------->
+                <div class="tab-pane fade" id="spell_page">
+                    {% include 'forms/3_page_top.html' %}
+                </div>
+            <!-- -------------------------------------------------------------------------------->
+            </div>
         </form>
 
     </div>
