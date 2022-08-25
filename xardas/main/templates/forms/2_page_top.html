@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-3">
+        <label for="name">Имя персонажа: </label>
+        <input id="name" class="form-control form-control-sm" type="text" name="name" value="{{ form.name }}">
+    </div>
+    <div class="col-3">
+        <label for="age">Возраст: </label>
+        <input id="age"  class="form-control form-control-sm" type="number" name="age" step="1" min="0" value="{{ form.age }}">
+    </div>
+    <div class="col-3">
+        <label for="height">Рост: </label>
+        <input id="height" class="form-control form-control-sm" type="text" name="height" value="{{ form.height }}">
+    </div>
+    <div class="col-3">
+        <label for="weight">Вес: </label>
+        <input id="weight" class="form-control form-control-sm" type="text" name="weight" value="{{ form.weight }}">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-3">
+        <label for="playername">Имя игрока: </label>
+        <input id="playername" class="form-control form-control-sm" type="text" name="playername" value="{{ form.playername }}">
+    </div>
+    <div class="col-3">
+        <label for="eyes">Цвет глаз: </label>
+        <input id="eyes" class="form-control form-control-sm" type="text" name="eyes" value="{{ form.eyes }}">
+    </div>
+
+    <div class="col-3">
+        <label for="skin">Цвет кожи: </label>
+        <input id="skin" class="form-control form-control-sm" type="text" name="skin" value="{{ form.skin }}">
+    </div>
+
+    <div class="col-3">
+        <label for="hair">Цвет волос: </label>
+        <input id="hair" class="form-control form-control-sm" type="text" name="hair" value="{{ form.hair }}">
+    </div>
+</div>
