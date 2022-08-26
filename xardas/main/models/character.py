@@ -206,12 +206,19 @@ class CharBase(models.Model):
     def char_classes_set(self, char_classes):
         self.char_classes.set([get_object_or_404(CharClasses, name=char_classes)])
 
-    def get_current_race(self):
-        cur_race = False
+    def get_current_race(self) -> str:
+        cur_race = ''
         for cr in self.races.all():
             cur_race = cr.name
             break
         return cur_race
+
+    def get_current_class(self) -> str:
+        cur_class = ''
+        for cc in self.char_classes.all():
+            cur_class = cc.name
+            break
+        return cur_class
 
     def get_current_char_classes(self):
         cur_class = []

@@ -259,7 +259,7 @@ def edit_character(request, name):
                 'char_races': CharRaces.get_races_captions(),
 
                 'cur_race': char_base.get_current_race(),
-                'cur_class': char_base.get_current_char_classes(),
+                'cur_class': char_base.get_current_class(),
     }
     return render(request, 'main/edit_character.html', context)
 

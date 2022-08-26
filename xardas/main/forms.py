@@ -90,11 +90,10 @@ class CharForm(forms.Form):
     chrarisma = forms.IntegerField(label='Харизма персонажа')
     chrarisma_modifier = forms.IntegerField()
 
-    initiative = forms.IntegerField(label='Инициатива')
+    inspiration = forms.IntegerField(label='Вдохновение')
     prof_bonus = forms.IntegerField(label='Бонус мастерства')
 
     # -------------------- (( СПАСБРОСКИ )) ----------------------------------------------------------
-
     st_strength_box = forms.BooleanField(required=False)
     st_dexterity_box = forms.BooleanField(required=False)
     st_constitution_box = forms.BooleanField(required=False)
@@ -122,25 +121,74 @@ class CharForm(forms.Form):
     stealth_box = forms.BooleanField(required=False)
     survival_box = forms.BooleanField(required=False)
 
-    armor_class = forms.IntegerField(label='Класс доспеха')
-    speed = forms.IntegerField(label='Скорость персонажа')
-    inspiration = forms.IntegerField(label='Вдохновение')
-
-    hitpoints_curr = forms.IntegerField(label='Текущие хиты')
-    hitpoints_temp = forms.IntegerField(label='Временные хиты')
-    hitpoints_max = forms.IntegerField(label='Максимум хитов')
-    hit_dice = forms.CharField(label='Кости хитов')
     psv_perception = forms.CharField(label='пассивная мудрость (внимательность)')
-    attacks_and_spell_casting = forms.CharField(label='Атаки и заклинания')
-    features_traits = forms.CharField(label='Умения и особенности')
-    equipment = forms.CharField(label='Снаряжение')
     prof_and_languages = forms.CharField(label='Прочие владения и языки')
 
+    # ------------------------------------------------------------------------------------------------ #
+    # ---------------------------------- ( 1st page 2 column ) --------------------------------------- #
+    # ------------------------------------------------------------------------------------------------ #
+    armor_class = forms.IntegerField(label='Класс доспеха')
+    initiative = forms.IntegerField(label='Инициатива')
+    speed = forms.IntegerField(label='Скорость персонажа')
+
+    hitpoints_curr = forms.IntegerField(label='Текущие хиты')
+    hitpoints_max = forms.IntegerField(label='Максимум хитов')
+
+    hitpoints_temp = forms.IntegerField(label='Временные хиты')
+
+    hit_dice = forms.CharField(label='Кости хитов')
+
+    # -------------------- (( Спасброски от смерти )) ----------------------------------------------------
+    st_succ_death_box1 = forms.BooleanField(required=False)
+    st_succ_death_box2 = forms.BooleanField(required=False)
+    st_succ_death_box3 = forms.BooleanField(required=False)
+    st_fail_death_box1 = forms.BooleanField(required=False)
+    st_fail_death_box2 = forms.BooleanField(required=False)
+    st_fail_death_box3 = forms.BooleanField(required=False)
+
+    attacks_and_spell_casting = forms.CharField(label='Атаки и заклинания')
+
+    equipment = forms.CharField(label='Снаряжение')
+
+    # ------------------------------------------------------------------------------------------------ #
+    # ---------------------------------- ( 1st page 3 column ) --------------------------------------- #
+    # ------------------------------------------------------------------------------------------------ #
     pers_traits = forms.CharField(max_length=32, label='Персональные черты')
     ideals = forms.CharField(max_length=32, label='Идеалы')
     bonds = forms.CharField(max_length=32, label='Привязанности')
     flaws = forms.CharField(max_length=32, label='Пороки')
+    features_traits = forms.CharField(label='Умения и особенности')
 
+    # ------------------------------------------------------------------------------------------------ #
+    # ---------------------------------- ( 2 page TOP) ----------------------------------------------- #
+    # ------------------------------------------------------------------------------------------------ #
+    # name
+    age = forms.IntegerField(required=False)
+    height = forms.IntegerField(required=False)
+    weight = forms.IntegerField(required=False)
+
+    eyes = forms.CharField(required=False)
+    skin = forms.CharField(required=False)
+    hair = forms.CharField(required=False)
+
+    # ------------------------------------------------------------------------------------------------ #
+    # ---------------------------------- ( 2 page 1st column) ---------------------------------------- #
+    # ------------------------------------------------------------------------------------------------ #
+    # avatar = models.ImageField(null=True, blank=True, upload_to='avatars/', verbose_name='Аватар')
+    char_backstory = forms.CharField(required=False)
+
+    # ------------------------------------------------------------------------------------------------ #
+    # ---------------------------------- ( 2 page 2 column) ------------------------------------------ #
+    # ------------------------------------------------------------------------------------------------ #
+    allies_and_org = forms.CharField(required=False)
+    allies_and_org_symbol_name = forms.CharField(required=False)
+    # allies_and_org_symbol = models.ImageField(null=True, blank=True, upload_to='symbols/', verbose_name='Символ')
+    additional_features_traits = forms.CharField(required=False)
+    treasure = forms.CharField(required=False)
+
+    # ------------------------------------------------------------------------------------------------ #
+    # ---------------------------------- ( 3 page ) -------------------------------------------------- #
+    # ------------------------------------------------------------------------------------------------ #
     SPELL_CHOICES = Spell.spells.get_spell_names_choices()
     modified = forms.DateTimeField(required=False, initial=get_date_time('%Y-%m-%d %H:%M:%S'),
                                    input_formats=['%Y-%m-%d %H:%M:%S'], label='Время модификации')
