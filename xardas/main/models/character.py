@@ -112,10 +112,10 @@ class CharBase(models.Model):
     initiative = models.IntegerField(default=0, verbose_name='Инициатива')
     speed = models.CharField(default='', max_length=32, verbose_name='Скорость персонажа')
 
-    hitpoints_curr = models.IntegerField(default=0, verbose_name='Текущие хиты')
-    hitpoints_max = models.IntegerField(default=0, verbose_name='Максимум хитов')
+    hit_points_curr = models.IntegerField(default=0, verbose_name='Текущие хиты')
+    hit_points_max = models.IntegerField(default=0, verbose_name='Максимум хитов')
 
-    hitpoints_temp = models.IntegerField(default=0, verbose_name='Временные хиты')
+    hit_points_temp = models.IntegerField(default=0, verbose_name='Временные хиты')
 
     hit_dice = models.CharField(default='', max_length=8, verbose_name='Кости хитов')
     hit_dice_total = models.CharField(default='', max_length=8, verbose_name='Кости хитов макс.')

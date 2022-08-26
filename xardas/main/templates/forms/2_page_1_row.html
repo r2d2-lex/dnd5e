@@ -43,13 +43,13 @@
                                 {% if form.allies_and_org_symbol %}
                                     <img src="{{ form.allies_and_org_symbol.url }}" class="img-thumbnail" width="150" height="150">
                                 {% else %}
-                                    <b>Пусто</b>
+                                    <b>Без символа</b>
                                 {% endif %}
                             </div>
                             <div class="card-footer text-muted">
                                 <input type="hidden" name="name" value="{{ form.name }}">
                                 <span class="btn btn-primary btn-file">
-                                Выберите файл<input id="allies_and_org_symbol" type="file" name="allies_and_org_symbol">
+                                Загрузить символ<input id="allies_and_org_symbol" type="file" name="allies_and_org_symbol">
                                 </span>
                                 <button type="submit" class="btn btn-primary">Сохранить символ</button>
                             </div>

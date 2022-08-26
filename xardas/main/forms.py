@@ -131,10 +131,10 @@ class CharForm(forms.Form):
     initiative = forms.IntegerField(label='Инициатива')
     speed = forms.IntegerField(label='Скорость персонажа')
 
-    hitpoints_curr = forms.IntegerField(label='Текущие хиты')
-    hitpoints_max = forms.IntegerField(label='Максимум хитов')
+    hit_points_curr = forms.IntegerField(label='Текущие хиты')
+    hit_points_max = forms.IntegerField(label='Максимум хитов')
 
-    hitpoints_temp = forms.IntegerField(label='Временные хиты')
+    hit_points_temp = forms.IntegerField(label='Временные хиты')
 
     hit_dice = forms.CharField(label='Кости хитов')
 
@@ -189,6 +189,10 @@ class CharForm(forms.Form):
     # ------------------------------------------------------------------------------------------------ #
     # ---------------------------------- ( 3 page ) -------------------------------------------------- #
     # ------------------------------------------------------------------------------------------------ #
+    spell_casting_ability = forms.CharField(required=False)
+    spell_save_dc = forms.CharField(required=False)
+    spell_attack_bonus = forms.CharField(required=False)
+
     SPELL_CHOICES = Spell.spells.get_spell_names_choices()
     modified = forms.DateTimeField(required=False, initial=get_date_time('%Y-%m-%d %H:%M:%S'),
                                    input_formats=['%Y-%m-%d %H:%M:%S'], label='Время модификации')
