@@ -1,0 +1,63 @@
+<div class="col-4">
+
+    <div class="card">
+        <div class="card-header">Аватар:</div>
+        <div class="card-body text-dark">
+            {% if form.avatar %}
+                <img src="{{ form.avatar.url }}" class="img-thumbnail" width="150" height="150">
+            {% else %}
+                <b>Без аватара</b>
+            {% endif %}
+        </div>
+        <div class="card-footer text-muted">
+            <input type="hidden" name="name" value="{{ form.name }}">
+            <span class="btn btn-primary btn-file">
+                Выберите файл<input id="avatar" type="file" name="avatar">
+            </span>
+            <button type="submit" class="btn btn-primary">Сохранить аватар</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="col-8">
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-6">
+                    <div class="form-row">
+                            <label for="allies_and_org">Альянсы и организации:</label>
+                            <textarea id="allies_and_org" name="allies_and_org" class="form-control" rows="10">{{ form.allies_and_org }}</textarea>
+                    </div>
+                </div>
+
+                <div class="col-6">
+
+                        <div class="card">
+                            <div class="card-header">
+                                    <label for="allies_and_org_symbol_name">Название символа: </label>
+                                    <input id="allies_and_org_symbol_name" class="form-control form-control-sm" type="text" name="allies_and_org_symbol_name" value="{{ form.allies_and_org_symbol_name }}">
+                            </div>
+                            <div class="card-body text-dark">
+                                {% if form.allies_and_org_symbol %}
+                                    <img src="{{ form.allies_and_org_symbol.url }}" class="img-thumbnail" width="150" height="150">
+                                {% else %}
+                                    <b>Пусто</b>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer text-muted">
+                                <input type="hidden" name="name" value="{{ form.name }}">
+                                <span class="btn btn-primary btn-file">
+                                Выберите файл<input id="allies_and_org_symbol" type="file" name="allies_and_org_symbol">
+                                </span>
+                                <button type="submit" class="btn btn-primary">Сохранить символ</button>
+                            </div>
+                        </div>
+
+                </div>
+
+            </div>
+        </div>
+
+</div>

@@ -17,23 +17,6 @@
     </div>
 
     <div class="col mb-6">
-        <div class="card border-dark">
-            <div class="card-header">Аватар:</div>
-            <div class="card-body text-dark">
-                {% if form.avatar %}
-                    <img src="{{ form.avatar.url }}" class="img-thumbnail" width="150" height="150">
-                {% else %}
-                    <b>Без аватара</b>
-                {% endif %}
-            </div>
-            <div class="card-footer">
-                <input type="hidden" name="name" value="{{ form.name }}">
-                <span class="btn btn-primary btn-file">
-                    Выберите файл<input id="avatar" type="file" name="avatar">
-                </span>
-                <button type="submit" class="btn btn-primary">Сохранить аватар</button>
-            </div>
-        </div>
     </div>
 
 </div>
