@@ -1,43 +1,65 @@
-<div class="form-row row-cols-2 row-cols-md-2 text-center">
+<div class="row mb-3">
 
-    <div class="col mb-6">
-        <div class="card border-dark">
-            <div class="card-header">Доступные заклинания:</div>
-            <div class="card-body text-dark">
-                <select id="spells" class="custom-select" name="spells" size="5" multiple>
-                {% for spellname in spells %}
-                    <option value="{{ spellname }}">{{ spellname }}</option>
-                {% endfor %}
-                </select>
+    <div class="col-3">
+        <label for="char_classes">Класс заклинателя: </label>
+        <input id="char_classes" class="form-control form-control-sm" type="text" name="char_classes" value="{{ form.char_classes }}">
+    </div>
+    <div class="col-3">
+        <label for="spell_casting_ability">Характеристика заклинателя: </label>
+        <input id="spell_casting_ability" class="form-control form-control-sm" type="text" name="spell_casting_ability" value="{{ form.spell_casting_ability }}">
+    </div>
+    <div class="col-3">
+        <label for="spell_save_dc">DC спасброска от заклинания: </label>
+        <input id="spell_save_dc" class="form-control form-control-sm" type="text" name="spell_save_dc" value="{{ form.spell_save_dc }}">
+    </div>
+    <div class="col-3">
+        <label for="spell_attack_bonus">Бонус к атаке заклинанием: </label>
+        <input id="spell_attack_bonus" class="form-control form-control-sm" type="text" name="spell_attack_bonus" value="{{ form.spell_attack_bonus }}">
+    </div>
+
+</div>
+
+<div class="row mb-3">
+
+        <div class="col-6">
+
+            <div class="card">
+                    <div class="card-header">Доступные заклинания:</div>
+                    <div class="card-body text-dark">
+                        <select id="spells" class="custom-select" name="spells" size="5" multiple>
+                        {% for spellname in spells %}
+                            <option value="{{ spellname }}">{{ spellname }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="card-footer text-muted">
+                            <input type="submit" class="btn btn-primary" value="Добавить заклинание" name="do_addspell">
+                    </div>
             </div>
-            <div class="card-footer">
-                    <input type="submit" class="btn btn-primary" value="Добавить заклинание" name="do_addspell">
-            </div>
+
         </div>
-    </div>
 
-    <div class="col mb-6">
-    </div>
+        <div class="col-6">
+                <div class="card">
+                    <div class="card-header">Используемые заклинания:</div>
+                    <div class="card-body text-dark">
+                        <div id="checkboxes">
+                            <ul class="nobull">
+                                {% for spell in form.spells.all %}
+                                    <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <input type="submit" class="btn btn-primary" value="Удалить заклинание" name="do_delspell">
+                    </div>
+                </div>
+
+        </div>
 
 </div>
 
 <!-- Spell page -->
-<div class="form-row">
 
-    <div class="card border-dark col-md-12">
-        <div class="card-header">Используемые заклинания:</div>
-        <div class="card-body text-dark">
-            <div id="checkboxes">
-                <ul class="nobull">
-                    {% for spell in form.spells.all %}
-                        <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="card-footer">
-            <input type="submit" class="btn btn-primary" value="Удалить заклинание" name="do_delspell">
-        </div>
-    </div>
 
-</div>
