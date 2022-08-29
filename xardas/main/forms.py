@@ -65,11 +65,11 @@ class CharForm(forms.Form):
     # ------------------------------------------------------------------------------------------------ #
     char_classes = forms.ChoiceField(choices=CharClasses.CLASS_CHOICES, label='Класс персонажа')
     level = forms.IntegerField(label='Уровень персонажа')
-    char_history = forms.CharField(label='Предыстория')
+    char_history = forms.CharField(required=False, label='Предыстория')
     playername = forms.CharField(label='Реальное имя персонажа')
     name = forms.CharField(label='Имя персонажа')
     char_races = forms.ChoiceField(choices=CharRaces.RACE_CHOICES, label='Расса персонажа')
-    world_view = forms.CharField(label='Мировозрение')
+    world_view = forms.CharField(required=False, label='Мировозрение')
     expirence = forms.IntegerField(label='Опыт персонажа')
 
     # ------------------------------------------------------------------------------------------------ #
@@ -121,8 +121,8 @@ class CharForm(forms.Form):
     stealth_box = forms.BooleanField(required=False)
     survival_box = forms.BooleanField(required=False)
 
-    psv_perception = forms.CharField(label='пассивная мудрость (внимательность)')
-    prof_and_languages = forms.CharField(label='Прочие владения и языки')
+    psv_perception = forms.CharField(required=False, label='пассивная мудрость (внимательность)')
+    prof_and_languages = forms.CharField(required=False, label='Прочие владения и языки')
 
     # ------------------------------------------------------------------------------------------------ #
     # ---------------------------------- ( 1st page 2 column ) --------------------------------------- #
@@ -136,7 +136,7 @@ class CharForm(forms.Form):
 
     hit_points_temp = forms.IntegerField(label='Временные хиты')
 
-    hit_dice = forms.CharField(label='Кости хитов')
+    hit_dice = forms.CharField(required=False, label='Кости хитов')
 
     # -------------------- (( Спасброски от смерти )) ----------------------------------------------------
     st_succ_death_box1 = forms.BooleanField(required=False)
@@ -146,18 +146,18 @@ class CharForm(forms.Form):
     st_fail_death_box2 = forms.BooleanField(required=False)
     st_fail_death_box3 = forms.BooleanField(required=False)
 
-    attacks_and_spell_casting = forms.CharField(label='Атаки и заклинания')
+    attacks_and_spell_casting = forms.CharField(required=False, label='Атаки и заклинания')
 
-    equipment = forms.CharField(label='Снаряжение')
+    equipment = forms.CharField(required=False, label='Снаряжение')
 
     # ------------------------------------------------------------------------------------------------ #
     # ---------------------------------- ( 1st page 3 column ) --------------------------------------- #
     # ------------------------------------------------------------------------------------------------ #
-    pers_traits = forms.CharField(max_length=32, label='Персональные черты')
-    ideals = forms.CharField(max_length=32, label='Идеалы')
-    bonds = forms.CharField(max_length=32, label='Привязанности')
-    flaws = forms.CharField(max_length=32, label='Пороки')
-    features_traits = forms.CharField(label='Умения и особенности')
+    pers_traits = forms.CharField(required=False, max_length=32, label='Персональные черты')
+    ideals = forms.CharField(required=False, max_length=32, label='Идеалы')
+    bonds = forms.CharField(required=False, max_length=32, label='Привязанности')
+    flaws = forms.CharField(required=False, max_length=32, label='Пороки')
+    features_traits = forms.CharField(required=False, label='Умения и особенности')
 
     # ------------------------------------------------------------------------------------------------ #
     # ---------------------------------- ( 2 page TOP) ----------------------------------------------- #

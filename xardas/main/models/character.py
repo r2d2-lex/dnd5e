@@ -110,7 +110,7 @@ class CharBase(models.Model):
     # ------------------------------------------------------------------------------------------------ #
     armor_class = models.IntegerField(default=0, verbose_name='Класс доспеха')
     initiative = models.IntegerField(default=0, verbose_name='Инициатива')
-    speed = models.CharField(default='', max_length=32, verbose_name='Скорость персонажа')
+    speed = models.IntegerField(default=0, verbose_name='Скорость персонажа')
 
     hit_points_curr = models.IntegerField(default=0, verbose_name='Текущие хиты')
     hit_points_max = models.IntegerField(default=0, verbose_name='Максимум хитов')
@@ -148,9 +148,9 @@ class CharBase(models.Model):
     # ---------------------------------- ( 2 page TOP) ----------------------------------------------- #
     # ------------------------------------------------------------------------------------------------ #
     # name
-    age = models.IntegerField(default=21, verbose_name='Возраст персонажа')
-    height = models.IntegerField(default=175, verbose_name='Рост персонажа')
-    weight = models.IntegerField(default=60, verbose_name='Вес персонажа')
+    age = models.IntegerField(default=0, verbose_name='Возраст персонажа')
+    height = models.IntegerField(default=0, verbose_name='Рост персонажа')
+    weight = models.IntegerField(default=0, verbose_name='Вес персонажа')
 
     eyes = models.CharField(default='', max_length=20, verbose_name='Цвет глаз')
     skin = models.CharField(default='', max_length=20, verbose_name='Цвет кожы')
