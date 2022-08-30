@@ -34,32 +34,16 @@
                     </div>
                     <div class="card-footer text-muted">
                             <input type="submit" class="btn btn-primary" value="Добавить заклинание" name="do_addspell">
+                            <input type="submit" class="btn btn-primary" value="Удалить заклинание" name="do_delspell">
                     </div>
             </div>
 
         </div>
 
         <div class="col-6">
-                <div class="card">
-                    <div class="card-header">Используемые заклинания:</div>
-                    <div class="card-body text-dark">
-                        <div id="checkboxes">
-                            <ul class="nobull">
-                                {% for spell in form.spells.all %}
-                                    <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card-footer text-muted">
-                        <input type="submit" class="btn btn-primary" value="Удалить заклинание" name="do_delspell">
-                    </div>
-                </div>
 
         </div>
 
 </div>
-
-<!-- Spell page -->
 
 
