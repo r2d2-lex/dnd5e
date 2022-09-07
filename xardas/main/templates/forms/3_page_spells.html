@@ -1,15 +1,15 @@
-<div class="row">
+<div class="row text-left">
 
     <div class="col-4">
 
                 <div class="card mt-1 mb-3">
                         <div class="card-header text-muted">Уровень заклинания: 0</div>
-                        <div class="card-body text-start">
+                        <div class="card-body">
 
                                 <ul>
                                     {% for spell in form.spells.all %}
                                         {% if spell.level == 0 %}
-                                                <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                                                {% include 'forms/spell_row.html' %}
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
@@ -20,12 +20,12 @@
 
                 <div class="card mt-1 mb-3">
                         <div class="card-header text-muted">Уровень заклинания: 1</div>
-                        <div class="card-body text-start">
+                        <div class="card-body">
 
                                 <ul>
                                     {% for spell in form.spells.all %}
                                         {% if spell.level == 1 %}
-                                                <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                                                {% include 'forms/spell_row.html' %}
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
@@ -36,12 +36,12 @@
 
                 <div class="card mt-1 mb-3">
                         <div class="card-header text-muted">Уровень заклинания: 2</div>
-                        <div class="card-body text-dark">
+                        <div class="card-body">
 
                                 <ul>
                                     {% for spell in form.spells.all %}
                                         {% if spell.level == 2 %}
-                                                <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                                                {% include 'forms/spell_row.html' %}
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
@@ -56,12 +56,12 @@
 
                 <div class="card mt-1 mb-3">
                         <div class="card-header text-muted">Уровень заклинания: 3</div>
-                        <div class="card-body text-start">
+                        <div class="card-body">
 
                                 <ul>
                                     {% for spell in form.spells.all %}
                                         {% if spell.level == 3 %}
-                                                <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                                                {% include 'forms/spell_row.html' %}
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
@@ -71,12 +71,12 @@
 
                 <div class="card mt-1 mb-3">
                         <div class="card-header text-muted">Уровень заклинания: 4</div>
-                        <div class="card-body text-start">
+                        <div class="card-body">
 
                                 <ul>
                                     {% for spell in form.spells.all %}
                                         {% if spell.level == 4 %}
-                                                <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                                                {% include 'forms/spell_row.html' %}
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
@@ -86,12 +86,12 @@
 
                 <div class="card mt-1 mb-3">
                         <div class="card-header text-muted">Уровень заклинания: 5</div>
-                        <div class="card-body text-start">
+                        <div class="card-body">
 
                                 <ul>
                                     {% for spell in form.spells.all %}
                                         {% if spell.level == 5 %}
-                                                <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                                                {% include 'forms/spell_row.html' %}
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
@@ -105,12 +105,12 @@
     <div class="col-4">
                 <div class="card mt-1 mb-3">
                         <div class="card-header text-muted">Уровень заклинания: 6</div>
-                        <div class="card-body text-start">
+                        <div class="card-body">
 
                                 <ul>
                                     {% for spell in form.spells.all %}
                                         {% if spell.level == 6 %}
-                                                <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                                                {% include 'forms/spell_row.html' %}
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
@@ -120,12 +120,12 @@
 
                 <div class="card mt-1 mb-3">
                         <div class="card-header text-muted">Уровень заклинания: 7</div>
-                        <div class="card-body text-start">
+                        <div class="card-body">
 
                                 <ul>
                                     {% for spell in form.spells.all %}
                                         {% if spell.level == 7 %}
-                                                <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                                                {% include 'forms/spell_row.html' %}
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
@@ -135,12 +135,12 @@
 
                 <div class="card mt-1 mb-3">
                         <div class="card-header text-muted">Уровень заклинания: 8</div>
-                        <div class="card-body text-start">
+                        <div class="card-body">
 
                                 <ul>
                                     {% for spell in form.spells.all %}
                                         {% if spell.level == 8 %}
-                                                <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                                                {% include 'forms/spell_row.html' %}
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
@@ -150,12 +150,12 @@
 
                 <div class="card mt-1 mb-3">
                         <div class="card-header text-muted">Уровень заклинания: 9</div>
-                        <div class="card-body text-start">
+                        <div class="card-body">
 
                                 <ul>
                                     {% for spell in form.spells.all %}
                                         {% if spell.level == 9 %}
-                                                <li><input type="checkbox" name="char_spells" value="{{ spell.name }}">{{ spell.name }}</li>
+                                                {% include 'forms/spell_row.html' %}
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
