@@ -5,71 +5,7 @@
     <div class="container">
             <div class="row">
             <div class="col-5">
-                    <div class="form-row">
-                        <div class="form-group col-sm-6">
-                            <label for="strength">Сила: </label>
-                            <input id="strength" class="form-control form-control-sm" type="number" name="strength" step="1" min="0" value="{{ form.strength }}">
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="strength_modifier">мдф.: </label>
-                            <input id="strength_modifier" class="form-control form-control-sm" type="number" name="strength_modifier" step="1" min="0" value="{{ form.strength_modifier }}">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-sm-6">
-                            <label for="dexterity">Ловкость: </label>
-                            <input id="dexterity" class="form-control form-control-sm" type="number" name="dexterity" step="1" min="0" value="{{ form.dexterity }}">
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="dexterity_modifier">мдф.: </label>
-                            <input id="dexterity_modifier" class="form-control form-control-sm" type="number" name="dexterity_modifier" step="1" min="0" value="{{ form.dexterity_modifier }}">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-sm-6">
-                            <label for="constitution">Телосложение: </label>
-                            <input id="constitution" class="form-control form-control-sm" type="number" name="constitution" step="1" min="0" value="{{ form.constitution }}">
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="constitution_modifier">мдф.: </label>
-                            <input id="constitution_modifier" class="form-control form-control-sm" type="number" name="constitution_modifier" step="1" min="0" value="{{ form.constitution_modifier }}">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-sm-6">
-                            <label for="intellegence">Интеллект: </label>
-                            <input id="intellegence" class="form-control form-control-sm" type="number" name="intellegence" step="1" min="0" value="{{ form.intellegence }}">
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="intellegence_modifier">мдф.: </label>
-                            <input id="intellegence_modifier" class="form-control form-control-sm" type="number" name="intellegence_modifier" step="1" min="0" value="{{ form.intellegence_modifier }}">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-sm-6">
-                            <label for="wisdom">Мудрость: </label>
-                            <input id="wisdom" class="form-control form-control-sm" type="number" name="wisdom" step="1" min="0" value="{{ form.wisdom }}">
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="wisdom_modifier">мдф.: </label>
-                            <input id="wisdom_modifier" class="form-control form-control-sm" type="number" name="wisdom_modifier" step="1" min="0" value="{{ form.wisdom_modifier }}">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-sm-6">
-                            <label for="chrarisma">Харизма: </label>
-                            <input id="chrarisma" class="form-control form-control-sm" type="number" name="chrarisma" step="1" min="0" value="{{ form.chrarisma }}">
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="chrarisma_modifier">мдф.: </label>
-                            <input id="chrarisma_modifier" class="form-control form-control-sm" type="number" name="chrarisma_modifier" step="1" min="0" value="{{ form.chrarisma_modifier }}">
-                        </div>
-                    </div>
+                    {% include 'forms/stats.html' %}
             </div>
 
             <div class="col-7">
@@ -84,16 +20,8 @@
                 </div>
 
                 <div class="card mt-3 mb-1">
-                    <div class="card-body text-dark">
-                        <div class="form-row">
-<!--                            <input id="st_strength" class="form-control form-control-sm" type="text" name="st_strength" value="{{ form.st_strength }}">-->
-                            <input id="st_strength_box" name="st_strength_box" type="checkbox" value="True" {% if form.st_strength_box %}checked{% endif %}>Сила
-                        </div>
-                        <div class="form-row"><input id="st_dexterity_box" name="st_dexterity_box" type="checkbox" value="True" {% if form.st_dexterity_box %}checked{% endif %}>Ловкость</div>
-                        <div class="form-row"><input id="st_constitution_box" name="st_constitution_box" type="checkbox" value="True" {% if form.st_constitution_box %}checked{% endif %}>Телосложение</div>
-                        <div class="form-row"><input id="st_intellegence_box" name="st_intellegence_box" type="checkbox" value="True" {% if form.st_intellegence_box %}checked{% endif %}>Интеллект</div>
-                        <div class="form-row"><input id="st_wisdom_box" name="st_wisdom_box" type="checkbox" value="True" {% if form.st_wisdom_box %}checked{% endif %}>Мудрость</div>
-                        <div class="form-row"><input id="st_chrarisma_box" name="st_chrarisma_box" type="checkbox" value="True" {% if form.st_chrarisma_box %}checked{% endif %}>Харизма</div>
+                    <div class="card-body text-dark text-left text-nowrap">
+                        {% include 'forms/saving_throws.html' %}
                     </div>
                     <div class="card-footer text-muted">Спасброски</div>
                 </div>
@@ -107,32 +35,9 @@
 
     <div class="row">
             <div class="card mt-3 mb-1">
-                <div class="card-body text-dark">
+                <div class="card-body text-dark text-left text-nowrap">
                     <div class="container">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-row"><input id="acrobatics_box" name="acrobatics_box" type="checkbox" value="True" {% if form.acrobatics_box %}checked{% endif %}>Акробатика(лов)</div>
-                                <div class="form-row"><input id="animal_box" name="animal_box" type="checkbox" value="True" {% if form.animal_box %}checked{% endif %}>Уход за животными(мдр)</div>
-                                <div class="form-row"><input id="arcana_box" name="arcana_box" type="checkbox" value="True" {% if form.arcana_box %}checked{% endif %}>Магия(инт)</div>
-                                <div class="form-row"><input id="athletics_box" name="athletics_box" type="checkbox" value="True" {% if form.athletics_box %}checked{% endif %}>Атлетика(сил)</div>
-                                <div class="form-row"><input id="deception_box" name="deception_box" type="checkbox" value="True" {% if form.deception_box %}checked{% endif %}>Обман(хар)</div>
-                                <div class="form-row"><input id="history_box" name="history_box" type="checkbox" value="True" {% if form.history_box %}checked{% endif %}>История(инт)</div>
-                                <div class="form-row"><input id="insight_box" name="insight_box" type="checkbox" value="True" {% if form.insight_box %}checked{% endif %}>Проницательность(мдр)</div>
-                                <div class="form-row"><input id="intimidation_box" name="intimidation_box" type="checkbox" value="True" {% if form.intimidation_box %}checked{% endif %}>Запугивание(хар)</div>
-                                <div class="form-row"><input id="investigation_box" name="investigation_box" type="checkbox" value="True" {% if form.investigation_box %}checked{% endif %}>Расследование(инт)</div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-row"><input id="nature_box" name="nature_box" type="checkbox" value="True" {% if form.nature_box %}checked{% endif %}>Природа(инт)</div>
-                                <div class="form-row"><input id="performance_box" name="performance_box" type="checkbox" value="True" {% if form.performance_box %}checked{% endif %}>Выступление(хар)</div>
-                                <div class="form-row"><input id="medicine_box" name="medicine_box" type="checkbox" value="True" {% if form.medicine_box %}checked{% endif %}>Медицина(мдр)</div>
-                                <div class="form-row"><input id="perception_box" name="perception_box" type="checkbox" value="True" {% if form.perception_box %}checked{% endif %}>Внимательность(мдр.)</div>
-                                <div class="form-row"><input id="persuasion_box" name="persuasion_box" type="checkbox" value="True" {% if form.persuasion_box %}checked{% endif %}>Убеждение(хар)</div>
-                                <div class="form-row"><input id="religion_box" name="religion_box" type="checkbox" value="True" {% if form.religion_box %}checked{% endif %}>Религия(инт)</div>
-                                <div class="form-row"><input id="sleight_of_hand_box" name="sleight_of_hand_box" type="checkbox" value="True" {% if form.sleight_of_hand_box %}checked{% endif %}>Ловкость рук(лов)</div>
-                                <div class="form-row"><input id="stealth_box" name="stealth_box" type="checkbox" value="True" {% if form.stealth_box %}checked{% endif %}>Скрытность(лов)</div>
-                                <div class="form-row"><input id="survival_box" name="survival_box" type="checkbox" value="True" {% if form.survival_box %}checked{% endif %}>Выживание(мдр)</div>
-                            </div>
-                        </div>
+                        {% include 'forms/skills.html' %}
                     </div>
                 </div>
                 <div class="card-footer text-muted">Навыки</div>
