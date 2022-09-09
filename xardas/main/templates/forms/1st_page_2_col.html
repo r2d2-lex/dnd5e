@@ -1,31 +1,31 @@
     <!-- AC,speed,init,hp -->
     <div class="form-row">
-        <div class="form-group col-md-3">
+        <div class="form-group col-sm-4">
             <label for="armor_class">КБ: </label>
             <input id="armor_class" class="form-control form-control-sm" type="number" name="armor_class" step="1" min="0" value="{{ form.armor_class }}">
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-sm-4">
             <label for="initiative">Инициатива: </label>
             <input id="initiative" class="form-control form-control-sm" type="number" name="initiative" step="1" min="0" value="{{ form.initiative }}">
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-sm-4">
             <label for="speed">Скорость: </label>
             <input id="speed" class="form-control form-control-sm" type="number" name="speed" step="1" min="0" value="{{ form.speed }}">
         </div>
     </div>
 
     <div class="form-row">
-        <div class="form-group col-sm-3">
+        <div class="form-group col-sm-4">
             <label for="hit_points_max">Максимум хитов: </label>
-            <input id="hit_points_max" class="form-control form-control-xs" type="number" name="hit_points_max" step="1" min="0" value="{{ form.hit_points_max }}">
+            <input id="hit_points_max" class="form-control form-control-sm" type="number" name="hit_points_max" step="1" min="0" value="{{ form.hit_points_max }}">
         </div>
         <div class="form-group col-sm-4">
             <label for="hit_points_curr">Текущие хиты: </label>
-            <input id="hit_points_curr" class="form-control form-control-xs" type="number" name="hit_points_curr" step="1" min="0" value="{{ form.hit_points_curr }}">
+            <input id="hit_points_curr" class="form-control form-control-sm" type="number" name="hit_points_curr" step="1" min="0" value="{{ form.hit_points_curr }}">
         </div>
-        <div class="form-group col-sm-3">
+        <div class="form-group col-sm-4">
             <label for="hit_points_temp">Временные хиты: </label>
-            <input id="hit_points_temp" class="form-control form-control-xs" type="number" name="hit_points_temp" step="1" min="0" value="{{ form.hit_points_temp }}">
+            <input id="hit_points_temp" class="form-control form-control-sm" type="number" name="hit_points_temp" step="1" min="0" value="{{ form.hit_points_temp }}">
         </div>
     </div>
 
@@ -71,6 +71,26 @@
     <div class="form-row">
                                     <label for="attacks_spellc">Атаки и заклинания:</label>
                             <textarea id="attacks_spellc" name="attacks_and_spell_casting" class="form-control" rows="4">{{ form.attacks_and_spell_casting }}</textarea>
+
+    </div>
+
+     <!-- Валюта -->
+    <div class="form-row">
+
+            <div class="form-group col-sm-4">
+                    <label for="gold_count">ЗМ: </label>
+                    <input id="gold_count" class="form-control form-control-sm" type="number" name="gold_count" step="1" min="0" value="{{ form.gold_count }}">
+            </div>
+
+            <div class="form-group col-sm-4">
+                    <label for="silver_count">СМ: </label>
+                    <input id="silver_count" class="form-control form-control-sm" type="number" name="silver_count" step="1" min="0" value="{{ form.silver_count }}">
+            </div>
+
+            <div class="form-group col-sm-4">
+                    <label for="copper_count">ММ: </label>
+                    <input id="copper_count" class="form-control form-control-sm" type="number" name="copper_count" step="1" min="0" value="{{ form.copper_count }}">
+            </div>
 
     </div>
 

@@ -149,6 +149,9 @@ class CharForm(forms.Form):
     attacks_and_spell_casting = forms.CharField(required=False, label='Атаки и заклинания')
 
     equipment = forms.CharField(required=False, label='Снаряжение')
+    gold_count = forms.IntegerField(label='Золото персонажа')
+    silver_count = forms.IntegerField(label='Серебро персонажа')
+    copper_count = forms.IntegerField(label='Медь персонажа')
 
     # ------------------------------------------------------------------------------------------------ #
     # ---------------------------------- ( 1st page 3 column ) --------------------------------------- #
