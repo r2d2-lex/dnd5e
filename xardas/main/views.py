@@ -127,6 +127,11 @@ def view_character(request, name):
 
 @login_required
 def get_spells(request):
+    context = {
+        'spells': '',
+        'status': 0,
+    }
+
     if request.method == 'GET':
         find_spell_form = FindSpellForm(request.GET)
         if find_spell_form.is_valid():
@@ -136,11 +141,6 @@ def get_spells(request):
                 context = {
                     'spells': spell_list,
                     'status': spells_list_qs.count(),
-                }
-            else:
-                context = {
-                    'spells': '',
-                    'status': 0,
                 }
             return JsonResponse(context)
 
@@ -260,6 +260,10 @@ def edit_character(request, name):
 
                 'cur_race': char_base.get_current_race(),
                 'cur_class': char_base.get_current_class(),
+
+                'spell_classes': CharClasses.get_classes_captions(),
+                'spell_levels': Spell.get_spell_levels(),
+                'spell_schools': Spell.get_spell_schools(),
     }
     return render(request, 'main/edit_character.html', context)
 

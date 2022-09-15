@@ -1,5 +1,10 @@
 {% extends "layout/basic.html" %}
 {% load static %}
+
+{% block js %}
+    <script src="{% static 'js/jsearch.js' %}"></script>
+{% endblock %}
+
 {% block style %}
 <link rel="stylesheet" type="text/css" href="{% static 'main/edit_char.css' %}">
 {% endblock %}
