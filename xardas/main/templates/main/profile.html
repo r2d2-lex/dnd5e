@@ -7,7 +7,7 @@
 <div class="card border-danger mt-5">
     <div class="card-header bg-light">
         <h5 class="card-title">
-            <a href="{% url 'main:view_character' character.name %}">{{ character.name }}</a>
+            <a href="{% url 'main:view_character' character.character_name %}">{{ character.character_name }}</a>
             &nbsp&nbsp(
             <b>Класс:</b>
             {% for char_class in character.char_classes.all %}
@@ -47,9 +47,9 @@
             </div>
     </div>
     <div class="card-footer">
-        <a class="badge badge-info" href="{% url 'main:edit_character' character.name %}">Редактировать персонажа</a>
-        <a class="badge badge-info" href="{% url 'main:export_character' character.name %}">Экспорт персонажа</a>
-        <a class="badge badge-info" href="{% url 'main:delete_character' character.name %}">Удалить персонажа</a>
+        <a class="badge badge-info" href="{% url 'main:edit_character' character.character_name %}">Редактировать персонажа</a>
+        <a class="badge badge-info" href="{% url 'main:export_character' character.character_name %}">Экспорт персонажа</a>
+        <a class="badge badge-info" href="{% url 'main:delete_character' character.character_name %}">Удалить персонажа</a>
         &nbsp&nbsp<span class="text-right text-muted">Изменено:  {{ character.modified|date:"d.m.Y H:i:s" }}</span>
     </div>
 </div>

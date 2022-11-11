@@ -22,7 +22,7 @@ class CharBase(models.Model):
     level = models.IntegerField(default=1, verbose_name='Уровень персонажа')
     char_history = models.CharField(default='', max_length=32, verbose_name='Предыстория')
     playername = models.CharField(null=True, max_length=20, verbose_name='Реальное имя персонажа')
-    name = models.CharField(db_index=True, null=False, max_length=20, verbose_name='Имя персонажа')
+    character_name = models.CharField(db_index=True, null=False, max_length=20, verbose_name='Имя персонажа')
     races = models.ManyToManyField(CharRaces, choices=CharRaces.RACE_CHOICES, max_length=20,
                                    verbose_name='Расса персонажа')
     world_view = models.CharField(default='', max_length=32, verbose_name='Мировозрение')

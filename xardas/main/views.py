@@ -224,21 +224,21 @@ def export_character(request, name):
 
 
 @login_required
-def edit_character(request, name):
-    char_base = get_object_or_404(CharBase, owner=request.user, name=name)
+def edit_character(request, character_name):
+    char_base = get_object_or_404(CharBase, owner=request.user, character_name=character_name)
 
     if request.method == 'POST':
         # Загрузка изображения
         if bool(request.FILES.get('avatar', False)):
             avatar_form = UploadAvatarForm(request.POST, request.FILES)
             avatar_form.upload_avatar(request, char_base, messages)
-            return redirect('main:edit_character', name=char_base.name)
+            return redirect('main:edit_character', character_name=char_base.character_name)
 
         char_form = CharForm(request.POST)
         if char_form.is_valid():
             char_form.edit_character(char_base, request)
             messages.add_message(request, messages.SUCCESS, 'Изменения сохранены')
-            return redirect('main:edit_character', name=char_base.name)
+            return redirect('main:edit_character', character_name=char_base.character_name)
         else:
             print("char_form NOT VALID. ERROR:\r\n", char_form.errors)
             messages.add_message(request, messages.WARNING, char_form.errors)

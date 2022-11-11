@@ -75,7 +75,7 @@ class CharForm(forms.Form):
     level = forms.IntegerField(label='Уровень персонажа')
     char_history = forms.CharField(required=False, label='Предыстория')
     playername = forms.CharField(label='Реальное имя персонажа')
-    name = forms.CharField(label='Имя персонажа')
+    character_name = forms.CharField(label='Имя персонажа')
     char_races = forms.ChoiceField(choices=CharRaces.RACE_CHOICES, label='Расса персонажа')
     world_view = forms.CharField(required=False, label='Мировозрение')
     expirence = forms.IntegerField(label='Опыт персонажа')
