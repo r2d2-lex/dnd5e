@@ -22,6 +22,7 @@ from .forms import FindSpellForm
 from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
 from .forms import UploadAvatarForm
+from .services import get_character_from_db, delete_character_from_db
 from .models import AdvUser, CharBase, CharClasses, CharRaces, Spell
 from .table_processing import ExportXLS
 from .tasks import signer
@@ -119,9 +120,8 @@ def profile(request):
 
 
 @login_required
-def view_character(request, name):
-    print("Current char: ", name)
-    ch = get_object_or_404(CharBase, owner=request.user, name=name)
+def view_character(request, character_name):
+    ch = get_character_from_db(request, character_name)
     return render(request, 'main/character.html', {'char': ch})
 
 
@@ -203,19 +203,18 @@ def create_character(request):
 
 
 @login_required
-def delete_character(request, name):
+def delete_character(request, character_name):
     if request.method == 'POST':
-        character_db = get_object_or_404(CharBase, owner=request.user, name=name)
-        character_db.delete()
+        delete_character_from_db(request, character_name)
         messages.add_message(request, messages.WARNING, 'Персонаж удалён')
         return redirect(reverse('main:profile'))
-    context = {'name': name}
+    context = {'character_name': character_name}
     return render(request, 'main/delete_character.html', context)
 
 
 @login_required
-def export_character(request, name):
-    char_base = get_object_or_404(CharBase, owner=request.user, name=name)
+def export_character(request, character_name):
+    char_base = get_character_from_db(request, character_name)
     with ExportXLS(char_base) as export_xls:
         doc_name, output_stream = export_xls.generate_xls()
         response = HttpResponse(FileWrapper(output_stream), content_type=ExportXLS.CONTENT_TYPE)
