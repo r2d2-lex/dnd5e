@@ -114,14 +114,14 @@ def user_activate(request, sign):
 @login_required
 def profile(request):
     print("Current account: ", request.user)
-    chars = CharBase.objects.filter(owner=request.user)
-    return render(request, 'main/profile.html', {'chars': chars})
+    characters = CharBase.objects.filter(owner=request.user)
+    return render(request, 'main/profile.html', {'characters': characters})
 
 
 @login_required
 def view_character(request, name):
     print("Current char: ", name)
-    ch = get_object_or_404(CharBase, name=name)
+    ch = get_object_or_404(CharBase, owner=request.user, name=name)
     return render(request, 'main/character.html', {'char': ch})
 
 
@@ -231,15 +231,7 @@ def edit_character(request, name):
         # Загрузка изображения
         if bool(request.FILES.get('avatar', False)):
             avatar_form = UploadAvatarForm(request.POST, request.FILES)
-            if avatar_form.is_valid():
-                char_name = avatar_form.cleaned_data['name']
-                char_base = get_object_or_404(CharBase, owner=request.user, name=char_name)
-                char_base.avatar = avatar_form.cleaned_data['avatar']
-                char_base.save(update_fields=["avatar"])
-                messages.add_message(request, messages.SUCCESS, 'Аватар сохранён')
-            else:
-                print("avatar_form NOT VALID. ERROR:", avatar_form.errors)
-                messages.add_message(request, messages.WARNING, avatar_form.errors)
+            avatar_form.upload_avatar(request, char_base, messages)
             return redirect('main:edit_character', name=char_base.name)
 
         char_form = CharForm(request.POST)

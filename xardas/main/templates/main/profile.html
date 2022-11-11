@@ -3,38 +3,54 @@
 {% block title %}Профиль пользователя  {% endblock %}
 
 {% block content %}
-{% for ch in chars %}
+{% for character in characters %}
 <div class="card border-danger mt-5">
     <div class="card-header bg-light">
         <h5 class="card-title">
-            <a href="{% url 'main:view_character' ch.name %}">{{ ch.name }}</a>
+            <a href="{% url 'main:view_character' character.name %}">{{ character.name }}</a>
             &nbsp&nbsp(
             <b>Класс:</b>
-            {% for char_class in ch.char_classes.all %}
+            {% for char_class in character.char_classes.all %}
                 {{ char_class.name }}
             {% endfor %}&nbsp
             <b>Расса:</b>
-            {% for race in ch.races.all %}
+            {% for race in character.races.all %}
                 {{ race.caption }}
             {% endfor %}&nbsp
-            Уровень: {{ ch.level }}&nbsp)
+            Уровень: {{ character.level }}&nbsp)
         </h5>
     </div>
     <div class="card-body">
-        Имя игрока:  {{ ch.playername }} <br>
-        Опыт: {{ ch.expirence }} <br>
-        Сила: {{ ch.strength }} <br>
-        Ловкость : {{ ch.dexterity }} <br>
-        Телосложение: {{ ch.constitution }} <br>
-        Интеллект: {{ ch.intellegence }} <br>
-        Мудрость: {{ ch.wisdom }} <br>
-        Харизма: {{ ch.chrarisma }} <br>
+
+            <div class="container">
+                <div class="row">
+                        <div class="col-3">
+                                {% if character.avatar %}
+                                    <img src="{{ character.avatar.url }}" class="img-thumbnail" width="150" height="150">
+                                {% else %}
+                                    <b>Без аватара</b>
+                                    <img src="/media/spec/noavatar.png" class="img-thumbnail" width="150" height="150">
+                                {% endif %}
+                        </div>
+
+                        <div class="col-9">
+                                Имя игрока:  {{ character.playername }} <br>
+                                Опыт: {{ character.expirence }} <br>
+                                Сила: {{ character.strength }} <br>
+                                Ловкость : {{ character.dexterity }} <br>
+                                Телосложение: {{ character.constitution }} <br>
+                                Интеллект: {{ character.intellegence }} <br>
+                                Мудрость: {{ character.wisdom }} <br>
+                                Харизма: {{ character.chrarisma }} <br>
+                        </div>
+                </div>
+            </div>
     </div>
     <div class="card-footer">
-        <a class="badge badge-info" href="{% url 'main:edit_character' ch.name %}">Редактировать персонажа</a>
-        <a class="badge badge-info" href="{% url 'main:export_character' ch.name %}">Экспорт персонажа</a>
-        <a class="badge badge-info" href="{% url 'main:delete_character' ch.name %}">Удалить персонажа</a>
-        &nbsp&nbsp<span class="text-right text-muted">Изменено:  {{ ch.modified|date:"d.m.Y H:i:s" }}</span>
+        <a class="badge badge-info" href="{% url 'main:edit_character' character.name %}">Редактировать персонажа</a>
+        <a class="badge badge-info" href="{% url 'main:export_character' character.name %}">Экспорт персонажа</a>
+        <a class="badge badge-info" href="{% url 'main:delete_character' character.name %}">Удалить персонажа</a>
+        &nbsp&nbsp<span class="text-right text-muted">Изменено:  {{ character.modified|date:"d.m.Y H:i:s" }}</span>
     </div>
 </div>
 {% endfor %}

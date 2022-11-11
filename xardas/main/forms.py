@@ -18,8 +18,16 @@ class FindSpellForm(forms.Form):
 
 
 class UploadAvatarForm(forms.Form):
-    name = forms.CharField(label='Имя персонажа')
     avatar = forms.ImageField(label='Аватар персонажа')
+
+    def upload_avatar(self, request, char_base, messages):
+        if self.is_valid():
+            char_base.avatar = self.cleaned_data['avatar']
+            char_base.save(update_fields=["avatar"])
+            messages.add_message(request, messages.SUCCESS, 'Аватар сохранён')
+        else:
+            print("avatar_form NOT VALID. ERROR:", self.errors)
+            messages.add_message(request, messages.WARNING, self.errors)
 
 
 class SpellForm(forms.Form):
@@ -51,8 +59,8 @@ class CreateCharForm(forms.Form):
                                 playername=self.cleaned_data['playername'],
                                 owner=request.user,
                                )
-        print('Расса при создании: ',self.cleaned_data['race'])
-        print('Класс при создании: ',self.cleaned_data['char_class'])
+        print('Расса при создании: ', self.cleaned_data['race'])
+        print('Класс при создании: ', self.cleaned_data['char_class'])
         create_char.save()
         create_char.races_set(self.cleaned_data['race'])
         create_char.char_classes_set(self.cleaned_data['char_class'])
