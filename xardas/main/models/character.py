@@ -228,7 +228,7 @@ class CharBase(models.Model):
         return cur_class
 
     def __str__(self):
-        return self.name
+        return self.character_name
 
     class Meta:
         ordering = ['-modified']
