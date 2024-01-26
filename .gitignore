@@ -12,7 +12,7 @@ xardas/main/migrations/
 xardas/main/migrations/__pycache__/
 xardas/xardas/config.py
 xardas/xardas/errors.txt
-xardas/media/
+xardas/media/*
 xardas/static/
 xardas/main/templates/doc/orig.docx
 xardas/db.sqlite3
