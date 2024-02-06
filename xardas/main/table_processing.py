@@ -1,10 +1,12 @@
 import io
 from collections import namedtuple
 from django.conf import settings
+from django.core.exceptions import FieldDoesNotExist
 from .xls_map_character import CHARACTER_FORM_RECORDS
 import openpyxl
 from .utilites import get_date_time
 
+CHARACTER_NAME_FIELD = 'character_name'
 
 class BaseKeyNotFound(KeyError):
     pass
@@ -52,22 +54,32 @@ class ExportXLS:
             record = DOC_FORM(*_record)
             if record.xls_cell:
                 value = self.get_db_value(record.db_field)
-                field_type = self.get_type_field(record.db_field)
-                field_verbose = self.get_verbose_field(record.db_field)
+
+                try:
+                    field_type = self.get_type_field(record.db_field)
+                    field_verbose = self.get_verbose_field(record.db_field)
+                except FieldDoesNotExist as error:
+                    print(f'{error}')
+
                 print(f'XLS_field: "{record.xls_cell}", Value "{value}" Description: "{field_verbose}" Type: "{field_type}"')
                 if value:
                     data[record.xls_cell] = value
         return data
 
     def get_doc_name(self):
-        character_name = self.get_db_value('name')
+        character_name = self.get_db_value(CHARACTER_NAME_FIELD)
         if not character_name:
             raise BaseKeyNotFound
         part_name = get_date_time('%Y%m%d')
         return character_name+part_name + self.DOCUMENT_EXTENSION
 
     def get_db_value(self, db_field):
-        value = getattr(self.char, db_field)
+        value = ''
+        try:
+            value = getattr(self.char, db_field)
+        except AttributeError as error:
+            print(f'get_db_value error: {error}')
+
         if value:
             try:
                 value = str(value)
@@ -84,4 +96,3 @@ class ExportXLS:
     def get_verbose_field(self, db_field) -> str:
         result = self.char._meta.get_field(db_field).verbose_name.title()
         return result
-
