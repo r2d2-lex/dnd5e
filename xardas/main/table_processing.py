@@ -62,6 +62,10 @@ class ExportXLS:
                     print(f'{error}')
 
                 print(f'XLS_field: "{record.xls_cell}", Value "{value}" Description: "{field_verbose}" Type: "{field_type}"')
+
+                if field_type == 'BooleanField' and value == 'True':
+                    value = '\u2714' # ✔
+
                 if value:
                     data[record.xls_cell] = value
         return data
