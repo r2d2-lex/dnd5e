@@ -30,7 +30,7 @@ CHARACTER_FORM_RECORDS = (
     ('chrarisma', 'G17'),
     ('chrarisma_modifier', 'K17'),
 
-    ('inspiration', 'C32'),
+    ('inspiration', 'P15'),
     ('prof_bonus', 'P12'),
 
     # -------------------- (( СПАСБРОСКИ )) ----------------------------------------------------------

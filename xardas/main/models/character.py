@@ -213,6 +213,13 @@ class CharBase(models.Model):
             break
         return cur_race
 
+    def get_race(self) -> str:
+        race = ''
+        for cr in self.races.all():
+            race = cr.caption
+            break
+        return race
+
     def get_current_class(self) -> str:
         cur_class = ''
         for cc in self.char_classes.all():

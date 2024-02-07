@@ -53,19 +53,8 @@ class ExportXLS:
         for _record in CHARACTER_FORM_RECORDS:
             record = DOC_FORM(*_record)
             if record.xls_cell:
+                print(f'DB_field: "{record.db_field}" -> XLS_field: "{record.xls_cell}"')
                 value = self.get_db_value(record.db_field)
-
-                try:
-                    field_type = self.get_type_field(record.db_field)
-                    field_verbose = self.get_verbose_field(record.db_field)
-                except FieldDoesNotExist as error:
-                    print(f'{error}')
-
-                print(f'XLS_field: "{record.xls_cell}", Value "{value}" Description: "{field_verbose}" Type: "{field_type}"')
-
-                if field_type == 'BooleanField' and value == 'True':
-                    value = '\u2714' # ✔
-
                 if value:
                     data[record.xls_cell] = value
         return data
@@ -84,13 +73,30 @@ class ExportXLS:
         except AttributeError as error:
             print(f'get_db_value error: {error}')
 
+        field_type = 'Unknown'
+        field_verbose = 'Unknown'
+
+        try:
+            field_type = self.get_type_field(db_field)
+            field_verbose = self.get_verbose_field(db_field)
+        except FieldDoesNotExist as error:
+            print(f'Field type error: {db_field} - {error}')
+
+        print(f'Value: "{value}" Description: "{field_verbose}" Type: "{field_type}"\r\n')
+
+        if field_type == 'BooleanField' and value == 'True':
+            value = '\u2714'  # ✔
+
+        if field_type == 'ManyToManyField':
+            if db_field == 'races':
+                value = self.char.get_race()
+
         if value:
             try:
                 value = str(value)
             except TypeError as err:
                 print('Bad value: {}'.format(err))
                 return False
-            print('Value: {}'.format(value))
             return value
 
     def get_type_field(self, db_field) -> str:
