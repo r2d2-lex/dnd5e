@@ -84,7 +84,7 @@ class ExportXLS:
 
         print(f'Value: "{value}" Description: "{field_verbose}" Type: "{field_type}"\r\n')
 
-        if field_type == 'BooleanField' and value == 'True':
+        if field_type == 'BooleanField' and value == True:
             value = '\u2714'  # ✔
 
         if field_type == 'ManyToManyField':
