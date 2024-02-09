@@ -5,8 +5,8 @@ from django.core.exceptions import FieldDoesNotExist
 from .xls_map_character import CHARACTER_FORM_RECORDS
 import openpyxl
 from .utilites import get_date_time
+from .models.character import CHARACTER_NAME_FIELD
 
-CHARACTER_NAME_FIELD = 'character_name'
 
 class BaseKeyNotFound(KeyError):
     pass
@@ -38,19 +38,25 @@ class ExportXLS:
             self.id_file.close()
 
     def generate_xls(self):
-        context = self.make_form_data()
-        # openpyxl.utils.exceptions.InvalidFileException:
         workbook = openpyxl.load_workbook(settings.XLS_TEMPLATE_PATH)
-        ws = workbook.active
-        xls_insert_data(ws, context)
+        sheet_index = 0
+        work_book_sheet_names = workbook.sheetnames
+
+        for template_records in CHARACTER_FORM_RECORDS:
+            print(f'Страница: {work_book_sheet_names[sheet_index]}\r\nЗаписи шаблона: {template_records}\r\n')
+            context = self.make_form_data(template_records)
+            # openpyxl.utils.exceptions.InvalidFileException:
+            ws = workbook[work_book_sheet_names[sheet_index]]
+            xls_insert_data(ws, context)
+            sheet_index+=1
         workbook.save(self.id_file)
         self.id_file.seek(0)
         return self.doc_name, self.id_file
 
-    def make_form_data(self) -> dict:
+    def make_form_data(self, form_records) -> dict:
         data = {}
         DOC_FORM = namedtuple('DOC_RECORDS', 'db_field xls_cell')
-        for _record in CHARACTER_FORM_RECORDS:
+        for _record in form_records:
             record = DOC_FORM(*_record)
             if record.xls_cell:
                 print(f'DB_field: "{record.db_field}" -> XLS_field: "{record.xls_cell}"')

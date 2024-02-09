@@ -5,6 +5,7 @@ from .common import CharClasses
 from .common import CharRaces
 from .spells import Spell
 
+CHARACTER_NAME_FIELD = 'character_name'
 
 class CharacterManager(models.Manager):
     pass
