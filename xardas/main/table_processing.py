@@ -1,9 +1,10 @@
 import io
+import openpyxl
 from collections import namedtuple
 from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist
+from openpyxl.drawing.image import Image
 from .xls_map_character import CHARACTER_FORM_RECORDS
-import openpyxl
 from .utilites import get_date_time
 from .models.character import CHARACTER_NAME_FIELD
 
@@ -19,6 +20,15 @@ def xls_insert_data(ws, context):
         except AttributeError:
             print(f'TEMPLATE ERROR: Key: {key} Value: {value}')
 
+def xls_insert_image(ws, context):
+    for xls_cell, path_to_image in context.items():
+        print(f'Xls cell "{xls_cell}" value: "{path_to_image}"')
+        image = openpyxl.drawing.image.Image(path_to_image)
+        image.width = 200
+        image.height = 200
+        ws.add_image(image, xls_cell)
+    context.clear()
+
 
 class ExportXLS:
     DOCUMENT_EXTENSION = '.xlsx'
@@ -28,6 +38,7 @@ class ExportXLS:
         self.char = char
         self.doc_name = self.get_doc_name()
         self.id_file = None
+        self.images = dict()
 
     def __enter__(self):
         self.id_file = io.BytesIO()
@@ -48,6 +59,10 @@ class ExportXLS:
             # openpyxl.utils.exceptions.InvalidFileException:
             ws = workbook[work_book_sheet_names[sheet_index]]
             xls_insert_data(ws, context)
+
+            if len(self.images):
+                xls_insert_image(ws, self.images)
+
             sheet_index+=1
         workbook.save(self.id_file)
         self.id_file.seek(0)
@@ -60,7 +75,7 @@ class ExportXLS:
             record = DOC_FORM(*_record)
             if record.xls_cell:
                 print(f'DB_field: "{record.db_field}" -> XLS_field: "{record.xls_cell}"')
-                value = self.get_db_value(record.db_field)
+                value = self.get_db_value(record.db_field, record.xls_cell)
                 if value:
                     data[record.xls_cell] = value
         return data
@@ -72,13 +87,8 @@ class ExportXLS:
         part_name = get_date_time('%Y%m%d')
         return character_name+part_name + self.DOCUMENT_EXTENSION
 
-    def get_db_value(self, db_field):
+    def get_db_value(self, db_field, xls_cell = None):
         value = ''
-        try:
-            value = getattr(self.char, db_field)
-        except AttributeError as error:
-            print(f'get_db_value error: {error}')
-
         field_type = 'Unknown'
         field_verbose = 'Unknown'
 
@@ -88,6 +98,11 @@ class ExportXLS:
         except FieldDoesNotExist as error:
             print(f'Field type error: {db_field} - {error}')
 
+        try:
+            value = getattr(self.char, db_field)
+        except AttributeError as error:
+            print(f'get_db_value error: {error}')
+
         print(f'Value: "{value}" Description: "{field_verbose}" Type: "{field_type}"\r\n')
 
         if field_type == 'BooleanField' and value == True:
@@ -96,6 +111,9 @@ class ExportXLS:
         if field_type == 'ManyToManyField':
             if db_field == 'races':
                 value = self.char.get_race()
+
+        if field_type == 'FileField':
+            self.images.update({xls_cell: value})
 
         if value:
             try:
