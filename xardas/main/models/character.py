@@ -6,6 +6,8 @@ from .common import CharRaces
 from .spells import Spell
 
 CHARACTER_NAME_FIELD = 'character_name'
+AVATAR_FIELD = 'avatar'
+ALLIES_AND_ORG_SYMBOL_FIELD = 'allies_and_org_symbol'
 
 class CharacterManager(models.Manager):
     pass

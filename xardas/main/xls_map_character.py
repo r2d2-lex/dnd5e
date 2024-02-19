@@ -1,5 +1,5 @@
 # Format (DB_name_field, XLS_cell)
-from .models.character import CHARACTER_NAME_FIELD
+from .models.character import CHARACTER_NAME_FIELD, AVATAR_FIELD, ALLIES_AND_ORG_SYMBOL_FIELD
 
 FIRST_PAGE_RECORDS  = (
     # ------------------------------------------------------------------------------------------------ #
@@ -111,6 +111,11 @@ FIRST_PAGE_RECORDS  = (
     ('features_traits', 'AP36'),
 )
 
+IMAGE_SIZES = {
+    AVATAR_FIELD: (280, 280),
+    ALLIES_AND_ORG_SYMBOL_FIELD: (280, 280),
+}
+
 SECOND_PAGE_RECORDS = (
     # ------------------------------------------------------------------------------------------------ #
     # ---------------------------------- ( 2 page TOP) ----------------------------------------------- #
@@ -127,7 +132,7 @@ SECOND_PAGE_RECORDS = (
     # ------------------------------------------------------------------------------------------------ #
     # ---------------------------------- ( 2 page 1st column) ---------------------------------------- #
     # ------------------------------------------------------------------------------------------------ #
-    ('avatar', 'C12'),
+    (AVATAR_FIELD, 'C12'),
     ('char_backstory', 'C26'),
 
     # ------------------------------------------------------------------------------------------------ #
@@ -135,7 +140,7 @@ SECOND_PAGE_RECORDS = (
     # ------------------------------------------------------------------------------------------------ #
     ('allies_and_org', ''),
     ('allies_and_org_symbol_name', ''),
-    ('allies_and_org_symbol', ''),
+    (ALLIES_AND_ORG_SYMBOL_FIELD, 'AO15'),
     ('additional_features_traits', ''),
     ('treasure', ''),
 )

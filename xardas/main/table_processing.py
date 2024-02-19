@@ -4,30 +4,13 @@ from collections import namedtuple
 from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist
 from openpyxl.drawing.image import Image
-from .xls_map_character import CHARACTER_FORM_RECORDS
+from .xls_map_character import CHARACTER_FORM_RECORDS, IMAGE_SIZES
 from .utilites import get_date_time
 from .models.character import CHARACTER_NAME_FIELD
 
 
 class BaseKeyNotFound(KeyError):
     pass
-
-
-def xls_insert_data(ws, context):
-    for key, value in context.items():
-        try:
-            ws[key] = value
-        except AttributeError:
-            print(f'TEMPLATE ERROR: Key: {key} Value: {value}')
-
-def xls_insert_image(ws, context):
-    for xls_cell, path_to_image in context.items():
-        print(f'Xls cell "{xls_cell}" value: "{path_to_image}"')
-        image = openpyxl.drawing.image.Image(path_to_image)
-        image.width = 200
-        image.height = 200
-        ws.add_image(image, xls_cell)
-    context.clear()
 
 
 class ExportXLS:
@@ -38,7 +21,7 @@ class ExportXLS:
         self.char = char
         self.doc_name = self.get_doc_name()
         self.id_file = None
-        self.images = dict()
+        self.ws = None
 
     def __enter__(self):
         self.id_file = io.BytesIO()
@@ -48,6 +31,40 @@ class ExportXLS:
         if self.id_file:
             self.id_file.close()
 
+    def xls_insert_data(self, context):
+        for key, value in context.items():
+            try:
+                self.ws[key] = value
+            except AttributeError:
+                print(f'TEMPLATE ERROR: Key: {key} Value: {value}')
+
+    def xls_insert_image(self, xls_cell, path_to_image, db_field):
+        print(f'Xls cell "{xls_cell}" value: "{path_to_image}"')
+        image = openpyxl.drawing.image.Image(path_to_image)
+
+        try:
+            print(
+                f'Номер колонки: "{self.ws[xls_cell].column}"\r\nНомер строки: "{self.ws[xls_cell].row}"\r\n Буква строки:'
+                f' "{self.ws[xls_cell].column_letter}"\r\nШирина изображения: "{image.width}"\r\nВысота изображения: "{image.height}"\r\n'
+                f'Путь к изображению: {path_to_image}')
+
+            row = self.ws[xls_cell].row
+            column = self.ws[xls_cell].column_letter
+
+            print(f'\r\nColumn column_dimensions: {self.ws.column_dimensions[column].width} \r\n')
+            print(f'Column row_dimensions: {self.ws.row_dimensions[row].height} \r\n')
+
+        except TypeError as error:
+            print(f'Error xls_insert_image: {error}')
+
+        for field_name, image_size in IMAGE_SIZES.items():
+            if field_name == db_field:
+                print(f'Found field name: {db_field} width: {image_size[0]}, height: {image_size[1]}')
+                image.width = image_size[0]
+                image.height = image_size[1]
+                break
+        self.ws.add_image(image, xls_cell)
+
     def generate_xls(self):
         workbook = openpyxl.load_workbook(settings.XLS_TEMPLATE_PATH)
         sheet_index = 0
@@ -55,13 +72,10 @@ class ExportXLS:
 
         for template_records in CHARACTER_FORM_RECORDS:
             print(f'Страница: {work_book_sheet_names[sheet_index]}\r\nЗаписи шаблона: {template_records}\r\n')
-            context = self.make_form_data(template_records)
             # openpyxl.utils.exceptions.InvalidFileException:
-            ws = workbook[work_book_sheet_names[sheet_index]]
-            xls_insert_data(ws, context)
-
-            if len(self.images):
-                xls_insert_image(ws, self.images)
+            self.ws = workbook[work_book_sheet_names[sheet_index]]
+            context = self.make_form_data(template_records)
+            self.xls_insert_data(context)
 
             sheet_index+=1
         workbook.save(self.id_file)
@@ -112,8 +126,9 @@ class ExportXLS:
             if db_field == 'races':
                 value = self.char.get_race()
 
-        if field_type == 'FileField':
-            self.images.update({xls_cell: value})
+        if field_type == 'FileField' and value:
+            self.xls_insert_image(xls_cell, value, db_field)
+            value = ''
 
         if value:
             try:
