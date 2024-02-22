@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from .models import AdvUser
 from .models import CharBase, CharClasses, CharRaces, Spell
 from .tasks import send_verification_email
-from .utilites import get_date_time
+from .utilites import get_date_time, resize_image
 
 
 class FindSpellForm(forms.Form):
@@ -23,13 +23,16 @@ class UploadIconForm(forms.Form):
 
     def upload_icon(self, request, char_base: CharBase, messages, image_field: str, sizes: tuple):
         if self.is_valid():
-            image = self.cleaned_data[image_field]
-            if image_field == 'avatar':
-                char_base.avatar = image
-            if image_field == 'allies_and_org_symbol':
-                char_base.allies_and_org_symbol = image
-            char_base.save(update_fields=[image_field])
-            messages.add_message(request, messages.SUCCESS, 'Изображение сохранено')
+            try:
+                image = resize_image(self.cleaned_data[image_field], sizes[0], image_field)
+                if image_field == 'avatar':
+                    char_base.avatar = image
+                if image_field == 'allies_and_org_symbol':
+                    char_base.allies_and_org_symbol = image
+                char_base.save(update_fields=[image_field])
+                messages.add_message(request, messages.SUCCESS, 'Изображение сохранено')
+            except (IndexError, KeyError):
+                messages.add_message(request, messages.WARNING, 'upload_icon: Ошибка дынных')
         else:
             print("IconForm not valid! ERROR:", self.errors)
             messages.add_message(request, messages.WARNING, self.errors)
