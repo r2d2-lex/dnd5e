@@ -17,16 +17,21 @@ class FindSpellForm(forms.Form):
     spc = forms.CharField(required=False, label='Класс заклинания')
 
 
-class UploadAvatarForm(forms.Form):
-    avatar = forms.ImageField(label='Аватар персонажа')
+class UploadIconForm(forms.Form):
+    avatar = forms.ImageField(required=False, label='Аватар персонажа')
+    allies_and_org_symbol = forms.ImageField(required=False, label='Символ')
 
-    def upload_avatar(self, request, char_base, messages):
+    def upload_icon(self, request, char_base: CharBase, messages, image_field: str, sizes: tuple):
         if self.is_valid():
-            char_base.avatar = self.cleaned_data['avatar']
-            char_base.save(update_fields=["avatar"])
-            messages.add_message(request, messages.SUCCESS, 'Аватар сохранён')
+            image = self.cleaned_data[image_field]
+            if image_field == 'avatar':
+                char_base.avatar = image
+            if image_field == 'allies_and_org_symbol':
+                char_base.allies_and_org_symbol = image
+            char_base.save(update_fields=[image_field])
+            messages.add_message(request, messages.SUCCESS, 'Изображение сохранено')
         else:
-            print("avatar_form NOT VALID. ERROR:", self.errors)
+            print("IconForm not valid! ERROR:", self.errors)
             messages.add_message(request, messages.WARNING, self.errors)
 
 

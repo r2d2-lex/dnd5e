@@ -21,11 +21,12 @@ from .forms import CharForm, CreateCharForm
 from .forms import FindSpellForm
 from .forms import ChangeUserInfoForm
 from .forms import RegisterUserForm
-from .forms import UploadAvatarForm
+from .forms import UploadIconForm
 from .services import get_character_from_db, delete_character_from_db
 from .models import AdvUser, CharBase, CharClasses, CharRaces, Spell
 from .table_processing import ExportXLS
 from .tasks import signer
+from .xls_map_character import IMAGE_SIZES
 
 from django.urls import reverse
 from django.shortcuts import redirect
@@ -228,10 +229,13 @@ def edit_character(request, character_name):
 
     if request.method == 'POST':
         # Загрузка изображения
-        if bool(request.FILES.get('avatar', False)):
-            avatar_form = UploadAvatarForm(request.POST, request.FILES)
-            avatar_form.upload_avatar(request, char_base, messages)
-            return redirect('main:edit_character', character_name=char_base.character_name)
+        for image_field, image_size in IMAGE_SIZES.items():
+            print(f'Field: {image_field} - size: [{image_size}]')
+            if bool(request.FILES.get(image_field, False)):
+                print(f'image_field: {image_field}')
+                avatar_form = UploadIconForm(request.POST, request.FILES)
+                avatar_form.upload_icon(request, char_base, messages, image_field, image_size)
+                return redirect('main:edit_character', character_name=char_base.character_name)
 
         char_form = CharForm(request.POST)
         if char_form.is_valid():

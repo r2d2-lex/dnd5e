@@ -138,11 +138,11 @@ SECOND_PAGE_RECORDS = (
     # ------------------------------------------------------------------------------------------------ #
     # ---------------------------------- ( 2 page 2 column) ------------------------------------------ #
     # ------------------------------------------------------------------------------------------------ #
-    ('allies_and_org', ''),
-    ('allies_and_org_symbol_name', ''),
+    ('allies_and_org', 'U12'),
+    ('allies_and_org_symbol_name', 'AO12'),
     (ALLIES_AND_ORG_SYMBOL_FIELD, 'AO15'),
-    ('additional_features_traits', ''),
-    ('treasure', ''),
+    ('additional_features_traits', 'U26'),
+    ('treasure', 'U48'),
 )
 
 THIRD_PAGE_RECORDS = (
