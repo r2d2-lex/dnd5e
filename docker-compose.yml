@@ -23,13 +23,15 @@ services:
       - REDIS_HOST=${REDIS_HOST}
 
   redis:
+    container_name: dnd5e_redis
     image: "redis:alpine"
-    ports:
-    - 6379:6379
+    restart: unless-stopped
 
   celery:
-    build: .
     <<: *envs_template
+    container_name: dnd5e_celery
+    build: .
+    restart: unless-stopped
     command: celery -A xardas worker --loglevel=debug --concurrency=4
     depends_on:
     - redis
@@ -38,8 +40,9 @@ services:
 
   web:
     <<: [*logs_template, *envs_template ]
-    container_name: web_django
+    container_name: dnd5e
     build: .
+    restart: unless-stopped
     expose:
       - 8000
     ports:
