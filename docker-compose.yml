@@ -40,7 +40,7 @@ services:
 
   web:
     <<: [*logs_template, *envs_template ]
-    container_name: dnd5e
+    container_name: dnd5e_django
     build: .
     restart: unless-stopped
     expose:
