@@ -37,9 +37,8 @@ services:
     - app-volume:/xardas
 
   web:
-    <<: *logs_template
+    <<: [*logs_template, *envs_template ]
     container_name: web_django
-    <<: *envs_template
     build: .
     expose:
       - 8000
