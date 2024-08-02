@@ -1,8 +1,5 @@
 version: '3'
 
-volumes:
-  app-volume:
-
 services:
   logs_template: &logs_template
     image: alpine
@@ -35,8 +32,6 @@ services:
     command: celery -A xardas worker --loglevel=debug --concurrency=4
     depends_on:
     - redis
-    volumes:
-    - app-volume:/xardas
 
   web:
     <<: [*logs_template, *envs_template ]
@@ -49,6 +44,4 @@ services:
       - 8000:8000
     depends_on:
       - redis
-    volumes:
-      - app-volume:/xardas
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
