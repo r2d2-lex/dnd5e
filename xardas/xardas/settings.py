@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', default=get_random_secret_key())
 DEBUG = True
 
 # ALLOWED_HOSTS = ['127.0.0.1', 'localhost', os.environ.get('DJ_ALLOWED_HOSTS'), ]
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
