@@ -1,7 +1,7 @@
 # Format (DB_name_field, XLS_cell)
 from .models.character import CHARACTER_NAME_FIELD, AVATAR_FIELD, ALLIES_AND_ORG_SYMBOL_FIELD
 
-FIRST_PAGE_RECORDS  = (
+FIRST_PAGE_RECORDS = (
     # ------------------------------------------------------------------------------------------------ #
     # ---------------------------------- ( 1st page TOP ) -------------------------------------------- #
     # ------------------------------------------------------------------------------------------------ #
@@ -156,4 +156,4 @@ THIRD_PAGE_RECORDS = (
 
 )
 
-CHARACTER_FORM_RECORDS = ( FIRST_PAGE_RECORDS,  SECOND_PAGE_RECORDS, THIRD_PAGE_RECORDS)
+CHARACTER_FORM_RECORDS = (FIRST_PAGE_RECORDS,  SECOND_PAGE_RECORDS, THIRD_PAGE_RECORDS)
