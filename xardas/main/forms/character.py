@@ -1,20 +1,6 @@
 from django import forms
-from django.contrib.auth import password_validation
-from django.core.exceptions import ValidationError
-
-from .models import AdvUser
-from .models import CharBase, CharClasses, CharRaces, Spell
-from .tasks import send_verification_email
-from .utilites import get_date_time, resize_image
-
-
-class FindSpellForm(forms.Form):
-    name = forms.CharField(required=False, label='Поиск заклинания')
-    ritual = forms.BooleanField(required=False, label='Поиск ритуалов')
-    concentrate = forms.CharField(required=False, label='Концентрация')
-    level = forms.CharField(required=False, label='Уровень заклинания')
-    school = forms.CharField(required=False, label='Школа заклинания')
-    spc = forms.CharField(required=False, label='Класс заклинания')
+from main.models import CharBase, CharClasses, CharRaces, Spell
+from main.utilites import get_date_time, resize_image
 
 
 class UploadIconForm(forms.Form):
@@ -36,23 +22,6 @@ class UploadIconForm(forms.Form):
         else:
             print("IconForm not valid! ERROR:", self.errors)
             messages.add_message(request, messages.WARNING, self.errors)
-
-
-class SpellForm(forms.Form):
-    name = forms.CharField(label='Название заклинания')
-    level = forms.IntegerField(label='Уровень заклинания')
-    school = forms.IntegerField(label='Школа заклинания')
-    comp_is_verbal = forms.BooleanField(label='Вербальные требования')
-    comp_is_somatic = forms.BooleanField(label='Соматичесские требования')
-    comp_is_material = forms.BooleanField(label='Материальные компоненты')
-    components = forms.CharField(label='Компоненты заклинания', required=False)
-    distance = forms.CharField(label='Дистанция заклинания')
-    duration = forms.CharField(label='Длительность заклинания')
-    cast_time = forms.CharField(label='Время сотворения заклинания')
-    is_concentrate = forms.BooleanField(label='Концентрация')
-    is_ritual = forms.BooleanField(label='Ритуал')
-    description = forms.CharField(label='Описание заклинания')
-    spell_classes = forms.CharField(required=False, label='Класс персонажа')
 
 
 class CreateCharForm(forms.Form):
@@ -243,49 +212,3 @@ class CharForm(forms.Form):
         char_qs.save()
 
 
-class ChangeUserInfoForm(forms.ModelForm):
-    email = forms.EmailField(required=True, label='Адерс эл. почты')
-
-    class Meta:
-        model = AdvUser
-        fields = ('username', 'email', 'first_name', 'last_name', 'send_message')
-
-
-class RegisterUserForm(forms.ModelForm):
-    email = forms.EmailField(required=True, label='Адрес электронной почты')
-    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput,
-                                help_text=password_validation.password_validators_help_text_html())
-    password2 = forms.CharField(label='Пароль (повторно)', widget=forms.PasswordInput,
-                                help_text='Введите тот же самый пароль еще раз для проверки')
-
-    def clean_password1(self):
-        password1 = self.cleaned_data['password1']
-        if password1:
-            password_validation.validate_password(password1)
-        return password1
-
-    def clean(self):
-        super().clean()
-        password1 = self.cleaned_data['password1']
-        password2 = self.cleaned_data['password2']
-        if password1 and password2 and password1 != password2:
-            errors = {'password2': ValidationError('Введенные пароли не совпадают',
-                                  code='password_mismatch')}
-            raise ValidationError(errors)
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password1'])
-        user.is_active = False
-        user.is_activated = False
-
-        # Celery task
-        send_verification_email.delay(self.cleaned_data['email'], user.username)
-
-        if commit:
-            user.save()
-        return user
-
-    class Meta:
-        model = AdvUser
-        fields = ('username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'send_message')
