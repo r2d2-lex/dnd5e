@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
-from main.models import MobBase
+from main.models.mobs import MobBase
 from main.utilites import get_html
 import re
 from bs4 import BeautifulSoup
