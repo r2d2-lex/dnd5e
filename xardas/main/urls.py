@@ -2,21 +2,23 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from .views import BBLoginView, BBLogoutView
-from .views import BBPasswordChangeView
-from .views import ChangeUserInfoView
-from .views import create_character
-from .views import export_character
-from .views import edit_character
-from .views import view_spell
-from .views import delete_character
-from .views import DeleteUserView
-from .views import index, other_page, profile
-from .views import RegisterUserView, RegisterDoneView
-from .views import find_spells
-from .views import get_spells
-from .views import user_activate
-from .views import view_character
+from .views.register import BBLoginView, BBLogoutView
+from .views.register import BBPasswordChangeView
+from .views.register import ChangeUserInfoView
+from .views.register import DeleteUserView
+from .views.register import RegisterUserView, RegisterDoneView
+from .views.register import user_activate
+from .views.character import create_character
+from .views.character import delete_character
+from .views.character import export_character
+from .views.character import edit_character
+from .views.character import view_character
+from .views.spells import view_spell
+from .views.spells import find_spells
+from .views.spells import get_spells
+from .views.profile import profile
+from .views.views import index, other_page
+
 
 app_name = 'main'
 urlpatterns = [
