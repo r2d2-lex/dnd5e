@@ -63,7 +63,7 @@ class CreateCharForm(forms.Form):
 
     def create_character(self, request):
         create_char = CharBase(
-                                name=self.cleaned_data['name'],
+                                character_name=self.cleaned_data['name'],
                                 playername=self.cleaned_data['playername'],
                                 owner=request.user,
                                )

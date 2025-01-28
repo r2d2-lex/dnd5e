@@ -26,7 +26,7 @@ def create_character(request):
         character_form = CreateCharForm(request.POST)
         if character_form.is_valid():
             created_character_db = character_form.create_character(request)
-            return redirect('main:edit_character', name=created_character_db.name)
+            return redirect('main:edit_character', character_name=created_character_db.character_name)
         else:
             messages.add_message(request, messages.ERROR, character_form.errors)
 
