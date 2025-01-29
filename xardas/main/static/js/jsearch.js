@@ -67,7 +67,7 @@ $(document).ready(function(){
                 const $spells = $('#spells');
                 $spells.empty();
                 $.each(spell_content, function(index, item) {
-                    $spells.append($('<option></option>').attr('value', item.name).text(item.name));
+                    $spells.append($('<option></option>').attr('value', item.name).text(item.name + ' (Уровень: ' + item.level + ')'));
                 });
                 showData(status);
             /* ----- END of Success ---- */
