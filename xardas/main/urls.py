@@ -12,6 +12,7 @@ from .views.character import create_character
 from .views.character import delete_character
 from .views.character import export_character
 from .views.character import edit_character
+from .views.character import edit_spell
 from .views.character import view_character
 from .views.spells import view_spell
 from .views.spells import find_spells
@@ -29,6 +30,7 @@ urlpatterns = [
     path('accounts/profile/change/', ChangeUserInfoView.as_view(), name='profile_change'),
     path('accounts/profile/delete/', DeleteUserView.as_view(), name='profile_delete'),
     path('char/create/', create_character, name='create_character'),
+    path('char/<str:character_name>/spell/', edit_spell, name='edit_spell'),
     path('char/<str:character_name>/edit/', edit_character, name='edit_character'),
     path('char/<str:character_name>/export/', export_character, name='export_character'),
     path('char/<str:character_name>/delete/', delete_character, name='delete_character'),

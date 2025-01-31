@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from wsgiref.util import FileWrapper
@@ -55,6 +55,24 @@ def export_character(request, character_name):
         response = HttpResponse(FileWrapper(output_stream), content_type=ExportXLS.CONTENT_TYPE)
         response['Content-Disposition'] = 'inline; filename="{}"'.format(doc_name)
         return response
+
+
+@login_required
+def edit_spell(request, character_name):
+    char_base = get_object_or_404(CharBase, owner=request.user, character_name=character_name)
+    spells = []
+    if request.method == 'POST':
+        spells = request.POST.getlist('spells[]')
+        print(spells, character_name)
+        for spell in spells:
+            char_base.spells.add(get_object_or_404(Spell, name=spell))
+
+    if request.method == 'DELETE':
+        spells = request.DELETE.getlist('spells[]')
+        print(spells, character_name)
+        for spell in spells:
+            char_base.spells.remove(get_object_or_404(Spell, name=spell))
+    return JsonResponse({'status': 'success', 'spells': spells})
 
 
 @login_required
