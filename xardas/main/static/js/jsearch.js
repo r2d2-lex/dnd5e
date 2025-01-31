@@ -77,14 +77,13 @@ function search_spell() {
     })
 }
 
-function add_spell(spells, character) {
-    console.log('Spells: ' + spells);
+function spell_action(action ,spells, character) {
     let url = '/char/'+ character +'/spell/';
-    console.log('Url: ' + url);
     $.ajax({
     type: 'POST',
     url: url,
     data: {
+        'action': action,
         'character_name': character,
         'spells': spells,
         'csrfmiddlewaretoken': csrftoken,
@@ -113,8 +112,18 @@ $(document).ready(function(){
         selectedOptions.each(function() {
             selectedValues.push($(this).val());
         });
-        add_spell(selectedValues, character_name);
+        spell_action('Add', selectedValues, character_name);
     });
     /**/
+    $('#del_spell').click(function() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="char_spells"]');
+        const selectedValues = [];
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                selectedValues.push(checkbox.value);
+            }
+        });
+        spell_action('Delete', selectedValues, character_name);
+    });
 
 })
