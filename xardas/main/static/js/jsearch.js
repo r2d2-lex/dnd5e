@@ -79,11 +79,9 @@ function search_spell() {
         dataType: 'json',
         success: function (data) {
             /* ----- Success ---- */
+            console.log('Успешный Ajax search_spell');
             let status = data.status;
             let spell_content = data.spells;
-            console.log('Успешный Ajax search_spell');
-            console.log(spell_content);
-
             const $spells = $('#spells');
             $spells.empty();
             $.each(spell_content, function(index, item) {
