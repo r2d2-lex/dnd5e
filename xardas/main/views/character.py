@@ -58,7 +58,7 @@ def export_character(request, character_name):
 
 
 @login_required
-def edit_spell(request, character_name):
+def edit_character_spell(request, character_name):
     char_base = get_object_or_404(CharBase, owner=request.user, character_name=character_name)
     if request.method == 'POST':
         spells = request.POST.getlist('spells[]')
