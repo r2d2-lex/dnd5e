@@ -60,7 +60,6 @@ def export_character(request, character_name):
 @login_required
 def edit_spell(request, character_name):
     char_base = get_object_or_404(CharBase, owner=request.user, character_name=character_name)
-    spells = []
     if request.method == 'POST':
         spells = request.POST.getlist('spells[]')
         action = request.POST.get('action')
@@ -71,7 +70,9 @@ def edit_spell(request, character_name):
                 char_base.spells.add(get_object_or_404(Spell, name=spell))
             if action == 'Delete':
                 char_base.spells.remove(get_object_or_404(Spell, name=spell))
-    return JsonResponse({'status': 'success', 'spells': spells})
+        character_spells = char_base.spells.values('name', 'level')
+        character_spells_list = list(character_spells)
+        return JsonResponse({'status': 'success', 'character_spells': character_spells_list})
 
 
 @login_required

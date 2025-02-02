@@ -89,10 +89,11 @@ function spell_action(action ,spells, character) {
         'csrfmiddlewaretoken': csrftoken,
     },
     success: function(response) {
-        console.log('Success Ajax add_spell');
+        console.log('Success Ajax '+ action +' spell');
+        console.log(response.character_spells);
     },
     error: function(xhr, status, error) {
-        console.log('Error Ajax add_spell');
+        console.log('Error Ajax '+ action +' spell');
     }
 });
 }
