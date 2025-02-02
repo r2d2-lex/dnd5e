@@ -35,6 +35,29 @@ function showData(status) {
     }
 }
 
+// Функция для обновления заклинаний в карточках
+function updateSpells(spells) {
+    for (let i = 0; i <= 9; i++) {
+        const levelDiv = document.querySelector(`.level${i}`);
+        if (levelDiv) {
+            levelDiv.innerHTML = '';
+        }
+    }
+    spells.forEach(spell => {
+        const levelDiv = document.querySelector(`.level${spell.level}`);
+        if (levelDiv) {
+            const spellDiv = document.createElement('div');
+            spellDiv.className = 'form-check text-nowrap';
+            spellDiv.innerHTML = `
+                <input type="checkbox" name="char_spells" value="${spell.name}" id="${spell.name}">
+                <label class="form-check-label" for="${spell.name}">${spell.name}</label>
+            `;
+            levelDiv.appendChild(spellDiv);
+        }
+    });
+}
+
+
 function search_spell() {
     var ritual = $('#id_ritual').prop('checked');
     var concentrate = $('#id_concentrate').val();
@@ -91,6 +114,7 @@ function spell_action(action ,spells, character) {
     success: function(response) {
         console.log('Success Ajax '+ action +' spell');
         console.log(response.character_spells);
+        updateSpells(response.character_spells);
     },
     error: function(xhr, status, error) {
         console.log('Error Ajax '+ action +' spell');
