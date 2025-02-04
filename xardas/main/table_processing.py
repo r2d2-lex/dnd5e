@@ -77,19 +77,29 @@ class ExportXLS:
             context = self.make_form_data(template_records)
             self.xls_insert_data(context)
 
-            sheet_index+=1
+            sheet_index += 1
         workbook.save(self.id_file)
         self.id_file.seek(0)
         return self.doc_name, self.id_file
 
+    '''
+        Считываем ячейку из xls_map_character.py и если находим соответствие db_field и xls_cell - помещаем в словарь
+    '''
+
     def make_form_data(self, form_records) -> dict:
         data = {}
-        DOC_FORM = namedtuple('DOC_RECORDS', 'db_field xls_cell')
+        DOC_FORM = namedtuple('DOC_RECORDS', 'db_field xls_cell options')
         for _record in form_records:
-            record = DOC_FORM(*_record)
+            if len(_record) == 3:
+                record = DOC_FORM(*_record)
+            elif len(_record) == 2:
+                record = DOC_FORM(_record[0], _record[1], None)
+            else:
+                raise ValueError("Неверный формат записи: должно быть 2 или 3 элемента.")
+
             if record.xls_cell:
-                print(f'DB_field: "{record.db_field}" -> XLS_field: "{record.xls_cell}"')
-                value = self.get_db_value(record.db_field, record.xls_cell)
+                print(f'DB_field: "{record.db_field}" -> XLS_field: "{record.xls_cell}" -> Options: {record.options}')
+                value = self.get_db_value(record.db_field, record.xls_cell, record.options)
                 if value:
                     data[record.xls_cell] = value
         return data
@@ -99,9 +109,9 @@ class ExportXLS:
         if not character_name:
             raise BaseKeyNotFound
         part_name = get_date_time('%Y%m%d')
-        return character_name+part_name + self.DOCUMENT_EXTENSION
+        return character_name + part_name + self.DOCUMENT_EXTENSION
 
-    def get_db_value(self, db_field, xls_cell = None):
+    def get_db_value(self, db_field, xls_cell=None, options=None):
         value = ''
         field_type = 'Unknown'
         field_verbose = 'Unknown'
@@ -122,11 +132,20 @@ class ExportXLS:
         if field_type == 'BooleanField' and value == True:
             value = '\u2714'  # ✔
 
-        if field_type == 'ManyToManyField':
+        elif field_type == 'ManyToManyField':
+            if db_field == 'spells':
+                if options:
+                    try:
+                        spell_level, spell_index = map(int, options.split(','))
+                        value = self.char.spells.filter(level=spell_level)[spell_index]
+                    except (IndexError, ValueError, TypeError) as error:
+                        value = ''
+                        print(f'Ошибка получения опций: {options} {error}')
+
             if db_field == 'races':
                 value = self.char.get_race()
 
-        if field_type == 'FileField' and value:
+        elif field_type == 'FileField' and value:
             self.xls_insert_image(xls_cell, value, db_field)
             value = ''
 

@@ -1,4 +1,4 @@
-# Format (DB_name_field, XLS_cell)
+# Format (DB_name_field, XLS_cell, options)
 from .models.character import CHARACTER_NAME_FIELD, AVATAR_FIELD, ALLIES_AND_ORG_SYMBOL_FIELD
 
 FIRST_PAGE_RECORDS = (
@@ -153,6 +153,138 @@ THIRD_PAGE_RECORDS = (
     ('spell_casting_ability', ''),
     ('spell_save_dc', ''),
     ('spell_attack_bonus', ''),
+
+    # Третье поле в кортеже заклинаний это уровень и индекс заклинаний
+    # Уровень 0
+    ('spells', 'D10', '0,0'),
+    ('spells', 'D11', '0,1'),
+    ('spells', 'D12', '0,2'),
+    ('spells', 'D13', '0,3'),
+    ('spells', 'D14', '0,4'),
+    ('spells', 'D15', '0,5'),
+    ('spells', 'D16', '0,6'),
+    ('spells', 'D17', '0,7'),
+    ('spells', 'D18', '0,8'),
+
+    # Уровень 1
+    ('spells', 'D22', '1,0'),
+    ('spells', 'D23', '1,1'),
+    ('spells', 'D24', '1,2'),
+    ('spells', 'D25', '1,3'),
+    ('spells', 'D26', '1,4'),
+    ('spells', 'D27', '1,5'),
+    ('spells', 'D28', '1,6'),
+    ('spells', 'D29', '1,7'),
+    ('spells', 'D30', '1,8'),
+    ('spells', 'D31', '1,9'),
+    ('spells', 'D32', '1,10'),
+    ('spells', 'D33', '1,11'),
+
+    # Уровень 2
+    ('spells', 'D37', '2,0'),
+    ('spells', 'D38', '2,1'),
+    ('spells', 'D39', '2,2'),
+    ('spells', 'D40', '2,3'),
+    ('spells', 'D41', '2,4'),
+    ('spells', 'D42', '2,5'),
+    ('spells', 'D43', '2,6'),
+    ('spells', 'D44', '2,7'),
+    ('spells', 'D45', '2,8'),
+    ('spells', 'D46', '2,9'),
+    ('spells', 'D47', '2,10'),
+    ('spells', 'D48', '2,11'),
+    ('spells', 'D49', '2,12'),
+    ('spells', 'D50', '2,13'),
+    ('spells', 'D51', '2,14'),
+    ('spells', 'D52', '2,15'),
+    ('spells', 'D53', '2,16'),
+
+    # Уровень 3
+    ('spells', 'V10', '3,0'),
+    ('spells', 'V11', '3,1'),
+    ('spells', 'V12', '3,2'),
+    ('spells', 'V13', '3,3'),
+    ('spells', 'V14', '3,4'),
+    ('spells', 'V15', '3,5'),
+    ('spells', 'V16', '3,6'),
+    ('spells', 'V17', '3,7'),
+    ('spells', 'V18', '3,8'),
+    ('spells', 'V19', '3,9'),
+    ('spells', 'V20', '3,10'),
+    ('spells', 'V21', '3,11'),
+    ('spells', 'V22', '3,12'),
+
+    # Уровень 4
+    ('spells', 'V26', '4,0'),
+    ('spells', 'V27', '4,1'),
+    ('spells', 'V28', '4,2'),
+    ('spells', 'V29', '4,3'),
+    ('spells', 'V30', '4,4'),
+    ('spells', 'V31', '4,5'),
+    ('spells', 'V32', '4,6'),
+    ('spells', 'V33', '4,7'),
+    ('spells', 'V34', '4,8'),
+    ('spells', 'V35', '4,9'),
+    ('spells', 'V36', '4,10'),
+    ('spells', 'V37', '4,11'),
+    ('spells', 'V38', '4,12'),
+
+    # Уровень 5
+    ('spells', 'V42', '5,0'),
+    ('spells', 'V43', '5,1'),
+    ('spells', 'V44', '5,2'),
+    ('spells', 'V45', '5,3'),
+    ('spells', 'V46', '5,4'),
+    ('spells', 'V47', '5,5'),
+    ('spells', 'V48', '5,6'),
+    ('spells', 'V49', '5,7'),
+    ('spells', 'V50', '5,8'),
+    ('spells', 'V51', '5,9'),
+    ('spells', 'V52', '5,10'),
+    ('spells', 'V53', '5,11'),
+
+    # Уровень 6
+    ('spells', 'AN10', '6,0'),
+    ('spells', 'AN11', '6,1'),
+    ('spells', 'AN12', '6,2'),
+    ('spells', 'AN13', '6,3'),
+    ('spells', 'AN14', '6,4'),
+    ('spells', 'AN15', '6,5'),
+    ('spells', 'AN16', '6,6'),
+    ('spells', 'AN17', '6,7'),
+    ('spells', 'AN18', '6,8'),
+    ('spells', 'AN19', '6,9'),
+    ('spells', 'AN20', '6,10'),
+    ('spells', 'AN21', '6,11'),
+    ('spells', 'AN22', '6,12'),
+
+    # Уровень 7
+    ('spells', 'AN26', '7,0'),
+    ('spells', 'AN27', '7,1'),
+    ('spells', 'AN28', '7,2'),
+    ('spells', 'AN29', '7,3'),
+    ('spells', 'AN30', '7,4'),
+    ('spells', 'AN31', '7,5'),
+    ('spells', 'AN32', '7,6'),
+    ('spells', 'AN33', '7,7'),
+    ('spells', 'AN34', '7,8'),
+    ('spells', 'AN35', '7,9'),
+    ('spells', 'AN36', '7,10'),
+
+    # Уровень 8
+    ('spells', 'AN40', '8,0'),
+    ('spells', 'AN41', '8,1'),
+    ('spells', 'AN42', '8,2'),
+    ('spells', 'AN43', '8,3'),
+    ('spells', 'AN44', '8,4'),
+    ('spells', 'AN45', '8,5'),
+
+    # Уровень 9
+    ('spells', 'AN49', '9,0'),
+    ('spells', 'AN50', '9,1'),
+    ('spells', 'AN51', '9,2'),
+    ('spells', 'AN52', '9,3'),
+    ('spells', 'AN53', '9,4'),
 
 )
 
