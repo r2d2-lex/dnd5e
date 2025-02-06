@@ -4,6 +4,7 @@ from collections import namedtuple
 from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist
 from openpyxl.drawing.image import Image
+from loguru import logger
 from .xls_map_character import CHARACTER_FORM_RECORDS, IMAGE_SIZES
 from .utilites import get_date_time
 from .models.character import CHARACTER_NAME_FIELD
@@ -36,14 +37,14 @@ class ExportXLS:
             try:
                 self.ws[key] = value
             except AttributeError:
-                print(f'TEMPLATE ERROR: Key: {key} Value: {value}')
+                logger.error(f'TEMPLATE ERROR: Key: {key} Value: {value}')
 
     def xls_insert_image(self, xls_cell, path_to_image, db_field):
-        print(f'Xls cell "{xls_cell}" value: "{path_to_image}"')
+        logger.info(f'Xls cell "{xls_cell}" value: "{path_to_image}"')
         image = openpyxl.drawing.image.Image(path_to_image)
 
         try:
-            print(
+            logger.debug(
                 f'Номер колонки: "{self.ws[xls_cell].column}"\r\nНомер строки: "{self.ws[xls_cell].row}"\r\n Буква строки:'
                 f' "{self.ws[xls_cell].column_letter}"\r\nШирина изображения: "{image.width}"\r\nВысота изображения: "{image.height}"\r\n'
                 f'Путь к изображению: {path_to_image}')
@@ -51,15 +52,15 @@ class ExportXLS:
             row = self.ws[xls_cell].row
             column = self.ws[xls_cell].column_letter
 
-            print(f'\r\nColumn column_dimensions: {self.ws.column_dimensions[column].width} \r\n')
-            print(f'Column row_dimensions: {self.ws.row_dimensions[row].height} \r\n')
+            logger.debug(f'\r\nColumn column_dimensions: {self.ws.column_dimensions[column].width} \r\n')
+            logger.debug(f'Column row_dimensions: {self.ws.row_dimensions[row].height} \r\n')
 
         except TypeError as error:
-            print(f'Error xls_insert_image: {error}')
+            logger.error(f'Error xls_insert_image: {error}')
 
         for field_name, image_size in IMAGE_SIZES.items():
             if field_name == db_field:
-                print(f'Found field name: {db_field} width: {image_size[0]}, height: {image_size[1]}')
+                logger.debug(f'Found field name: {db_field} width: {image_size[0]}, height: {image_size[1]}')
                 image.width = image_size[0]
                 image.height = image_size[1]
                 break
@@ -71,7 +72,7 @@ class ExportXLS:
         work_book_sheet_names = workbook.sheetnames
 
         for template_records in CHARACTER_FORM_RECORDS:
-            print(f'Страница: {work_book_sheet_names[sheet_index]}\r\nЗаписи шаблона: {template_records}\r\n')
+            logger.info(f'Страница: {work_book_sheet_names[sheet_index]}\r\nЗаписи шаблона: {template_records}\r\n')
             # openpyxl.utils.exceptions.InvalidFileException:
             self.ws = workbook[work_book_sheet_names[sheet_index]]
             context = self.make_form_data(template_records)
@@ -98,7 +99,7 @@ class ExportXLS:
                 raise ValueError("Неверный формат записи: должно быть 2 или 3 элемента.")
 
             if record.xls_cell:
-                print(f'DB_field: "{record.db_field}" -> XLS_field: "{record.xls_cell}" -> Options: {record.options}')
+                logger.debug(f'DB_field: "{record.db_field}" -> XLS_field: "{record.xls_cell}" -> Options: {record.options}')
                 value = self.get_db_value(record.db_field, record.xls_cell, record.options)
                 if value:
                     data[record.xls_cell] = value
@@ -120,14 +121,14 @@ class ExportXLS:
             field_type = self.get_type_field(db_field)
             field_verbose = self.get_verbose_field(db_field)
         except FieldDoesNotExist as error:
-            print(f'Field type error: {db_field} - {error}')
+            logger.error(f'Field type error: {db_field} - {error}')
 
         try:
             value = getattr(self.char, db_field)
         except AttributeError as error:
-            print(f'get_db_value error: {error}')
+            logger.error(f'get_db_value error: {error}')
 
-        print(f'Value: "{value}" Description: "{field_verbose}" Type: "{field_type}"\r\n')
+        logger.debug(f'Value: "{value}" Description: "{field_verbose}" Type: "{field_type}"\r\n')
 
         if field_type == 'BooleanField' and value == True:
             value = '\u2714'  # ✔
@@ -140,7 +141,7 @@ class ExportXLS:
                         value = self.char.spells.filter(level=spell_level)[spell_index]
                     except (IndexError, ValueError, TypeError) as error:
                         value = ''
-                        print(f'Ошибка получения опций: {options} {error}')
+                        logger.debug(f'Ошибка получения опций: {options} {error}')
 
             if db_field == 'races':
                 value = self.char.get_race()
@@ -153,7 +154,7 @@ class ExportXLS:
             try:
                 value = str(value)
             except TypeError as err:
-                print('Bad value: {}'.format(err))
+                logger.error('Bad value: {}'.format(err))
                 return False
             return value
 

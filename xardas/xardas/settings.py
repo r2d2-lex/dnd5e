@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 from django.core.management.utils import get_random_secret_key
+from loguru import logger
+import sys
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -139,3 +141,7 @@ TEMPLATES_DOC_DIR = os.path.join(PROJECT_ROOT, 'templates/doc/')
 XLS_TEMPLATE_PATH = TEMPLATES_DOC_DIR + TEMPLATE_XLS_NAME
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+
+logger.remove()
+logger.add(sys.stderr, format="{time} {level} {message}", level="INFO")
