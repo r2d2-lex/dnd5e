@@ -36,8 +36,8 @@ class ExportXLS:
         for key, value in context.items():
             try:
                 self.ws[key] = value
-            except AttributeError:
-                logger.error(f'TEMPLATE ERROR: Key: {key} Value: {value}')
+            except (AttributeError, ValueError) as error:
+                logger.error(f'Ошибка шаблона: Ключ: {key} Значение: {value} Ошибка: {error}')
 
     def xls_insert_image(self, xls_cell, path_to_image, db_field):
         logger.info(f'Xls cell "{xls_cell}" value: "{path_to_image}"')
@@ -86,7 +86,6 @@ class ExportXLS:
     '''
         Считываем ячейку из xls_map_character.py и если находим соответствие db_field и xls_cell - помещаем в словарь
     '''
-
     def make_form_data(self, form_records) -> dict:
         data = {}
         DOC_FORM = namedtuple('DOC_RECORDS', 'db_field xls_cell options')
@@ -145,6 +144,9 @@ class ExportXLS:
 
             if db_field == 'races':
                 value = self.char.get_race()
+
+            if db_field == 'char_classes':
+                value = self.char.get_current_class()
 
         elif field_type == 'FileField' and value:
             self.xls_insert_image(xls_cell, value, db_field)
