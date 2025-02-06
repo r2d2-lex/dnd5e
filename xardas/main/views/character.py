@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from loguru import logger
 from wsgiref.util import FileWrapper
 from main.forms import CharForm, CreateCharForm
 from main.forms import UploadIconForm
@@ -64,7 +65,7 @@ def edit_character_spell(request, character_name):
         spells = request.POST.getlist('spells[]')
         action = request.POST.get('action')
 
-        print(f'Action: {action} - {spells}, {character_name}')
+        logger.debug(f'Action: {action} - {spells}, {character_name}')
         for spell in spells:
             if action == 'Add':
                 char_base.spells.add(get_object_or_404(Spell, name=spell))
@@ -82,9 +83,9 @@ def edit_character(request, character_name):
     if request.method == 'POST':
         # Загрузка изображения
         for image_field, image_size in IMAGE_SIZES.items():
-            print(f'Field: {image_field} - size: [{image_size}]')
+            logger.debug(f'Field: {image_field} - size: [{image_size}]')
             if bool(request.FILES.get(image_field, False)):
-                print(f'image_field: {image_field}')
+                logger.debug(f'image_field: {image_field}')
                 avatar_form = UploadIconForm(request.POST, request.FILES)
                 avatar_form.upload_icon(request, char_base, messages, image_field, image_size)
                 return redirect('main:edit_character', character_name=char_base.character_name)
@@ -95,7 +96,7 @@ def edit_character(request, character_name):
             messages.add_message(request, messages.SUCCESS, 'Изменения сохранены')
             return redirect('main:edit_character', character_name=char_base.character_name)
         else:
-            print("char_form NOT VALID. ERROR:\r\n", char_form.errors)
+            logger.debug("char_form NOT VALID. ERROR:\r\n", char_form.errors)
             messages.add_message(request, messages.WARNING, char_form.errors)
 
     context = {
