@@ -5,9 +5,14 @@ from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist
 from openpyxl.drawing.image import Image
 from loguru import logger
-from .xls_map_character import CHARACTER_FORM_RECORDS, IMAGE_SIZES
+from .xls_map_character import CHARACTER_FORM_RECORDS
 from .utilites import get_date_time
 from .models.character import CHARACTER_NAME_FIELD
+
+# Высота и ширина ячейки под размер шрифта + отступ
+HEIGHT_COEFFICIENT = 1.33
+WIDTH_COEFFICIENT = HEIGHT_COEFFICIENT
+INDENT_PX = 5
 
 
 class BaseKeyNotFound(KeyError):
@@ -39,31 +44,69 @@ class ExportXLS:
             except (AttributeError, ValueError) as error:
                 logger.error(f'Ошибка шаблона: Ключ: {key} Значение: {value} Ошибка: {error}')
 
-    def xls_insert_image(self, xls_cell, path_to_image, db_field):
-        logger.info(f'Xls cell "{xls_cell}" value: "{path_to_image}"')
+    def get_column_width_in_pixels(self, column_letter):
+        column_width = self.ws.column_dimensions[column_letter].width
+        if column_width is not None:
+            return round(column_width * WIDTH_COEFFICIENT) - INDENT_PX
+        return 0
+
+    def get_row_height_in_pixels(self, row):
+        row_height = self.ws.row_dimensions[row].height
+        if row_height is not None:
+            return round(row_height * HEIGHT_COEFFICIENT) - INDENT_PX
+        return 0
+
+    def get_merged_cell_dimensions(self, merged_cell_range: str):
+        min_col, min_row, max_col, max_row = openpyxl.utils.range_boundaries(merged_cell_range)
+        total_width = 0
+        for col in range(min_col, max_col + 1):
+            column_letter = openpyxl.utils.get_column_letter(col)
+            total_width += self.ws.column_dimensions[column_letter].width or 0
+
+        total_height = 0
+        for row in range(min_row, max_row + 1):
+            total_height += self.ws.row_dimensions[row].height or 0
+
+        total_width_in_pixels = round(total_width * WIDTH_COEFFICIENT) - INDENT_PX
+        total_height_in_pixels = round(total_height * HEIGHT_COEFFICIENT) - INDENT_PX
+        return total_width_in_pixels, total_height_in_pixels
+
+    def xls_insert_image(self, xls_cell, path_to_image):
         image = openpyxl.drawing.image.Image(path_to_image)
 
-        try:
-            logger.debug(
-                f'Номер колонки: "{self.ws[xls_cell].column}"\r\nНомер строки: "{self.ws[xls_cell].row}"\r\n Буква строки:'
-                f' "{self.ws[xls_cell].column_letter}"\r\nШирина изображения: "{image.width}"\r\nВысота изображения: "{image.height}"\r\n'
-                f'Путь к изображению: {path_to_image}')
+        row = self.ws[xls_cell].row
+        column_letter = self.ws[xls_cell].column_letter
 
-            row = self.ws[xls_cell].row
-            column = self.ws[xls_cell].column_letter
+        logger.info(
+            f'\r\nXls ячейка "{xls_cell}" значение: "{path_to_image}"\r\n'
+            f'Номер колонки: "{self.ws[xls_cell].column}"\r\n'
+            f'Номер строки: "{row}"\r\n'
+            f'Буква строки: "{column_letter}"\r\n'
+            f'Путь к изображению: "{path_to_image}"\r\n'
+            f'Ширина изображения: "{image.width}"\r\n'
+            f'Высота изображения: "{image.height}"'
+        )
 
-            logger.debug(f'\r\nColumn column_dimensions: {self.ws.column_dimensions[column].width} \r\n')
-            logger.debug(f'Column row_dimensions: {self.ws.row_dimensions[row].height} \r\n')
-
-        except TypeError as error:
-            logger.error(f'Error xls_insert_image: {error}')
-
-        for field_name, image_size in IMAGE_SIZES.items():
-            if field_name == db_field:
-                logger.debug(f'Found field name: {db_field} width: {image_size[0]}, height: {image_size[1]}')
-                image.width = image_size[0]
-                image.height = image_size[1]
+        # Получаем размеры объединённых ячеек, если ячейка объединена
+        merged_cell_range = None
+        for merged_range in self.ws.merged_cells.ranges:
+            if xls_cell in merged_range:
+                merged_cell_range = str(merged_range)
+                print(f'Merged cell: {xls_cell} range: {merged_cell_range}')
                 break
+
+        if merged_cell_range:
+            cell_width_in_pixels, cell_height_in_pixels = self.get_merged_cell_dimensions(merged_cell_range)
+            logger.info(
+                f'Объединенные размеры ячеек для {merged_cell_range}: ширина в пикселях: {cell_width_in_pixels}, высота в пикселях: {cell_height_in_pixels}')
+        else:
+            # Если ячейка не объединена, используем обычные методы
+            cell_width_in_pixels = self.get_column_width_in_pixels(column_letter)
+            cell_height_in_pixels = self.get_row_height_in_pixels(row)
+
+        # растягиваем изображение на ячейку
+        image.width = cell_width_in_pixels
+        image.height = cell_height_in_pixels
         self.ws.add_image(image, xls_cell)
 
     def generate_xls(self):
@@ -72,7 +115,7 @@ class ExportXLS:
         work_book_sheet_names = workbook.sheetnames
 
         for template_records in CHARACTER_FORM_RECORDS:
-            logger.info(f'Страница: {work_book_sheet_names[sheet_index]}\r\nЗаписи шаблона: {template_records}\r\n')
+            logger.debug(f'Страница: {work_book_sheet_names[sheet_index]}\r\nЗаписи шаблона: {template_records}\r\n')
             # openpyxl.utils.exceptions.InvalidFileException:
             self.ws = workbook[work_book_sheet_names[sheet_index]]
             context = self.make_form_data(template_records)
@@ -149,7 +192,7 @@ class ExportXLS:
                 value = self.char.get_current_class()
 
         elif field_type == 'FileField' and value:
-            self.xls_insert_image(xls_cell, value, db_field)
+            self.xls_insert_image(xls_cell, value)
             value = ''
 
         if value:
